@@ -10,4 +10,6 @@
 
 @interface JSViewController : UIViewController
 
+- (void)reloadData;
+
 @end

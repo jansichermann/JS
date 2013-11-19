@@ -9,4 +9,6 @@
 
 @implementation JSViewController
 
+- (void)reloadData {}
+
 @end
