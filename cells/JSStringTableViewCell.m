@@ -6,6 +6,10 @@
 @implementation JSStringTableViewCell
 
 + (NSAttributedString *)defaultAttributedStringForString:(NSString *)string {
+    if (!string) {
+        return nil;
+    }
+    
     NSMutableParagraphStyle *s = [[NSMutableParagraphStyle alloc] init];
     s.lineBreakMode = NSLineBreakByWordWrapping;
     return [[NSAttributedString alloc] initWithString:string

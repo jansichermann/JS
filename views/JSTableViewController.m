@@ -52,6 +52,11 @@ UITableViewDataSource
     self.sections = nil;
 }
 
+- (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section {
+    [self addSection:section
+     reloadTableView:NO];
+}
+
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload {
     NSParameterAssert(section);

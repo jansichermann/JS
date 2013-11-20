@@ -16,6 +16,9 @@ JSTableViewRowModelProtocol
 @property (nonatomic, copy, readonly)  OnClickBlock        onClickBlock;
 
 + (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass;
+
++ (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
                   onClick:(OnClickBlock)onClickBlock;
 - (id)model;

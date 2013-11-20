@@ -15,6 +15,13 @@
 @implementation JSTableViewRowModel
 
 + (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass {
+    return [self withModel:model
+                 cellClass:cellClass
+                   onClick:nil];
+}
+
++ (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
                   onClick:(OnClickBlock)onClickBlock {
     JSTableViewRowModel *m = [[JSTableViewRowModel alloc] init];

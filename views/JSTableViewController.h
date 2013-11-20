@@ -14,7 +14,6 @@ typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
 @protocol JSTableViewCellProtocol <NSObject>
 
 @required
-+ (id)alloc;
 + (CGFloat)heightForModel:(id)model
               inTableView:(UITableView *)tableView;
 - (void)configureWithModel:(id)model;
@@ -27,7 +26,7 @@ typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
 
 @required
 - (id)model;
-- (Class <JSTableViewCellProtocol>)cellClass;
+- (Class)cellClass;
 
 @optional
 @property (nonatomic, copy, readonly)   OnClickBlock        onClickBlock;
@@ -54,6 +53,7 @@ typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
 - (void)setTableViewStyle:(UITableViewStyle)style;
 
 - (void)resetSections;
+- (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;
 
