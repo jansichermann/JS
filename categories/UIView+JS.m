@@ -13,6 +13,13 @@
                             self.height);
 }
 
+- (void)setWidth:(CGFloat)width {
+    self.frame = CGRectMake(self.left,
+                            self.top,
+                            width,
+                            self.height);
+}
+
 - (CGFloat)width {
     return CGRectGetWidth(self.frame);
 }

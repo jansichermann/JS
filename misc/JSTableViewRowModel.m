@@ -23,11 +23,31 @@
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor {
+    return [self withModel:model
+                 cellClass:cellClass
+            backgroundColor:bgColor
+                   onClick:nil];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+                  onClick:(OnClickBlock)onClickBlock {
+    return [self withModel:model
+          cellClass:cellClass
+     backgroundColor:nil
+            onClick:onClickBlock];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
                   onClick:(OnClickBlock)onClickBlock {
     JSTableViewRowModel *m = [[JSTableViewRowModel alloc] init];
     m.model = model;
     m.cellClass = cellClass;
     m.onClickBlock = onClickBlock;
+    m.cellBackgroundColor = bgColor;
     return m;
 }
 

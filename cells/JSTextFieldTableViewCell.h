@@ -9,7 +9,8 @@ typedef void(^OnResignBlock)(UITextField *tf);
 
 @interface JSTextFieldTableViewCellModel : NSObject
 
-+ (instancetype)withOnResignBlock:(OnResignBlock)onResignBlock;
++ (instancetype)withOnResignBlock:(OnResignBlock)onResignBlock
+                  placeholderText:(NSString *)placeholderText;
 
 @end
 

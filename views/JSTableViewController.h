@@ -29,7 +29,8 @@ typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
 - (Class)cellClass;
 
 @optional
-@property (nonatomic, copy, readonly)   OnClickBlock        onClickBlock;
+- (OnClickBlock)onClickBlock;
+- (UIColor *)cellBackgroundColor;
 - (UITableViewCellStyle)cellStyle;
 
 @end

@@ -15,6 +15,7 @@
 - (CGFloat)left;
 - (CGFloat)top;
 - (void)setTop:(CGFloat)top;
+- (void)setWidth:(CGFloat)width;
 - (CGFloat)width;
 - (void)setRight:(CGFloat)right;
 - (CGFloat)bottom;

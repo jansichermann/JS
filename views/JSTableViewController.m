@@ -134,6 +134,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
                                                       cellForRowModel:rowModel];
 
     [cell configureWithModel:rowModel.model];
+    if ([rowModel respondsToSelector:@selector(cellBackgroundColor)] &&
+        rowModel.cellBackgroundColor) {
+        cell.contentView.backgroundColor = rowModel.cellBackgroundColor;
+        cell.backgroundColor = rowModel.cellBackgroundColor;
+    }
     
     return cell;
 }
