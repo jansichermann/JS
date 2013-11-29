@@ -7,8 +7,7 @@
  */
 @protocol JSTableViewRowModelProtocol;
 
-typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
-                            NSIndexPath *indexPath);
+typedef void(^OnClickBlock)();
 
 
 @protocol JSTableViewCellProtocol <NSObject>
@@ -55,6 +54,9 @@ typedef void(^OnClickBlock)(NSObject <JSTableViewRowModelProtocol> *rowModel,
 
 - (void)resetSections;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
+- (void)updateSection:(NSUInteger)section
+             withRows:(NSArray *)rows
+      reloadTableView:(BOOL)reloadTableView;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;
 

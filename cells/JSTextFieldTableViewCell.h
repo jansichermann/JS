@@ -5,12 +5,15 @@
  Created by jan on 11/19/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
  */
 
-typedef void(^OnResignBlock)(UITextField *tf);
+typedef void(^ChangeBlock)(UITextField *tf);
 
 @interface JSTextFieldTableViewCellModel : NSObject
 
-+ (instancetype)withOnResignBlock:(OnResignBlock)onResignBlock
-                  placeholderText:(NSString *)placeholderText;
++ (instancetype)withOnDidEndEditingBlock:(ChangeBlock)onDidEndEditingBlock
+                        onDidResignBlock:(ChangeBlock)onDidResignBlock
+                      onValueChangeBlock:(ChangeBlock)onValueChangeBlock
+                         placeholderText:(NSString *)placeholderText
+                             initialText:(NSString *)initialText;
 
 @end
 
@@ -21,5 +24,5 @@ typedef void(^OnResignBlock)(UITextField *tf);
  */
 
 @interface JSTextFieldTableViewCell : JSTableViewCell
-
+@property (nonatomic, readonly)       UITextField                     *textField;
 @end

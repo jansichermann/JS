@@ -13,6 +13,7 @@
  @return Return YES if you want the view to be resized according to the keyboard
  */
 - (BOOL)shouldObserveKeyboard;
+
 - (void)reloadData;
 - (void)dismissSelfAnimated;
 @end

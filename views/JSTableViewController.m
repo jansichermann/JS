@@ -57,6 +57,18 @@ UITableViewDataSource
      reloadTableView:NO];
 }
 
+- (void)updateSection:(NSUInteger)section
+             withRows:(NSArray *)rows
+      reloadTableView:(BOOL)reloadTableView {
+    NSMutableArray *sections = [NSMutableArray arrayWithArray:self.sections];
+    sections[section] = rows.copy;
+    self.sections = sections.copy;
+    if (reloadTableView) {
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload {
     NSParameterAssert(section);
@@ -132,7 +144,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell <JSTableViewCellProtocol> *cell = [self tableView:tableView
                                                       cellForRowModel:rowModel];
-
+    
     [cell configureWithModel:rowModel.model];
     if ([rowModel respondsToSelector:@selector(cellBackgroundColor)] &&
         rowModel.cellBackgroundColor) {
@@ -148,7 +160,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *rowModel =
     [self modelForTableView:tableView
                 atIndexPath:indexPath];
-    [self tableView:tableView didSelectRow:rowModel
+    [self tableView:tableView
+       didSelectRow:rowModel
         atIndexPath:indexPath];
 }
 
@@ -157,7 +170,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
       atIndexPath:(NSIndexPath *)indexPath {
     if ([rowModel respondsToSelector:@selector(onClickBlock)] &&
         rowModel.onClickBlock) {
-        rowModel.onClickBlock(rowModel, indexPath);
+        rowModel.onClickBlock();
     }
 }
 
