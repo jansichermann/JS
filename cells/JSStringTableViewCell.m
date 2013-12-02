@@ -1,60 +1,53 @@
 #import "JSStringTableViewCell.h"
+
+#include "JSMacros.h"
+
 #import "UIView+JS.h"
 
 
 @interface JSStringTableViewCell ()
-@property (nonatomic)           UILabel         *jsTextLabel;
 @end
-static const CGFloat        labelXInset = 16.f;
 
 
 @implementation JSStringTableViewCell
+
+
+#pragma mark - Height
+
++ (CGFloat)heightForModel:(NSString *)model
+              inTableView:(UITableView *)tableView {
+    NSParameterAssert(model);
+    return [[[NSAttributedString alloc] initWithString:model
+                                    attributes:@{
+              NSFontAttributeName :[self font]
+              }] boundingRectWithSize:CGSizeMake(tableView.width - 32.f, CGFLOAT_MAX)
+     options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil].size.height;
+}
+
+
++ (UIFont *)font {
+    return [UIFont systemFontOfSize:14];
+}
+
+#pragma - mark Initializer
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (!self) {
         return nil;
     }
-    self.jsTextLabel = [[UILabel alloc] initWithFrame:CGRectInset(self.contentView.bounds,
-                                                                  labelXInset, 0.f)];
-    self.jsTextLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.jsTextLabel.numberOfLines = 64;
-    self.jsTextLabel.backgroundColor = [UIColor clearColor];
-    [self.contentView addSubview:self.jsTextLabel];
-    self.textLabel.numberOfLines = 64;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.textLabel.numberOfLines = NSIntegerMax;
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    self.textLabel.font = [self.class font];
+    
+    WEAK(self);
+    self.configureBlock = ^(id model) {
+        JSAssert(weak_self, [model isKindOfClass:[NSString class]], @"Expected NSString");
+        weak_self.textLabel.text = model;
+        [weak_self.textLabel sizeToFit];
+    };
     return self;
-}
-
-+ (NSDictionary *)defaultAttributes {
-    NSMutableParagraphStyle *s = [[NSMutableParagraphStyle alloc] init];
-    s.lineBreakMode = NSLineBreakByWordWrapping;
-    return @{
-      NSForegroundColorAttributeName: [UIColor darkGrayColor],
-      NSFontAttributeName : [UIFont systemFontOfSize:14.f],
-      NSParagraphStyleAttributeName : s
-      };
-}
-
-+ (NSAttributedString *)defaultAttributedStringForString:(NSString *)string {
-    if (!string) {
-        return nil;
-    }
-    return [[NSAttributedString alloc] initWithString:string
-                                           attributes:
-            [self defaultAttributes]];
-}
-
-+ (CGFloat)heightForModel:(NSString *)model
-              inTableView:(UITableView *)tableView {
-    NSParameterAssert(model);
-    UILabel *l = [[UILabel alloc] initWithFrame:CGRectInset(tableView.bounds, labelXInset, 0.f)];
-    l.attributedText = [self defaultAttributedStringForString:model];
-    l.numberOfLines = 96;
-    return [l sizeThatFits:l.bounds.size].height;
-}
-
-- (void)configureWithModel:(NSString *)model {
-    self.jsTextLabel.attributedText = [self.class defaultAttributedStringForString:model];
 }
 
 @end
