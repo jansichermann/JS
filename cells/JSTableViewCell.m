@@ -8,7 +8,9 @@
 }
 
 - (void)configureWithModel:(id)model {
-
+    if (self.configureBlock) {
+        self.configureBlock(model);
+    }
 }
 
 @end
