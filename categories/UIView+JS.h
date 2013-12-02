@@ -12,7 +12,10 @@
 - (CGFloat)height;
 - (void)setHeight:(CGFloat)height;
 - (CGFloat)right;
+- (CGFloat)verticalCenter;
+- (CGFloat)horizontalCenter;
 - (CGFloat)left;
+- (void)setLeft:(CGFloat)left;
 - (CGFloat)top;
 - (void)setTop:(CGFloat)top;
 - (void)setWidth:(CGFloat)width;

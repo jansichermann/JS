@@ -56,9 +56,18 @@
     return CGRectGetMaxX(self.frame);
 }
 
+- (CGFloat)verticalCenter {
+    return self.top + self.height / 2.f;
+}
+
+- (CGFloat)horizontalCenter {
+    return self.left + self.width / 2.f;
+}
+
 - (CGFloat)left {
     return CGRectGetMinX(self.frame);
 }
+
 - (void)setLeft:(CGFloat)left {
     self.frame = CGRectMake(left,
                             self.top,

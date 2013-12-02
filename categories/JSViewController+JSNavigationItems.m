@@ -1,14 +1,16 @@
 #import "JSViewController+JSNavigationItems.h"
+#import "UIBarButtonItem+JSButton.h"
+
 
 @implementation JSViewController (JSNavigationItems)
 
-- (void)installNavigationCancelButton {
+- (void)installNavigationCancelButtonWithFont:(UIFont *)font {
     self.navigationItem.leftBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(dismissSelfAnimated)];
-
+    [UIBarButtonItem barButtonItemWithTitle:@"Cancel"
+                                       font:font
+                                 clickBlock:^{
+                                     [self dismissSelfAnimated];
+                                 }];
 }
 
 - (void)installNavigationCloseButton {
