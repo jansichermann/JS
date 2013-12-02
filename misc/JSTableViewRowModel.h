@@ -14,7 +14,6 @@
 JSTableViewRowModelProtocol
 >
 @property (nonatomic, copy, readonly)   OnClickBlock        onClickBlock;
-@property (nonatomic)                   UIColor             *cellBackgroundColor;
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass;
@@ -25,6 +24,11 @@ JSTableViewRowModelProtocol
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+           selectionStyle:(UITableViewCellSelectionStyle)style;
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
                   onClick:(OnClickBlock)onClickBlock;
 
 + (instancetype)withModel:(id)model
@@ -32,7 +36,15 @@ JSTableViewRowModelProtocol
           backgroundColor:(UIColor *)bgColor
                   onClick:(OnClickBlock)onClickBlock;
 
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+           selectionStyle:(UITableViewCellSelectionStyle)style
+                  onClick:(OnClickBlock)onClickBlock;
+
 - (id)model;
 - (Class)cellClass;
+- (UIColor *)cellBackgroundColor;
+- (UITableViewCellSelectionStyle)selectionStyle;
 
 @end

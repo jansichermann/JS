@@ -7,6 +7,8 @@
 @property (nonatomic)                   id                  model;
 @property (nonatomic)                   Class               cellClass;
 @property (nonatomic, copy, readwrite)  OnClickBlock        onClickBlock;
+@property (nonatomic)                   UIColor             *cellBackgroundColor;
+@property (nonatomic)                   UITableViewCellSelectionStyle selectionStyle;
 
 @end
 
@@ -23,10 +25,21 @@
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+selectionStyle:(UITableViewCellSelectionStyle)style {
+    return [self withModel:model
+                 cellClass:cellClass
+           backgroundColor:bgColor
+                   selectionStyle:style
+                   onClick:nil];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
           backgroundColor:(UIColor *)bgColor {
     return [self withModel:model
                  cellClass:cellClass
-            backgroundColor:bgColor
+           backgroundColor:bgColor
                    onClick:nil];
 }
 
@@ -34,20 +47,33 @@
                 cellClass:(Class)cellClass
                   onClick:(OnClickBlock)onClickBlock {
     return [self withModel:model
-          cellClass:cellClass
-     backgroundColor:nil
-            onClick:onClickBlock];
+                 cellClass:cellClass
+           backgroundColor:nil
+                   onClick:onClickBlock];
 }
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
           backgroundColor:(UIColor *)bgColor
                   onClick:(OnClickBlock)onClickBlock {
+    return [self withModel:model
+                 cellClass:cellClass
+           backgroundColor:bgColor
+            selectionStyle:UITableViewCellSelectionStyleGray
+                   onClick:onClickBlock];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+           selectionStyle:(UITableViewCellSelectionStyle)style
+                  onClick:(OnClickBlock)onClickBlock {
     JSTableViewRowModel *m = [[JSTableViewRowModel alloc] init];
     m.model = model;
     m.cellClass = cellClass;
     m.onClickBlock = onClickBlock;
     m.cellBackgroundColor = bgColor;
+    m.selectionStyle = style;
     return m;
 }
 
