@@ -30,6 +30,7 @@ typedef void(^OnClickBlock)();
 @optional
 - (OnClickBlock)onClickBlock;
 - (UIColor *)cellBackgroundColor;
+- (UITableViewCellSelectionStyle)selectionStyle;
 - (UITableViewCellStyle)cellStyle;
 
 @end
@@ -40,8 +41,11 @@ typedef void(^OnClickBlock)();
 
 @required
 - (NSObject <JSTableViewRowModelProtocol> *)modelAtRow:(NSUInteger)row;
-- (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row;
 - (NSInteger)count;
+
+@optional
+- (UIView *)sectionHeaderView;
+- (CGFloat)sectionHeaderHeight;
 
 @end
 

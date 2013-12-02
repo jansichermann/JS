@@ -80,18 +80,10 @@ UITableViewDataSource
 }
 
 
-#pragma mark - TableView Delegate, DataSource
+#pragma mark - JSTableViewController Convenience
 
-- (CGFloat)tableView:(UITableView *)tableView
-heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSObject <JSTableViewRowModelProtocol> *rowModel =
-    [self modelForTableView:tableView atIndexPath:indexPath];
-    return [rowModel.cellClass heightForModel:rowModel.model
-                                  inTableView:tableView];
-}
-
-- (NSObject <JSTableViewSectionModelProtocol> *)rowsForTableView:(UITableView *)tableView
-                                                       inSection:(NSUInteger)section {
+- (NSObject <JSTableViewSectionModelProtocol> *)_sectionModelForTableView:(UITableView *)tableView
+                                                                inSection:(NSUInteger)section {
     return [self.sections objectAtIndexOrNil:section];
 }
 
@@ -99,26 +91,16 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
                                                   atIndexPath:(NSIndexPath *)indexPath {
     
     NSObject <JSTableViewSectionModelProtocol> *rows =
-    [self rowsForTableView:tableView
-                 inSection:indexPath.section];
+    [self _sectionModelForTableView:tableView
+                          inSection:indexPath.section];
     
     return [rows modelAtRow:indexPath.row];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self rowsForTableView:tableView
-                         inSection:section]
-            count];
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.sections.count;
-}
-
 - (UITableViewCell <JSTableViewCellProtocol> *)tableView:(UITableView *)tableView
                                          cellForRowModel:(NSObject <JSTableViewRowModelProtocol> *)rowModel {
-    NSParameterAssert(![rowModel
-                        conformsToProtocol:@protocol(JSTableViewRowModelProtocol)]);
+    NSParameterAssert([rowModel
+                       conformsToProtocol:@protocol(JSTableViewRowModelProtocol)]);
     NSParameterAssert([rowModel.cellClass
                        conformsToProtocol:@protocol(JSTableViewCellProtocol)]);
     
@@ -135,9 +117,59 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView
+     didSelectRow:(NSObject <JSTableViewRowModelProtocol> *)rowModel
+      atIndexPath:(NSIndexPath *)indexPath {
+    if ([rowModel respondsToSelector:@selector(onClickBlock)] &&
+        rowModel.onClickBlock) {
+        rowModel.onClickBlock();
+    }
+}
+
+
+#pragma mark - TableView Delegate, DataSource
+
+- (CGFloat)tableView:(UITableView *)tableView
+heightForHeaderInSection:(NSInteger)section {
+    NSObject <JSTableViewSectionModelProtocol> *sectionModel = [self _sectionModelForTableView:tableView inSection:section];
+    NSParameterAssert([sectionModel conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
+    if ([sectionModel respondsToSelector:@selector(sectionHeaderHeight)]) {
+        return sectionModel.sectionHeaderHeight;
+    }
+    return 0.f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView
+viewForHeaderInSection:(NSInteger)section {
+    NSObject <JSTableViewSectionModelProtocol> *sectionModel = [self _sectionModelForTableView:tableView inSection:section];
+    NSParameterAssert([sectionModel conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
+    if ([sectionModel respondsToSelector:@selector(sectionHeaderView)]) {
+        return sectionModel.sectionHeaderView;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView
+heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSObject <JSTableViewRowModelProtocol> *rowModel =
+    [self modelForTableView:tableView atIndexPath:indexPath];
+    return [rowModel.cellClass heightForModel:rowModel.model
+                                  inTableView:tableView];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+    return [[self _sectionModelForTableView:tableView
+                                  inSection:section]
+            count];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sections.count;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     NSObject <JSTableViewRowModelProtocol> *rowModel =
     [self modelForTableView:tableView
                 atIndexPath:indexPath];
@@ -145,13 +177,19 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell <JSTableViewCellProtocol> *cell = [self tableView:tableView
                                                       cellForRowModel:rowModel];
     
-    [cell configureWithModel:rowModel.model];
+    if ([rowModel respondsToSelector:@selector(selectionStyle)]) {
+        cell.selectionStyle = rowModel.selectionStyle;
+    }
     if ([rowModel respondsToSelector:@selector(cellBackgroundColor)] &&
         rowModel.cellBackgroundColor) {
         cell.contentView.backgroundColor = rowModel.cellBackgroundColor;
-        cell.backgroundColor = rowModel.cellBackgroundColor;
+        cell.backgroundColor = [UIColor clearColor];
     }
-    
+
+    // this is consciously done after
+    // selectionstyle and background color are set
+    // to allow overriding by the configure block
+    [cell configureWithModel:rowModel.model];
     return cell;
 }
 
@@ -164,15 +202,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
        didSelectRow:rowModel
         atIndexPath:indexPath];
 }
-
-- (void)tableView:(UITableView *)tableView
-     didSelectRow:(NSObject <JSTableViewRowModelProtocol> *)rowModel
-      atIndexPath:(NSIndexPath *)indexPath {
-    if ([rowModel respondsToSelector:@selector(onClickBlock)] &&
-        rowModel.onClickBlock) {
-        rowModel.onClickBlock();
-    }
-}
-
 
 @end
