@@ -20,6 +20,8 @@ JSTableViewSectionModelProtocol
  */
 + (instancetype)sectionWithRows:(NSArray *)rows;
 
+- (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title;
+- (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row;
 
 /**
  *-----
@@ -27,7 +29,7 @@ JSTableViewSectionModelProtocol
  *-----
  */
 - (NSObject <JSTableViewRowModelProtocol> *)modelAtRow:(NSUInteger)row;
-- (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row;
 - (NSInteger)count;
+- (UIView *)sectionHeaderView;
 
 @end
