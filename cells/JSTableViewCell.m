@@ -13,4 +13,10 @@
     }
 }
 
+- (void)prepareForReuse {
+    if (self.prepareForReuseBlock) {
+        self.prepareForReuseBlock();
+    }
+}
+
 @end
