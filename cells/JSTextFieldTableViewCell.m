@@ -4,13 +4,14 @@
 
 @interface JSTextFieldTableViewCellModel ()
 
-@property (nonatomic, copy) ChangeBlock         onResignBlock;
-@property (nonatomic, copy) ChangeBlock         onDidEndEditingBlock;
-@property (nonatomic, copy) ChangeBlock         onValueChangeBlock;
+@property (nonatomic, copy) JSTextFieldDelegateBlock         onEditingDidEndOnExitBlock;
+@property (nonatomic, copy) JSTextFieldDelegateBlock         onDidEndEditingBlock;
+@property (nonatomic, copy) JSTextFieldDelegateBlock         onValueChangeBlock;
 @property (nonatomic)       UIFont              *font;
 @property (nonatomic)       UIImage             *icon;
 @property (nonatomic)       NSString            *placeholderText;
 @property (nonatomic)       NSString            *initialText;
+@property (nonatomic)       UIColor             *color;
 
 @end
 
@@ -18,21 +19,23 @@
 
 @implementation JSTextFieldTableViewCellModel
 
-+ (instancetype)withOnDidEndEditingBlock:(ChangeBlock)onDidEndEditingBlock
-                        onDidResignBlock:(ChangeBlock)onDidResignBlock
-                      onValueChangeBlock:(ChangeBlock)onValueChangeBlock
++ (instancetype)withOnDidEndEditingBlock:(JSTextFieldDelegateBlock)onDidEndEditingBlock
+              onEditingDidEndOnExitBlock:(JSTextFieldDelegateBlock)onEditingDidEndOnExitBlock
+                      onValueChangeBlock:(JSTextFieldDelegateBlock)onValueChangeBlock
                                     font:(UIFont *)font
                                     icon:(UIImage *)icon
                          placeholderText:(NSString *)placeholderText
-                             initialText:(NSString *)initialText {
+                             initialText:(NSString *)initialText
+                               textColor:(UIColor *)color {
     JSTextFieldTableViewCellModel *m = [[JSTextFieldTableViewCellModel alloc] init];
-    m.onResignBlock = onDidResignBlock;
-    m.onValueChangeBlock = onValueChangeBlock;
     m.onDidEndEditingBlock = onDidEndEditingBlock;
+    m.onValueChangeBlock = onValueChangeBlock;
+    m.onEditingDidEndOnExitBlock = onEditingDidEndOnExitBlock;
     m.initialText = initialText;
     m.placeholderText = placeholderText;
     m.font = font;
     m.icon = icon;
+    m.color = color;
     return m;
 }
 
@@ -42,8 +45,7 @@
 
 @interface JSTextFieldTableViewCell ()
 
-@property (nonatomic, readwrite)       UITextField                     *textField;
-@property (nonatomic)       JSTextFieldTableViewCellModel   *model;
+@property (nonatomic)               UILabel             *placeholderLabel;
 
 @end
 
@@ -58,18 +60,12 @@
     if (!self) {
         return nil;
     }
-    self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
-    [self.textField addTarget:self
-                       action:@selector(textFieldDoneTapped)
-             forControlEvents:UIControlEventEditingDidEndOnExit];
-    [self.textField addTarget:self
-                       action:@selector(textFieldResigned)
-             forControlEvents:UIControlEventEditingDidEnd];
-    [self.textField addTarget:self
-                       action:@selector(textFieldChanged)
-             forControlEvents:UIControlEventEditingChanged];
-    self.textField.returnKeyType = UIReturnKeyDone;
-    [self.contentView addSubview:self.textField];
+    self.placeholderLabel = [[UILabel alloc] init];
+    [self.contentView addSubview:self.placeholderLabel];
+    
+    JSTextField *textField = [[JSTextField alloc] init];
+    [self.contentView addSubview:textField];
+    
     WEAK(self);
     self.configureBlock = ^(id model) {
         JSAssert(weak_self,
@@ -77,43 +73,37 @@
                  @"Expected JSTextFieldTableViewCellModel");
         JSTextFieldTableViewCellModel *cellModel = (JSTextFieldTableViewCellModel *)model;
         
+        textField.onDidEndEditingBlock = cellModel.onDidEndEditingBlock;
+        textField.onEditingDidEndOnExitBlock = cellModel.onEditingDidEndOnExitBlock;
+        textField.onValueChangeBlock = ^(UITextField *tf) {
+            cellModel.onValueChangeBlock(tf);
+            weak_self.placeholderLabel.text = tf.text.length > 0 ? nil : cellModel.placeholderText;
+        };
+        
+        
         weak_self.imageView.image = cellModel.icon;
         
-#warning not deterministically determined x
-        weak_self.textField.frame =
+#warning fix how x is determined
+        weak_self.placeholderLabel.frame =
         CGRectMake(cellModel.icon ? cellModel.icon.size.width + 32.f : 10.f,
                    0.f,
                    cellModel.icon ?
                    weak_self.contentView.width - cellModel.icon.size.width - 20.f :
                    weak_self.contentView.width - 10.f,
                    weak_self.contentView.height);
-        weak_self.textField.text = cellModel.initialText ? cellModel.initialText : @"";
-        weak_self.textField.placeholder = cellModel.placeholderText;
-        weak_self.textField.font = cellModel.font;
-        weak_self.model = model;
 
-        [weak_self.textField setNeedsLayout];
+        weak_self.placeholderLabel.font = cellModel.font;
+        weak_self.placeholderLabel.textColor = cellModel.color;
+        
+        textField.frame = weak_self.placeholderLabel.frame;
+        textField.text = cellModel.initialText ? cellModel.initialText : @"";
+        weak_self.placeholderLabel.text = textField.text.length > 0 ? @"" : cellModel.placeholderText;
+        textField.textColor = cellModel.color;
+        
+        textField.font = cellModel.font;
     };
     
     return self;
-}
-
-- (void)textFieldResigned {
-    if (self.model && self.model.onResignBlock) {
-        self.model.onResignBlock(self.textField);
-    }
-}
-
-- (void)textFieldDoneTapped {
-    if (self.model && self.model.onDidEndEditingBlock) {
-        self.model.onDidEndEditingBlock(self.textField);
-    }
-}
-
-- (void)textFieldChanged {
-    if (self.model && self.model.onValueChangeBlock) {
-        self.model.onValueChangeBlock(self.textField);
-    }
 }
 
 @end

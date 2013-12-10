@@ -7,9 +7,13 @@ typedef void(^TextViewBlock)(UITextView *tv);
 
 + (instancetype)withOnValueChangeBlock:(TextViewBlock)block
                 onDidBeginEditingBlock:(TextViewBlock)didBeginEditingBlock;
+
 + (instancetype)withOnValueChangeBlock:(TextViewBlock)block
                 onDidBeginEditingBlock:(TextViewBlock)didBeginEditingBlock
-                                  icon:(UIImage *)icon;
+                  onDidEndEditingBlock:(TextViewBlock)didEndEditingBlock
+                                  icon:(UIImage *)icon
+                           initialText:(NSAttributedString *)initialText
+                       placeholderText:(NSAttributedString *)placeholderText;
 @end
 
 

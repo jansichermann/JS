@@ -3,11 +3,15 @@
 #import "UIView+JS.h"
 
 
+
 @interface JSTextViewTableViewCellModel()
 
 @property (nonatomic, copy) TextViewBlock           onValueChangeBlock;
 @property (nonatomic, copy) TextViewBlock           onDidBeginEditingBlock;
+@property (nonatomic, copy) TextViewBlock           onDidEndEditingBlock;
 @property (nonatomic)       UIImage                 *icon;
+@property (nonatomic)       NSAttributedString      *initialText;
+@property (nonatomic)       NSAttributedString      *placeholderText;
 
 @end
 
@@ -19,15 +23,24 @@
                 onDidBeginEditingBlock:(TextViewBlock)didBeginEditingBlock {
     return [self withOnValueChangeBlock:block
                  onDidBeginEditingBlock:didBeginEditingBlock
-                                   icon:nil];
+                   onDidEndEditingBlock:nil
+                                   icon:nil
+                            initialText:nil
+                        placeholderText:nil];
 }
 + (instancetype)withOnValueChangeBlock:(TextViewBlock)block
                 onDidBeginEditingBlock:(TextViewBlock)didBeginEditingBlock
-                                  icon:(UIImage *)icon {
+                  onDidEndEditingBlock:(TextViewBlock)didEndEditingBlock
+                                  icon:(UIImage *)icon
+                           initialText:(NSAttributedString *)initialText
+                       placeholderText:(NSAttributedString *)placeholderText {
     JSTextViewTableViewCellModel *m = [[JSTextViewTableViewCellModel alloc] init];
     m.onValueChangeBlock = block;
     m.onDidBeginEditingBlock = didBeginEditingBlock;
+    m.onDidEndEditingBlock = didEndEditingBlock;
     m.icon = icon;
+    m.placeholderText = placeholderText;
+    m.initialText = initialText;
     return m;
 }
 
@@ -66,6 +79,7 @@ UITextViewDelegate
     self.configureBlock = ^(id model) {
         JSTextViewTableViewCellModel *cellModel = (JSTextViewTableViewCellModel *)model;
         weak_self.model = model;
+        weak_self.textView.attributedText = cellModel.initialText ? cellModel.initialText : cellModel.placeholderText;
         weak_self.imageView.contentMode = UIViewContentModeTopLeft;
         weak_self.imageView.image = cellModel.icon;
         weak_self.textView.frame =
@@ -77,7 +91,7 @@ UITextViewDelegate
     return self;
 }
 
-#pragma mark - UITextViewDelegate 
+#pragma mark - UITextViewDelegate
 
 - (void)textViewDidChange:(UITextView *)textView {
     if (self.model && self.model.onValueChangeBlock) {
@@ -86,8 +100,18 @@ UITextViewDelegate
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:self.model.placeholderText.string]) {
+        textView.text = @"";
+    }
+
     if (self.model && self.model.onDidBeginEditingBlock) {
         self.model.onDidBeginEditingBlock(textView);
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if (self.model && self.model.onDidEndEditingBlock) {
+        self.model.onDidEndEditingBlock(textView);
     }
 }
 

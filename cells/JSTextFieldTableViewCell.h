@@ -1,21 +1,20 @@
 #import "JSTableViewCell.h"
-
+#import "JSTextField.h"
 
 /**
  Created by jan on 11/19/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
  */
 
-typedef void(^ChangeBlock)(UITextField *tf);
-
 @interface JSTextFieldTableViewCellModel : NSObject
 
-+ (instancetype)withOnDidEndEditingBlock:(ChangeBlock)onDidEndEditingBlock
-                        onDidResignBlock:(ChangeBlock)onDidResignBlock
-                      onValueChangeBlock:(ChangeBlock)onValueChangeBlock
++ (instancetype)withOnDidEndEditingBlock:(JSTextFieldDelegateBlock)onDidEndEditingBlock
+                        onEditingDidEndOnExitBlock:(JSTextFieldDelegateBlock)onEditingDidEndOnExitBlock
+                      onValueChangeBlock:(JSTextFieldDelegateBlock)onValueChangeBlock
                                     font:(UIFont *)font
                                     icon:(UIImage *)icon
                          placeholderText:(NSString *)placeholderText
-                             initialText:(NSString *)initialText;
+                             initialText:(NSString *)initialText
+                               textColor:(UIColor *)color;
 @end
 
 
@@ -28,5 +27,4 @@ typedef void(^ChangeBlock)(UITextField *tf);
 <
 JSTableViewCellProtocol
 >
-@property (nonatomic, readonly)       UITextField                     *textField;
 @end
