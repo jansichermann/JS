@@ -8,6 +8,8 @@
 @property (nonatomic)       NSArray                 *rows;
 @property (nonatomic)       UIView                  *sectionHeaderView;
 @property (nonatomic)       NSAttributedString      *headerAttributedString;
+@property (nonatomic)       UIColor                 *headerBackgroundColor;
+@property (nonatomic)       CGFloat                 headerTopBottomPadding;
 
 @end
 
@@ -19,7 +21,10 @@
 #pragma mark - Initializers
 
 + (instancetype)sectionWithRows:(NSArray *)rows {
-    NSParameterAssert(rows.count > 0);
+    if (!rows.count > 0) {
+        return nil;
+    }
+    
     JSTableViewSectionModel *m = [[JSTableViewSectionModel alloc] init];
     m.rows = rows;
     return m;
@@ -30,11 +35,12 @@
 
 #pragma mark - Public Methods
 
+#pragma mark Section Header
 - (CGFloat)sectionHeaderHeight {
     if (!self.headerAttributedString) {
         return 0.f;
     }
-    return [self.headerAttributedString boundingRectWithSize:
+    return 2 * self.headerTopBottomPadding + [self.headerAttributedString boundingRectWithSize:
             CGSizeMake([self _sectionHeaderLabelWidth],
                        CGFLOAT_MAX)
                                                      options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
@@ -45,11 +51,14 @@
     return [UIScreen mainScreen].bounds.size.width - 10.f;
 }
 
-- (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title {
+- (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title
+                               topBottomPadding:(CGFloat)padding
+                                backgroundColor:(UIColor *)color {
     self.headerAttributedString = title;
+    self.headerBackgroundColor = color;
+    self.headerTopBottomPadding = padding;
     self.sectionHeaderView = nil;
 }
-
 
 - (UIView *)sectionHeaderView {
     if (!self.headerAttributedString) {
@@ -64,7 +73,7 @@
                                                 0.f,
                                                 [UIScreen mainScreen].bounds.size.width,
                                                 labelHeight)];
-        sectionHeaderView.backgroundColor = [UIColor whiteColor];
+        sectionHeaderView.backgroundColor = self.headerBackgroundColor;
         sectionHeaderView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         UILabel *label = [[UILabel alloc] initWithFrame:
                           CGRectMake(10.f,
@@ -79,6 +88,9 @@
     }
     return _sectionHeaderView;
 }
+
+
+#pragma mark - Protocol Functions
 
 - (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row {
     NSParameterAssert(row);

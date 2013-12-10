@@ -20,7 +20,9 @@ JSTableViewSectionModelProtocol
  */
 + (instancetype)sectionWithRows:(NSArray *)rows;
 
-- (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title;
+- (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title
+                               topBottomPadding:(CGFloat)padding
+                                backgroundColor:(UIColor *)color;
 - (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row;
 
 /**
