@@ -57,6 +57,8 @@ typedef void(^OnClickBlock)();
 - (void)setTableViewStyle:(UITableViewStyle)style;
 
 - (void)resetSections;
+- (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
+           atIndex:(NSUInteger)index;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
 - (void)updateSection:(NSUInteger)section
              withRows:(NSArray *)rows

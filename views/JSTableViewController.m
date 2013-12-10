@@ -52,6 +52,15 @@ UITableViewDataSource
     self.sections = nil;
 }
 
+- (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
+           atIndex:(NSUInteger)index {
+    NSParameterAssert(self.sections.count + 1 >= index);
+    NSParameterAssert(section);
+    NSMutableArray *sections = [NSMutableArray arrayWithArray:self.sections];
+    sections[index] = section;
+    self.sections = sections.copy;
+}
+
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section {
     [self addSection:section
      reloadTableView:NO];
@@ -71,7 +80,9 @@ UITableViewDataSource
 
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload {
-    NSParameterAssert(section);
+    if (!section) {
+        return;
+    }
     NSParameterAssert([section conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
     self.sections = self.sections ? [self.sections arrayByAddingObject:section] : @[section];
     if (reload) {
@@ -182,8 +193,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     if ([rowModel respondsToSelector:@selector(cellBackgroundColor)] &&
         rowModel.cellBackgroundColor) {
-        cell.contentView.backgroundColor = rowModel.cellBackgroundColor;
-        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = rowModel.cellBackgroundColor;
     }
 
     // this is consciously done after
