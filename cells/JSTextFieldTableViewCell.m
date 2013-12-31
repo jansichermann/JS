@@ -2,6 +2,8 @@
 #include "JSMacros.h"
 #import "UIView+JS.h"
 
+
+
 @interface JSTextFieldTableViewCellModel ()
 
 @property (nonatomic, copy) JSTextFieldDelegateBlock         onEditingDidEndOnExitBlock;
@@ -9,9 +11,13 @@
 @property (nonatomic, copy) JSTextFieldDelegateBlock         onValueChangeBlock;
 @property (nonatomic)       UIFont              *font;
 @property (nonatomic)       UIImage             *icon;
+@property (nonatomic)       NSAttributedString  *titleString;
 @property (nonatomic)       NSString            *placeholderText;
 @property (nonatomic)       NSString            *initialText;
 @property (nonatomic)       UIColor             *color;
+@property (nonatomic)       BOOL                secureTextEntry;
+@property (nonatomic)       UIKeyboardType      keyboardType;
+@property (nonatomic)       UITextAutocapitalizationType autoCapitalizationType;
 
 @end
 
@@ -24,9 +30,14 @@
                       onValueChangeBlock:(JSTextFieldDelegateBlock)onValueChangeBlock
                                     font:(UIFont *)font
                                     icon:(UIImage *)icon
+                                   title:(NSAttributedString *)title
                          placeholderText:(NSString *)placeholderText
                              initialText:(NSString *)initialText
-                               textColor:(UIColor *)color {
+                               textColor:(UIColor *)color
+                         secureTextEntry:(BOOL)secureTextEntry
+                            keyboardType:(UIKeyboardType)keyboardType
+                  autoCapitalizationType:(UITextAutocapitalizationType)autocapitalizationType {
+    
     JSTextFieldTableViewCellModel *m = [[JSTextFieldTableViewCellModel alloc] init];
     m.onDidEndEditingBlock = onDidEndEditingBlock;
     m.onValueChangeBlock = onValueChangeBlock;
@@ -34,9 +45,17 @@
     m.initialText = initialText;
     m.placeholderText = placeholderText;
     m.font = font;
+    // can only set icon or title
+    NSParameterAssert(icon == nil || title == nil);
     m.icon = icon;
+    m.titleString = title;
     m.color = color;
+    m.secureTextEntry = secureTextEntry;
+    m.keyboardType = keyboardType;
+    m.autoCapitalizationType = autocapitalizationType;
+    
     return m;
+    
 }
 
 @end
@@ -51,59 +70,89 @@
 
 
 
+static const CGFloat cellDefaultHeight = 52.f;
+
+
+
 @implementation JSTextFieldTableViewCell
+
+
+
++ (CGFloat)heightForModel:(__unused id)model
+              inTableView:(__unused UITableView *)tableView __attribute__((const)) {
+    return cellDefaultHeight;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier {
+    
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (!self) {
         return nil;
     }
+    
     self.placeholderLabel = [[UILabel alloc] init];
     [self.contentView addSubview:self.placeholderLabel];
     
     JSTextField *textField = [[JSTextField alloc] init];
     [self.contentView addSubview:textField];
     
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.f,
+                                                                    0.f,
+                                                                    0.f,
+                                                                    cellDefaultHeight)];
+    [self.contentView addSubview:titleLabel];
+    
     WEAK(self);
-    self.configureBlock = ^(id model) {
-        JSAssert(weak_self,
-                 [model isKindOfClass:[JSTextFieldTableViewCellModel class]],
-                 @"Expected JSTextFieldTableViewCellModel");
-        JSTextFieldTableViewCellModel *cellModel = (JSTextFieldTableViewCellModel *)model;
-        
-        textField.onDidEndEditingBlock = cellModel.onDidEndEditingBlock;
-        textField.onEditingDidEndOnExitBlock = cellModel.onEditingDidEndOnExitBlock;
+    self.configureBlock = ^(JSTextFieldTableViewCellModel *model) {
+        textField.secureTextEntry = model.secureTextEntry;
+        textField.autocapitalizationType = model.autoCapitalizationType;
+        textField.keyboardType = model.keyboardType;
+        textField.onDidEndEditingBlock = model.onDidEndEditingBlock;
+        textField.onEditingDidEndOnExitBlock = model.onEditingDidEndOnExitBlock;
         textField.onValueChangeBlock = ^(UITextField *tf) {
-            cellModel.onValueChangeBlock(tf);
-            weak_self.placeholderLabel.text = tf.text.length > 0 ? nil : cellModel.placeholderText;
+            if (model.onValueChangeBlock) {
+                model.onValueChangeBlock(tf);
+            }
+            weak_self.placeholderLabel.text = tf.text.length > 0 ? nil : model.placeholderText;
         };
         
+        titleLabel.hidden = !model.titleString.length > 0;
+        titleLabel.attributedText = model.titleString;
+        CGSize s = [titleLabel sizeThatFits:CGSizeMake(150.f, cellDefaultHeight)];
+        titleLabel.width = s.width;
         
-        weak_self.imageView.image = cellModel.icon;
+        CGFloat titleLeft = 10.f;
+        if (model.titleString.length > 0) {
+            titleLeft = titleLabel.right + 10.f;
+        }
+        else if (model.icon) {
+            titleLeft = model.icon.size.width + 32.f;
+        }
+        
+        weak_self.imageView.image = model.icon;
         
 #warning fix how x is determined
         weak_self.placeholderLabel.frame =
-        CGRectMake(cellModel.icon ? cellModel.icon.size.width + 32.f : 10.f,
+        CGRectMake(titleLeft,
                    0.f,
-                   cellModel.icon ?
-                   weak_self.contentView.width - cellModel.icon.size.width - 20.f :
-                   weak_self.contentView.width - 10.f,
-                   weak_self.contentView.height);
+                   weak_self.contentView.width - 10.f - titleLeft,
+                   cellDefaultHeight);
 
-        weak_self.placeholderLabel.font = cellModel.font;
-        weak_self.placeholderLabel.textColor = cellModel.color;
+        weak_self.placeholderLabel.font = model.font;
+        weak_self.placeholderLabel.textColor = model.color;
         
         textField.frame = weak_self.placeholderLabel.frame;
-        textField.text = cellModel.initialText ? cellModel.initialText : @"";
-        weak_self.placeholderLabel.text = textField.text.length > 0 ? @"" : cellModel.placeholderText;
-        textField.textColor = cellModel.color;
+        textField.text = model.initialText ? model.initialText : @"";
+        weak_self.placeholderLabel.text = textField.text.length > 0 ? @"" : model.placeholderText;
+        textField.textColor = model.color;
         
-        textField.font = cellModel.font;
+        textField.font = model.font;
     };
     
     return self;
+    
 }
 
 @end
