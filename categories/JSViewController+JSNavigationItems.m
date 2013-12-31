@@ -13,13 +13,13 @@
                                  }];
 }
 
-- (void)installNavigationCloseButton {
-    self.navigationItem.leftBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:@"Close"
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(dismissSelfAnimated)];
-    
+- (void)installNavigationCloseButtonWithFont:(UIFont *)font {
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem barButtonItemWithTitle:@"Close"
+                                       font:font
+                                 clickBlock:^{
+                                     [self dismissSelfAnimated];
+                                 }];
+
 }
 
 - (void)installNavigationActionButtonWithTitle:(NSString *)title
