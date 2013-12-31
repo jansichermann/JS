@@ -130,7 +130,7 @@ static const CGFloat buttonHeight = 44.f;
     
     // Now apply the blur effect using Apple's UIImageEffect category
     UIImage *blurredSnapshotImage = [snapshotImage applyBlurWithRadius:4
-                                                             tintColor:nil
+                                                             tintColor:[UIColor colorWithWhite:0.f alpha:0.1]
                                                  saturationDeltaFactor:1.f
                                                              maskImage:nil];
     
