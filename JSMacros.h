@@ -17,3 +17,19 @@ lineNumber:__LINE__ description:(desc), ##__VA_ARGS__]; \
 }				\
 __PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \
 } while(0)
+
+
+
+// SINGLETON
+#define SHARED_SINGLETON_HEADER(_class) \
++ (_class *)shared;
+
+#define SHARED_SINGLETON_IMPLEMENTATION(_class) \
++ (_class *)shared { \
+static dispatch_once_t once; \
+static _class *sharedInstance = nil; \
+dispatch_once(&once, ^{ \
+sharedInstance = [[self alloc] init]; \
+}); \
+return sharedInstance; \
+}
