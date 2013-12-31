@@ -1,15 +1,21 @@
 #import "JSViewController.h"
+
+#include "JSMacros.h"
+
 #import "UIView+JS.h"
 
 
 
 @interface JSViewController ()
-@property (nonatomic)           BOOL        didRegisterKeyboardObserver;
+@property (nonatomic)                   BOOL                didRegisterKeyboardObserver;
+@property (nonatomic, readwrite)        NSUInteger          appearanceCount;
 @end
 
 
 
 @implementation JSViewController
+
+
 
 #pragma mark - Keyboard
 
@@ -22,6 +28,11 @@
     if ([self shouldObserveKeyboard]) {
         [self registerForKeyboardNotification];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.appearanceCount++;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

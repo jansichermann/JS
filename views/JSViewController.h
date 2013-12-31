@@ -9,6 +9,8 @@
 
 
 @interface JSViewController : UIViewController
+@property (nonatomic, readonly)         NSUInteger          appearanceCount;
+
 /**
  @return Return YES if you want the view to be resized according to the keyboard
  */
