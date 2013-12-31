@@ -61,7 +61,7 @@ typedef void(^OnClickBlock)();
            atIndex:(NSUInteger)index;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
 - (void)updateSection:(NSUInteger)section
-             withRows:(NSArray *)rows
+             withRows:(NSObject <JSTableViewSectionModelProtocol> *)rows
       reloadTableView:(BOOL)reloadTableView;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;

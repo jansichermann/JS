@@ -54,6 +54,7 @@ UITableViewDataSource
 
 - (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
            atIndex:(NSUInteger)index {
+    NSParameterAssert(self.sections);
     NSParameterAssert(self.sections.count + 1 >= index);
     NSParameterAssert(section);
     NSMutableArray *sections = [NSMutableArray arrayWithArray:self.sections];
@@ -67,10 +68,10 @@ UITableViewDataSource
 }
 
 - (void)updateSection:(NSUInteger)section
-             withRows:(NSArray *)rows
+             withRows:(NSObject <JSTableViewSectionModelProtocol> *)rows
       reloadTableView:(BOOL)reloadTableView {
     NSMutableArray *sections = [NSMutableArray arrayWithArray:self.sections];
-    sections[section] = rows.copy;
+    sections[section] = rows;
     self.sections = sections.copy;
     if (reloadTableView) {
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section]
