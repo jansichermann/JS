@@ -19,6 +19,10 @@
     [self addTarget:self
              action:@selector(textFieldEditingDidEndOnExit:)
    forControlEvents:UIControlEventEditingDidEndOnExit];
+    [self addTarget:self
+             action:@selector(textFieldDidEndEditing:)
+   forControlEvents:UIControlEventEditingDidEnd];
+
     return self;
 }
 
