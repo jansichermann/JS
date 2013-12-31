@@ -88,4 +88,21 @@
     self.left = (self.superview.width / 2) - (self.width / 2);
 }
 
+- (UIImage *)snapshot {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size,
+                                           NO,
+                                           [UIScreen mainScreen].scale);
+    
+    // There he is! The new API method
+    [self drawViewHierarchyInRect:self.frame
+               afterScreenUpdates:NO];
+    
+    // Get the snapshot
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Be nice and clean your mess up
+    UIGraphicsEndImageContext();
+    return snapshotImage;
+}
+
 @end

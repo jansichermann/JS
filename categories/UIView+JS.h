@@ -25,4 +25,5 @@
 - (void)setBottom:(CGFloat)bottom;
 - (void)centerInSuperview;
 - (void)centerHorizontallyInSuperview;
+- (UIImage *)snapshot;
 @end
