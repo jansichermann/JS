@@ -11,7 +11,7 @@
 @interface JSViewController (JSNavigationItems)
 - (void)installNavigationCancelButtonWithFont:(UIFont *)font;
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font;
-- (void)installNavigationActionButtonWithTitle:(NSString *)title
-                              target:(id)target
-                            selector:(SEL)selector;
+- (void)installRightNavigationButtonWithTitle:(NSString *)title
+                                         font:(UIFont *)font
+                                   clickBlock:(void(^)())block;
 @end

@@ -15,21 +15,20 @@
 
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font {
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem barButtonItemWithTitle:@"Close"
-                                       font:font
-                                 clickBlock:^{
-                                     [self dismissSelfAnimated];
-                                 }];
-
+                                                                               font:font
+                                                                         clickBlock:^{
+                                                                             [self dismissSelfAnimated];
+                                                                         }];
+    
 }
 
-- (void)installNavigationActionButtonWithTitle:(NSString *)title
-                              target:(id)target
-                            selector:(SEL)selector {
+- (void)installRightNavigationButtonWithTitle:(NSString *)title
+                                         font:(UIFont *)font
+                                   clickBlock:(void(^)())block {
     self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:title
-                                     style:UIBarButtonItemStylePlain
-                                    target:target
-                                    action:selector];
+    [UIBarButtonItem barButtonItemWithTitle:title
+                                       font:font
+                                 clickBlock:block];
 }
 
 @end
