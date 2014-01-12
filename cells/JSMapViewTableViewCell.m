@@ -5,16 +5,19 @@
 @interface JSMapViewTableViewCellModel()
 @property (nonatomic)       CGFloat             height;
 @property (nonatomic)       id<MKAnnotation>    annotation;
+@property (nonatomic)       BOOL                showsCurrentLocation;
 @end
 
 
 @implementation JSMapViewTableViewCellModel
 
 + (instancetype)withHeight:(CGFloat)height
-                annotation:(id<MKAnnotation>)annotation {
+                annotation:(id<MKAnnotation>)annotation
+      showsCurrentLocation:(BOOL)showsCurrentLocation {
     NSParameterAssert([annotation conformsToProtocol:@protocol(MKAnnotation)]);
     JSMapViewTableViewCellModel *m = [[JSMapViewTableViewCellModel alloc] init];
     m.height = height;
+    m.showsCurrentLocation = showsCurrentLocation;
     m.annotation = annotation;
     return m;
 }
@@ -44,6 +47,7 @@
     [self.contentView addSubview:mv];
     
     self.configureBlock = ^(JSMapViewTableViewCellModel *model) {
+        mv.showsUserLocation = model.showsCurrentLocation;
         [mv removeAnnotations:mv.annotations];
         [mv addAnnotation:model.annotation];
         [mv setRegion:

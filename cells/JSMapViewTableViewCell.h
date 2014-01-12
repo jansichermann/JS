@@ -3,8 +3,11 @@
 
 @interface JSMapViewTableViewCellModel : NSObject
 + (instancetype)withHeight:(CGFloat)height
-                annotation:(id<MKAnnotation>)annotation;
+                annotation:(id<MKAnnotation>)annotation
+      showsCurrentLocation:(BOOL)showsCurrentLocation;
 @end
+
+
 /**
  Created by jan on 12/7/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
  */
