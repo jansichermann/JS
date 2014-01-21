@@ -78,7 +78,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.buttonView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 150.f, self.view.width, 44.f)];
+    self.buttonView = [[UIView alloc] initWithFrame:CGRectMake(0.f,
+                                                               150.f,
+                                                               self.view.width,
+                                                               44.f)];
     
     self.buttonView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     self.buttonView.backgroundColor = [UIColor whiteColor];
