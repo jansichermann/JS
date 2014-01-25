@@ -25,6 +25,16 @@
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
+           selectionStyle:(UITableViewCellSelectionStyle)style {
+    return [self withModel:model
+                 cellClass:cellClass
+            backgroundColor:nil
+            selectionStyle:style];
+}
+
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
           backgroundColor:(UIColor *)bgColor
 selectionStyle:(UITableViewCellSelectionStyle)style {
     return [self withModel:model

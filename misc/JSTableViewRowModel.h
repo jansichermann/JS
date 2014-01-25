@@ -20,6 +20,10 @@ JSTableViewRowModelProtocol
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass
+           selectionStyle:(UITableViewCellSelectionStyle)style;
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
           backgroundColor:(UIColor *)bgColor;
 
 + (instancetype)withModel:(id)model
