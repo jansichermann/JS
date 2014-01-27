@@ -10,6 +10,10 @@
 + (instancetype)withText:(NSAttributedString *)text
                     icon:(UIImage *)icon
         topBottomPadding:(CGFloat)topBottomPadding;
++ (instancetype)withText:(NSAttributedString *)text
+                    icon:(UIImage *)icon
+           accessoryIcon:(UIImage *)accessoryIcon
+        topBottomPadding:(CGFloat)topBottomPadding;
 @end
 
 /**
