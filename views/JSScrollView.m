@@ -25,7 +25,7 @@ UIScrollViewDelegate
     return self;
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDecelerating:(JSScrollView *)scrollView {
     if (self.didEndDeceleratingBlock) {
         self.didEndDeceleratingBlock(scrollView);
     }
