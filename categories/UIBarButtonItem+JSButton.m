@@ -23,13 +23,12 @@
 + (instancetype)barButtonItemWithImage:(UIImage *)image
                             clickBlock:(void(^)())block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
-    [b setImage:image
-       forState:UIControlStateNormal];
     b.touchUpInsideBlock = ^(__unused JSButton *b) {
         block();
     };
+    [b setBackgroundImage:image
+                 forState:UIControlStateNormal];
     [b sizeToFit];
-    
     UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:b];
     return bb;
 }
