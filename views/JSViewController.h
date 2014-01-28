@@ -9,6 +9,9 @@
 
 
 @interface JSViewController : UIViewController
+/**
+ @return Returns the number of times this instance's viewDidAppear: method was called.
+ */
 @property (nonatomic, readonly)         NSUInteger          appearanceCount;
 
 /**
@@ -16,6 +19,13 @@
  */
 - (BOOL)shouldObserveKeyboard;
 
+/**
+ @discussion A generic reload method to be overridden by subclasses.
+ */
 - (void)reloadData;
+
+/**
+ @discussion Calls dismissViewControllerAnimated:completion: with the arguments YES and nil.
+ */
 - (void)dismissSelfAnimated;
 @end
