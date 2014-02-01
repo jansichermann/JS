@@ -6,7 +6,8 @@
 @implementation JSSpacingTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:style
+                reuseIdentifier:reuseIdentifier];
     WEAK(self);
     self.configureBlock = ^(__unused id model) {
         weak_self.selectionStyle = UITableViewCellSelectionStyleNone;

@@ -7,7 +7,8 @@ typedef void(^PrepareForReuseBlock)();
 
 
 /**
- Created by jan on 11/18/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.\
+ A generic Table View Cell that conforms to JSTableViewCellProtocol.
+ Created by jan on 11/18/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
  */
 
 

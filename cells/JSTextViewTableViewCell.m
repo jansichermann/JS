@@ -53,7 +53,6 @@
 UITextViewDelegate
 >
 @property (nonatomic)       JSTextViewTableViewCellModel        *model;
-@property (nonatomic)       UITextView                          *textView;
 @end
 
 @implementation JSTextViewTableViewCell
@@ -69,24 +68,29 @@ UITextViewDelegate
     if (!self) {
         return nil;
     }
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.textView = [[UITextView alloc] init];
-    self.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.textView.delegate = self;
-    [self.contentView addSubview:self.textView];
+    UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(16.f,
+                                                                          12.f,
+                                                                          1.f,
+                                                                          1.f)];
+    [self.contentView addSubview:iconView];
+    iconView.contentMode = UIViewContentModeTopLeft;
+    
+    UITextView *textView = [[UITextView alloc] init];
+    textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    textView.delegate = self;
+    [self.contentView addSubview:textView];
     WEAK(self);
-    self.configureBlock = ^(id model) {
+    self.configureBlock = ^(JSTextViewTableViewCellModel *model) {
         JSTextViewTableViewCell *strongSelf = weak_self;
-        JSTextViewTableViewCellModel *cellModel = (JSTextViewTableViewCellModel *)model;
         strongSelf.model = model;
-        strongSelf.textView.attributedText = cellModel.initialText ? cellModel.initialText : cellModel.placeholderText;
-        strongSelf.imageView.contentMode = UIViewContentModeTopLeft;
-        strongSelf.imageView.image = cellModel.icon;
-        strongSelf.textView.frame =
-        CGRectMake(cellModel.icon ? cellModel.icon.size.width + 32.f : 10.f,
+        textView.attributedText = model.initialText ? model.initialText : model.placeholderText;
+        iconView.image = model.icon;
+        [iconView sizeToFit];
+        textView.frame =
+        CGRectMake(model.icon ? model.icon.size.width + 32.f : 10.f,
                    0.f,
-                   cellModel.icon ? strongSelf.contentView.width - 32.f - cellModel.icon.size.width : strongSelf.contentView.width,
+                   model.icon ? strongSelf.contentView.width - 32.f - model.icon.size.width : strongSelf.contentView.width,
                    strongSelf.contentView.height);
     };
     return self;

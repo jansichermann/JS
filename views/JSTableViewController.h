@@ -7,7 +7,10 @@
  */
 @protocol JSTableViewRowModelProtocol;
 
+
+
 typedef void(^OnClickBlock)();
+
 
 
 @protocol JSTableViewCellProtocol <NSObject>
@@ -52,6 +55,9 @@ typedef void(^OnClickBlock)();
 
 
 @interface JSTableViewController : JSViewController
+/**
+ @discussion The UITableView instance for this controller. This instance may change during the lifetime of this controller, such as when you call setTableViewStyle:
+ */
 @property (nonatomic, readonly)       UITableView         *tableView;
 
 - (void)setTableViewStyle:(UITableViewStyle)style;

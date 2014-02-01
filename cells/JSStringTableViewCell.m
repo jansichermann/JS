@@ -43,9 +43,10 @@
     
     WEAK(self);
     self.configureBlock = ^(id model) {
-        JSAssert(weak_self, [model isKindOfClass:[NSString class]], @"Expected NSString");
-        weak_self.textLabel.text = model;
-        [weak_self.textLabel sizeToFit];
+        JSStringTableViewCell *strongSelf = weak_self;
+        JSAssert(strongSelf, [model isKindOfClass:[NSString class]], @"Expected NSString");
+        strongSelf.textLabel.text = model;
+        [strongSelf.textLabel sizeToFit];
     };
     return self;
 }
