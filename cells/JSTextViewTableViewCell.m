@@ -82,16 +82,16 @@ UITextViewDelegate
     [self.contentView addSubview:textView];
     WEAK(self);
     self.configureBlock = ^(JSTextViewTableViewCellModel *model) {
-        JSTextViewTableViewCell *strong_self = weak_self;
-        strong_self.model = model;
+        JSTextViewTableViewCell *strongSelf = weak_self;
+        strongSelf.model = model;
         textView.attributedText = model.initialText ? model.initialText : model.placeholderText;
         iconView.image = model.icon;
         [iconView sizeToFit];
         textView.frame =
         CGRectMake(model.icon ? model.icon.size.width + 32.f : 10.f,
                    0.f,
-                   model.icon ? strong_self.contentView.width - 32.f - model.icon.size.width : strong_self.contentView.width,
-                   strong_self.contentView.height);
+                   model.icon ? strongSelf.contentView.width - 32.f - model.icon.size.width : strongSelf.contentView.width,
+                   strongSelf.contentView.height);
     };
     return self;
 }
