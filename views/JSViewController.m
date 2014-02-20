@@ -33,6 +33,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    NSLog(@"%@", NSStringFromClass(self.class));
     self.appearanceCount++;
 }
 
