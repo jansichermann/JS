@@ -15,7 +15,8 @@
              action:@selector(textFieldValueChanged:)
    forControlEvents:UIControlEventEditingChanged];
     [self addTarget:self
-             action:@selector(textFieldDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
+             action:@selector(textFieldDidBeginEditing:)
+   forControlEvents:UIControlEventEditingDidBegin];
     [self addTarget:self
              action:@selector(textFieldEditingDidEndOnExit:)
    forControlEvents:UIControlEventEditingDidEndOnExit];

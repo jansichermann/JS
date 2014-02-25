@@ -1,5 +1,4 @@
-#import <UIKit/UIKit.h>
-
+#import "JSImageView.h"
 
 
 /**
@@ -9,7 +8,7 @@
 
 
 @interface JSInsetImageView : UIView
-@property (nonatomic, readonly)         UIImageView         *imageView;
+@property (nonatomic, readonly)         JSImageView         *imageView;
 
 + (instancetype)insetImageViewWithFrame:(CGRect)frame
                                   inset:(UIEdgeInsets)edgeInsets

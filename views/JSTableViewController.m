@@ -16,6 +16,8 @@ UITableViewDataSource
 
 @implementation JSTableViewController
 
+@synthesize tableView = _tableView;
+@synthesize sections = _sections;
 
 #pragma mark - Setup
 
@@ -94,7 +96,7 @@ UITableViewDataSource
 
 #pragma mark - JSTableViewController Convenience
 
-- (NSObject <JSTableViewSectionModelProtocol> *)_sectionModelForTableView:(UITableView *)tableView
+- (NSObject <JSTableViewSectionModelProtocol> *)_sectionModelForTableView:(__unused UITableView *)tableView
                                                                 inSection:(NSUInteger)section {
     return [self.sections objectAtIndexOrNil:section];
 }
@@ -104,9 +106,9 @@ UITableViewDataSource
     
     NSObject <JSTableViewSectionModelProtocol> *rows =
     [self _sectionModelForTableView:tableView
-                          inSection:indexPath.section];
+                          inSection:(NSUInteger)indexPath.section];
     
-    return [rows modelAtRow:indexPath.row];
+    return [rows modelAtRow:(NSUInteger)indexPath.row];
 }
 
 - (UITableViewCell <JSTableViewCellProtocol> *)tableView:(UITableView *)tableView
@@ -129,9 +131,9 @@ UITableViewDataSource
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView
+- (void)tableView:(__unused UITableView *)tableView
      didSelectRow:(NSObject <JSTableViewRowModelProtocol> *)rowModel
-      atIndexPath:(NSIndexPath *)indexPath {
+      atIndexPath:(__unused NSIndexPath *)indexPath {
     if ([rowModel respondsToSelector:@selector(onClickBlock)] &&
         rowModel.onClickBlock) {
         rowModel.onClickBlock();
@@ -143,7 +145,9 @@ UITableViewDataSource
 
 - (CGFloat)tableView:(UITableView *)tableView
 heightForHeaderInSection:(NSInteger)section {
-    NSObject <JSTableViewSectionModelProtocol> *sectionModel = [self _sectionModelForTableView:tableView inSection:section];
+    NSObject <JSTableViewSectionModelProtocol> *sectionModel =
+    [self _sectionModelForTableView:tableView
+                          inSection:(NSUInteger)section];
     NSParameterAssert([sectionModel conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
     if ([sectionModel respondsToSelector:@selector(sectionHeaderHeight)]) {
         return sectionModel.sectionHeaderHeight;
@@ -153,7 +157,9 @@ heightForHeaderInSection:(NSInteger)section {
 
 - (UIView *)tableView:(UITableView *)tableView
 viewForHeaderInSection:(NSInteger)section {
-    NSObject <JSTableViewSectionModelProtocol> *sectionModel = [self _sectionModelForTableView:tableView inSection:section];
+    NSObject <JSTableViewSectionModelProtocol> *sectionModel =
+    [self _sectionModelForTableView:tableView
+                          inSection:(NSUInteger)section];
     NSParameterAssert([sectionModel conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
     if ([sectionModel respondsToSelector:@selector(sectionHeaderView)]) {
         return sectionModel.sectionHeaderView;
@@ -172,12 +178,12 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section {
     return [[self _sectionModelForTableView:tableView
-                                  inSection:section]
+                                  inSection:(NSUInteger)section]
             count];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.sections.count;
+- (NSInteger)numberOfSectionsInTableView:(__unused UITableView *)tableView {
+    return (NSInteger)self.sections.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -196,7 +202,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         rowModel.cellBackgroundColor) {
         cell.backgroundColor = rowModel.cellBackgroundColor;
     }
-
+    
     // this is consciously done after
     // selectionstyle and background color are set
     // to allow overriding by the configure block

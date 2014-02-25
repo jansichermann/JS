@@ -2,7 +2,7 @@
 #import "UIView+JS.h"
 
 @interface JSInsetImageView ()
-@property (nonatomic, readwrite)         UIImageView         *imageView;
+@property (nonatomic, readwrite)         JSImageView         *imageView;
 @end
 
 @implementation JSInsetImageView
@@ -33,9 +33,8 @@
     if (!self) {
         return nil;
     }
-    self.imageView = [[UIImageView alloc] init];
+    self.imageView = [[JSImageView alloc] init];
     return self;
 }
-
 
 @end
