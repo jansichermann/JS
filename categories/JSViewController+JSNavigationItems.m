@@ -5,21 +5,26 @@
 @implementation JSViewController (JSNavigationItems)
 
 - (void)installNavigationCancelButtonWithFont:(UIFont *)font {
+    WEAK(self);
     self.navigationItem.leftBarButtonItem =
     [UIBarButtonItem barButtonItemWithTitle:@"Cancel"
                                        font:font
                                  clickBlock:^{
-                                     [self dismissSelfAnimated];
+                                     JSViewController *vc = weak_self;
+                                     [vc dismissSelfAnimated];
                                  }];
 }
 
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font {
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem barButtonItemWithTitle:@"Close"
-                                                                               font:font
-                                                                         clickBlock:^{
-                                                                             [self dismissSelfAnimated];
-                                                                         }];
-    
+    WEAK(self);
+    self.navigationItem.leftBarButtonItem =
+    [UIBarButtonItem barButtonItemWithTitle:@"Close"
+                                       font:font
+                                 clickBlock:
+     ^{
+         JSViewController *vc = weak_self;
+         [vc dismissSelfAnimated];
+     }];
 }
 
 - (void)installRightNavigationButtonWithTitle:(NSString *)title
