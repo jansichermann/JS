@@ -29,7 +29,6 @@
     return [UIFont systemFontOfSize:14];
 }
 
-#pragma - mark Initializer
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

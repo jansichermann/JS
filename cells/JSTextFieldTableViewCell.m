@@ -70,7 +70,7 @@
 
 
 
-static const CGFloat cellDefaultHeight = 52.f;
+static const CGFloat cellDefaultHeight = 44.f;
 
 
 
@@ -106,6 +106,8 @@ static const CGFloat cellDefaultHeight = 52.f;
     
     WEAK(self);
     self.configureBlock = ^(JSTextFieldTableViewCellModel *model) {
+        JSTextFieldTableViewCell *strongSelf = weak_self;
+        
         textField.secureTextEntry = model.secureTextEntry;
         textField.autocapitalizationType = model.autoCapitalizationType;
         textField.keyboardType = model.keyboardType;
@@ -115,7 +117,7 @@ static const CGFloat cellDefaultHeight = 52.f;
             if (model.onValueChangeBlock) {
                 model.onValueChangeBlock(tf);
             }
-            weak_self.placeholderLabel.text = tf.text.length > 0 ? nil : model.placeholderText;
+            strongSelf.placeholderLabel.text = tf.text.length > 0 ? nil : model.placeholderText;
         };
         
         titleLabel.hidden = !model.titleString.length > 0;
@@ -128,24 +130,24 @@ static const CGFloat cellDefaultHeight = 52.f;
             titleLeft = titleLabel.right + 10.f;
         }
         else if (model.icon) {
-            titleLeft = model.icon.size.width + 32.f;
+            titleLeft = model.icon.size.width + 30.f;
         }
         
-        weak_self.imageView.image = model.icon;
+        strongSelf.imageView.image = model.icon;
         
 #warning fix how x is determined
-        weak_self.placeholderLabel.frame =
+        strongSelf.placeholderLabel.frame =
         CGRectMake(titleLeft,
                    0.f,
-                   weak_self.contentView.width - 10.f - titleLeft,
+                   strongSelf.contentView.width - 10.f - titleLeft,
                    cellDefaultHeight);
 
-        weak_self.placeholderLabel.font = model.font;
-        weak_self.placeholderLabel.textColor = model.color;
+        strongSelf.placeholderLabel.font = model.font;
+        strongSelf.placeholderLabel.textColor = model.color;
         
-        textField.frame = weak_self.placeholderLabel.frame;
+        textField.frame = strongSelf.placeholderLabel.frame;
         textField.text = model.initialText ? model.initialText : @"";
-        weak_self.placeholderLabel.text = textField.text.length > 0 ? @"" : model.placeholderText;
+        strongSelf.placeholderLabel.text = textField.text.length > 0 ? @"" : model.placeholderText;
         textField.textColor = model.color;
         
         textField.font = model.font;

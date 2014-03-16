@@ -57,12 +57,14 @@ UITextViewDelegate
 
 @implementation JSTextViewTableViewCell
 
-+ (CGFloat)heightForModel:(id)model inTableView:(UITableView *)tableView {
++ (CGFloat)heightForModel:(__unused id)model
+              inTableView:(__unused UITableView *)tableView {
     return 96.f;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier {
+
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (!self) {
@@ -80,7 +82,9 @@ UITextViewDelegate
     textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     textView.delegate = self;
     [self.contentView addSubview:textView];
+    
     WEAK(self);
+    
     self.configureBlock = ^(JSTextViewTableViewCellModel *model) {
         JSTextViewTableViewCell *strongSelf = weak_self;
         strongSelf.model = model;
@@ -88,9 +92,9 @@ UITextViewDelegate
         iconView.image = model.icon;
         [iconView sizeToFit];
         textView.frame =
-        CGRectMake(model.icon ? model.icon.size.width + 32.f : 10.f,
+        CGRectMake(model.icon ? model.icon.size.width + 24.f : 10.f,
                    0.f,
-                   model.icon ? strongSelf.contentView.width - 32.f - model.icon.size.width : strongSelf.contentView.width,
+                   model.icon ? strongSelf.contentView.width - 24.f - model.icon.size.width : strongSelf.contentView.width,
                    strongSelf.contentView.height);
     };
     return self;

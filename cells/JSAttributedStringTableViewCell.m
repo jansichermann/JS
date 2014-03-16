@@ -75,15 +75,20 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier {
+    
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
+    
     if (!self) {
         return nil;
     }
+    
     self.textLabel.numberOfLines = INT16_MAX;
     UILabel *textLabel = self.textLabel;
     UIImageView *imageView = self.imageView;
+    
     WEAK(self);
+    
     self.configureBlock = ^(JSAttributedStringTableViewCellModel *model) {
         JSAttributedStringTableViewCell *strong_self = weak_self;
         if (model.accessoryIcon) {
@@ -97,6 +102,7 @@
         imageView.image = model.icon;
         [textLabel sizeToFit];
     };
+    
     return self;
 }
 
