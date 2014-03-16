@@ -10,4 +10,5 @@
 
 @interface NSArray (JS)
 - (id)objectAtIndexOrNil:(NSUInteger)index;
+- (NSArray *)arrayByRemovingObject:(NSObject *)object;
 @end

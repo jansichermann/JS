@@ -9,4 +9,13 @@
     return self[index];
 }
 
+- (NSArray *)arrayByRemovingObject:(NSObject *)object {
+    if (![self containsObject:object]) {
+        return self;
+    }
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:self];
+    [arr removeObject:object];
+    return arr.copy;
+}
+
 @end
