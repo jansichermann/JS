@@ -12,5 +12,5 @@ typedef void(^JSTextFieldDelegateBlock)(UITextField *tf);
 @property (nonatomic, copy)         JSTextFieldDelegateBlock        onValueChangeBlock;
 @property (nonatomic, copy)         JSTextFieldDelegateBlock        onDidEndEditingBlock;
 @property (nonatomic, copy)         JSTextFieldDelegateBlock        onEditingDidEndOnExitBlock;
-@property (nonatomic, copy)         JSTextFieldDelegateBlock        onDidBeginEditing;
+@property (nonatomic, copy)         JSTextFieldDelegateBlock        onDidBeginEditingBlock;
 @end

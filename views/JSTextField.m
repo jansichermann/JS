@@ -46,8 +46,8 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)tf {
-    if (self.onDidBeginEditing) {
-        self.onDidBeginEditing(tf);
+    if (self.onDidBeginEditingBlock) {
+        self.onDidBeginEditingBlock(tf);
     }
 }
 
