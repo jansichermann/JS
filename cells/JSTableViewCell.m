@@ -2,8 +2,8 @@
 
 @implementation JSTableViewCell
 
-+ (CGFloat)heightForModel:(id)model
-              inTableView:(UITableView *)tableView {
++ (CGFloat)heightForModel:(__unused id)model
+              inTableView:(__unused UITableView *)tableView {
     return 44.f;
 }
 
