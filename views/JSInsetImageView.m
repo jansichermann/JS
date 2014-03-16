@@ -18,12 +18,14 @@
                                    edgeInsets.top,
                                    i.width - edgeInsets.left - edgeInsets.right,
                                    i.height - edgeInsets.top - edgeInsets.bottom);
+    i.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [i addSubview:i.imageView];
     if (circle) {
         i.clipsToBounds = YES;
         i.imageView.clipsToBounds = YES;
         i.layer.cornerRadius = i.width / 2.f;
         i.imageView.layer.cornerRadius = i.imageView.width / 2.f;
+        i.imageView.clipsToBounds = YES;
     }
     return i;
 }
