@@ -20,11 +20,6 @@
 - (BOOL)shouldObserveKeyboard;
 
 /**
- @discussion A generic reload method to be overridden by subclasses.
- */
-- (void)reloadData;
-
-/**
  @discussion Calls dismissViewControllerAnimated:completion: with the arguments YES and nil.
  */
 - (void)dismissSelfAnimated;

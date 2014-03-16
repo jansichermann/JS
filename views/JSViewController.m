@@ -6,17 +6,22 @@
 
 
 
-
 @interface JSViewController ()
-@property (nonatomic)                   BOOL                didRegisterKeyboardObserver;
-@property (nonatomic, readwrite)        NSUInteger          appearanceCount;
+
+@property (nonatomic)            BOOL       didRegisterKeyboardObserver;
+@property (nonatomic, readwrite) NSUInteger appearanceCount;
+
 @end
 
 
 
 @implementation JSViewController
 
-
+#if LOG
+- (void)dealloc {
+    NSLog(@"dealloc: %@", NSStringFromClass(self.class));
+}
+#endif
 
 #pragma mark - Keyboard
 
@@ -33,7 +38,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+#if LOG
     NSLog(@"%@", NSStringFromClass(self.class));
+#endif
     self.appearanceCount++;
 }
 
@@ -73,15 +80,14 @@
     CGPoint p = [self.view convertPoint:r.origin
                                fromView:w];
         
-    float height = p.y;
-    __weak JSViewController *weak_self = self;
+    CGFloat height = p.y;
         
     [UIView animateWithDuration:[[notification.userInfo
                                   objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.f
                         options:(UIViewAnimationOptions)[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
                      animations:^ {
-                         weak_self.view.height = height;
+                         self.view.height = height;
                      }
                      completion:nil];
 }
@@ -94,7 +100,7 @@
         CGPoint p = [self.view convertPoint:r.origin
                                    fromView:w];
         
-        float height = p.y;
+        CGFloat height = p.y;
         [UIView animateWithDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                               delay:0.f
                             options:(UIViewAnimationOptions)[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
@@ -104,13 +110,11 @@
                          completion:nil];
 }
 
-
-#pragma mark - Reload
-
-- (void)reloadData { }
+#pragma mark - Dismiss
 
 - (void)dismissSelfAnimated {
     [self dismissViewControllerAnimated:YES
                              completion:nil];
 }
+
 @end
