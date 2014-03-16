@@ -1,4 +1,6 @@
 #import "JSAlertView.h"
+#import "NSArray+JS.h"
+
 
 
 @interface JSAlertViewButtonItem()
@@ -54,12 +56,17 @@ UIAlertViewDelegate
 
 - (void)alertView:(JSAlertView *)alertView
 didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    NSParameterAssert(alertView.numberOfButtons == alertView.buttonItems.count);
     
-    JSAlertViewButtonItem *item = alertView.buttonItems[buttonIndex];
+    JSAlertViewButtonItem *item = [alertView.buttonItems objectAtIndexOrNil:(NSUInteger)buttonIndex];
     if (item.onClickBlock) {
         item.onClickBlock();
     }
+}
+
+- (void)cancel {
+    self.buttonItems = nil;
+    [self dismissWithClickedButtonIndex:0
+                               animated:YES];
 }
 
 @end

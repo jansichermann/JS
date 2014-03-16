@@ -15,6 +15,7 @@ typedef void(^OnClickBlock)();
 
 
 @interface JSAlertView : UIAlertView
+- (void)cancel;
 + (instancetype)withTitle:(NSString *)title
                   message:(NSString *)message
    jsAlertViewButtonItems:(NSArray *)buttonItems;
