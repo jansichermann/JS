@@ -32,7 +32,7 @@ UIScrollViewDelegate
 }
 
 - (NSUInteger)currentHorizontalPage {
-    return self.contentOffset.x / self.width;
+    return (NSUInteger)self.contentOffset.x / self.width;
 }
 
 
