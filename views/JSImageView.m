@@ -19,8 +19,8 @@
 [session dataTaskWithURL:[NSURL URLWithString:urlString]
                               completionHandler:
                         ^(NSData *data,
-                          NSURLResponse *response,
-                          NSError *error) {
+                          __unused NSURLResponse *response,
+                          __unused NSError *error) {
                             UIImage *i = [UIImage imageWithData:data];
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 self.image = i;
