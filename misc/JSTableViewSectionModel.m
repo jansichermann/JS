@@ -1,5 +1,6 @@
 #import "JSTableViewSectionModel.h"
 #import "NSArray+JS.h"
+#import "UIView+JS.h"
 
 
 
@@ -37,6 +38,9 @@
 
 #pragma mark Section Header
 - (CGFloat)sectionHeaderHeight {
+    if (_sectionHeaderView) {
+        return self.sectionHeaderView.height;
+    }
     if (!self.headerAttributedString) {
         return 0.f;
     }
@@ -51,6 +55,10 @@
     return [UIScreen mainScreen].bounds.size.width - 10.f;
 }
 
+- (void)setHeaderView:(UIView *)v {
+    self.sectionHeaderView = v;
+}
+
 - (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title
                                topBottomPadding:(CGFloat)padding
                                 backgroundColor:(UIColor *)color {
@@ -61,10 +69,10 @@
 }
 
 - (UIView *)sectionHeaderView {
-    if (!self.headerAttributedString) {
-        return nil;
-    }
     if (!_sectionHeaderView) {
+        if (!self.headerAttributedString) {
+            return nil;
+        }
         CGFloat labelWidth = [self _sectionHeaderLabelWidth];
         CGFloat labelHeight = [self sectionHeaderHeight];
         
@@ -102,7 +110,7 @@
 }
 
 - (NSInteger)count {
-    return self.rows.count;
+    return (NSInteger)self.rows.count;
 }
 
 @end

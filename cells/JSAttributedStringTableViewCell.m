@@ -88,7 +88,6 @@
     UIImageView *imageView = self.imageView;
     
     WEAK(self);
-    
     self.configureBlock = ^(JSAttributedStringTableViewCellModel *model) {
         JSAttributedStringTableViewCell *strong_self = weak_self;
         if (model.accessoryIcon) {

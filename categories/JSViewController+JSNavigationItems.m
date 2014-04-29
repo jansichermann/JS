@@ -27,6 +27,15 @@
      }];
 }
 
+- (void)installLeftNavigationButtonWithTitle:(NSString *)title
+                                        font:(UIFont *)font
+                                   clickBlock:(void(^)())block {
+    self.navigationItem.leftBarButtonItem =
+    [UIBarButtonItem barButtonItemWithTitle:title
+                                       font:font
+                                 clickBlock:block];
+
+}
 - (void)installRightNavigationButtonWithTitle:(NSString *)title
                                          font:(UIFont *)font
                                    clickBlock:(void(^)())block {

@@ -9,8 +9,5 @@
 
 
 @interface BaseModelObject (Archiving)
-
-- (void)jss_persistToPath:(NSString *)path;
-+ (instancetype)jss_loadFromPath:(NSString *)path;
-
+<PersistanceProtocol>
 @end

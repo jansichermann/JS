@@ -31,9 +31,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self shouldObserveKeyboard]) {
-        [self registerForKeyboardNotification];
-    }
+    [self registerForKeyboardNotification];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -74,14 +72,17 @@
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    if (!self.shouldObserveKeyboard) {
+        return;
+    }
     CGRect r = [(NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        
+    
     UIWindow *w = [[UIApplication sharedApplication] windows].lastObject;
     CGPoint p = [self.view convertPoint:r.origin
                                fromView:w];
-        
+    
     CGFloat height = p.y;
-        
+    
     [UIView animateWithDuration:[[notification.userInfo
                                   objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.f
@@ -93,21 +94,24 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-        CGRect r =
-        [(NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        
-        UIWindow *w = [[UIApplication sharedApplication] windows].lastObject;
-        CGPoint p = [self.view convertPoint:r.origin
-                                   fromView:w];
-        
-        CGFloat height = p.y;
-        [UIView animateWithDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                              delay:0.f
-                            options:(UIViewAnimationOptions)[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
-                         animations:^ {
-                             self.view.height = height;
-                         }
-                         completion:nil];
+    if (!self.shouldObserveKeyboard) {
+        return;
+    }
+    CGRect r =
+    [(NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    UIWindow *w = [[UIApplication sharedApplication] windows].lastObject;
+    CGPoint p = [self.view convertPoint:r.origin
+                               fromView:w];
+    
+    CGFloat height = p.y;
+    [UIView animateWithDuration:[[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          delay:0.f
+                        options:(UIViewAnimationOptions)[[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
+                     animations:^ {
+                         self.view.height = height;
+                     }
+                     completion:nil];
 }
 
 #pragma mark - Dismiss

@@ -210,6 +210,27 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView
+canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSObject <JSTableViewRowModelProtocol> *m = [self modelForTableView:tableView
+                                                            atIndexPath:indexPath];
+    if ([m respondsToSelector:@selector(editable)]) {
+        return m.editable;
+    }
+    
+    return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView
+           editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSObject <JSTableViewRowModelProtocol> *m = [self modelForTableView:tableView
+                atIndexPath:indexPath];
+    if ([m respondsToSelector:@selector(editingStyle)]) {
+        return m.editingStyle;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *rowModel =

@@ -8,11 +8,14 @@
 
 - (NSDateComponents *)componentsForCurrentCalendar {
     NSDateComponents *comps = [[NSCalendar currentCalendar] components:
-                               NSCalendarUnitYear |
-                               NSCalendarUnitMonth |
-                               NSCalendarUnitDay |
-                               NSCalendarUnitHour |
-                               NSCalendarUnitMinute
+                               NSCalendarUnitYear
+                               | NSCalendarUnitMonth
+                               | NSCalendarUnitDay
+                               | NSCalendarUnitHour
+                               | NSCalendarUnitMinute
+                               | NSCalendarUnitWeekday
+                               | NSCalendarUnitWeekOfYear
+                               | NSCalendarUnitWeekOfMonth
                                                fromDate:self];
     return comps;
 }

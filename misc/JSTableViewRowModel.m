@@ -9,6 +9,8 @@
 @property (nonatomic, copy, readwrite)  OnClickBlock        onClickBlock;
 @property (nonatomic)                   UIColor             *cellBackgroundColor;
 @property (nonatomic)                   UITableViewCellSelectionStyle selectionStyle;
+@property (nonatomic)                   UITableViewCellEditingStyle editingStyle;
+
 @end
 
 
@@ -77,12 +79,27 @@ selectionStyle:(UITableViewCellSelectionStyle)style {
           backgroundColor:(UIColor *)bgColor
            selectionStyle:(UITableViewCellSelectionStyle)style
                   onClick:(OnClickBlock)onClickBlock {
+    return [self withModel:model
+                 cellClass:cellClass
+            backgroundColor:bgColor
+            selectionStyle:style
+            editingStyle:UITableViewCellEditingStyleNone
+                   onClick:onClickBlock];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+           selectionStyle:(UITableViewCellSelectionStyle)style
+             editingStyle:(UITableViewCellEditingStyle)editingStyle
+                  onClick:(OnClickBlock)onClickBlock {
     JSTableViewRowModel *m = [[JSTableViewRowModel alloc] init];
     m.model = model;
     m.cellClass = cellClass;
     m.onClickBlock = onClickBlock;
     m.cellBackgroundColor = bgColor;
     m.selectionStyle = style;
+    m.editingStyle = editingStyle;
     return m;
 }
 
@@ -91,4 +108,9 @@ selectionStyle:(UITableViewCellSelectionStyle)style {
     NSParameterAssert([cellClass isSubclassOfClass:[UITableViewCell class]]);
     _cellClass = cellClass;
 }
+
+- (BOOL)editable {
+    return self.editingStyle != UITableViewCellEditingStyleNone;
+}
+
 @end

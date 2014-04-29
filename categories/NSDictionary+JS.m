@@ -4,11 +4,17 @@
 
 - (NSDictionary *)dictionaryBySettingObject:(NSObject *)object
                                      forKey:(id)key {
-    if (object == nil || key == nil) {
+    if (key == nil) {
         return self;
     }
+    
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:self];
-    d[key] = object;
+    if (object == nil) {
+        [d removeObjectForKey:key];
+    }
+    else {
+        d[key] = object;
+    }
     return d.copy;
 }
 

@@ -35,7 +35,8 @@ typedef void(^OnClickBlock)();
 - (UIColor *)cellBackgroundColor;
 - (UITableViewCellSelectionStyle)selectionStyle;
 - (UITableViewCellStyle)cellStyle;
-
+- (UITableViewCellEditingStyle)editingStyle;
+- (BOOL)editable;
 @end
 
 

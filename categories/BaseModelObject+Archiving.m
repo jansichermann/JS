@@ -2,16 +2,24 @@
 
 @implementation BaseModelObject (Archiving)
 
-- (void)jss_persistToPath:(NSString *)path {
+- (void)js__persistToPath:(NSString *)path {
     [NSKeyedArchiver archiveRootObject:self
                                 toFile:path];
 }
 
-+ (instancetype)jss_loadFromPath:(NSString *)path {
++ (instancetype)js__loadFromPath:(NSString *)path {
+    BaseModelObject *bm = nil;
+    
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        return nil;
+        return bm;
     }
-    return [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+
+    @try {
+        bm = [NSKeyedUnarchiver unarchiveObjectWithFile:path];;
+    }
+    @catch (NSException *exception) {}
+    
+    return bm;
 }
 
 @end
