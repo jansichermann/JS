@@ -11,7 +11,7 @@
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
     [b setTitle:title forState:UIControlStateNormal];
     b.titleLabel.font = font;
-    b.touchUpInsideBlock = ^(__unused JSButton *b) {
+    b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         block();
     };
     [b sizeToFit];
@@ -23,7 +23,7 @@
 + (instancetype)barButtonItemWithImage:(UIImage *)image
                             clickBlock:(void(^)())block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
-    b.touchUpInsideBlock = ^(__unused JSButton *b) {
+    b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         block();
     };
     [b setBackgroundImage:image

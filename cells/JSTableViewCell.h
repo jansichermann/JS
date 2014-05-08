@@ -18,8 +18,9 @@ typedef void(^PrepareForReuseBlock)();
 JSTableViewCellProtocol
 >
 
-@property (nonatomic, copy)         ConfigureBlock          configureBlock;
-@property (nonatomic, copy)         PrepareForReuseBlock    prepareForReuseBlock;
+@property (nonatomic, copy) ConfigureBlock          configureBlock;
+@property (nonatomic, copy) PrepareForReuseBlock    prepareForReuseBlock;
+@property (nonatomic, weak) UITableView             *parentTableView;
 
 + (CGFloat)heightForModel:(id)model
               inTableView:(UITableView *)tableView;

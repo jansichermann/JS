@@ -1,5 +1,6 @@
 #import "JS__NotificationCenter.h"
 #import "NSObject+JS.h"
+#import "NSSet+JS.h"
 
 
 
@@ -41,11 +42,6 @@
     return strongObserver.hash;
 }
 
-- (void)dealloc {
-    NSLog(@"deallocing observer container");
-}
-
-
 @end
 
 
@@ -53,26 +49,40 @@
 
 @interface JS__NotificationCenter()
 
-@property (nonatomic) NSSet *observers;
+@property (atomic) NSSet *observers;
 
 @end
 
 
 
 @implementation JS__NotificationCenter
+@synthesize observers = _observers;
+
+
 
 - (NSSet *)observers {
-    if (!_observers) {
-        _observers = [NSSet set];
+    NSSet *s = nil;
+    @synchronized(self.class) {
+        s = _observers;
+        if (!s) {
+            s = [NSSet set];
+            _observers = s;
+        }
     }
-    return _observers;
+    return s;
+}
+
+- (void)setObservers:(NSSet *)observers {
+    @synchronized(self.class) {
+        _observers = observers;
+    }
 }
 
 
 - (void)registerObserver:(NSObject *)observer
          forNotification:(NSString *)notificationName
            withFireBlock:(JS__SingleParameterBlock)fireBlock {
-
+    
     JS__NotificationObserverContainer *c =
     [JS__NotificationObserverContainer withObserver:observer];
     
@@ -82,21 +92,37 @@
     self.observers = [self.observers setByAddingObject:c];
 }
 
-
 - (void)fireNotification:(NSString *)notificationName
               withObject:(NSObject *)object {
     
+    NSMutableSet *toRemove = [NSMutableSet setWithCapacity:self.observers.count];
+    
     for (JS__NotificationObserverContainer *c in self.observers) {
-
+        
         NSObject *strongObserver = c.observer;
+        
+        if (!strongObserver) {
+            [toRemove addObject:c];
+        }
+        
         NSDictionary *d = strongObserver.__jsNotificationBlocks;
         
         JS__SingleParameterBlock b = d[notificationName];
         if (b) {
-            b(object);
+            if (![[NSThread currentThread] isMainThread]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    b(object);
+                });
+            }
+            else {
+                b(object);
+            }
         }
     }
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        self.observers = [self.observers setByRemovingObjects:toRemove.copy];
+    });
 }
 
 @end

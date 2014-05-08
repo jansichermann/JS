@@ -56,16 +56,25 @@
 }
 
 - (JSButton *)buttonForItem:(JSActionSheetItem *)item {
+    
     JSButton *b = [JSButton buttonWithType:UIButtonTypeCustom];
+    
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     b.backgroundColor = [UIColor clearColor];
-    [b setTitle:item.title forState:UIControlStateNormal];
+    
+    [b setTitle:item.title
+       forState:UIControlStateNormal];
+    
     [b setTitleColor:item.titleColor
             forState:UIControlStateNormal];
+    
+    [b setTitleColor:((UIWindow *)[UIApplication sharedApplication].windows.lastObject).tintColor
+            forState:UIControlStateHighlighted];
+    
     b.titleLabel.font = item.titleFont;
     // the button explicitly introduces a retain cycle
     // so the controller sticks around
-    b.touchUpInsideBlock = ^(__unused JSButton *b) {
+    b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         [self dismiss];
         if (item.onClickBlock) {
             item.onClickBlock();
@@ -119,29 +128,20 @@ static const CGFloat buttonHeight = 44.f;
 }
 
 - (void)present {
-    // Create the image context
     UIWindow *w = [[UIApplication sharedApplication] windows].firstObject;
     UIGraphicsBeginImageContextWithOptions(w.bounds.size,
                                            NO,
                                            w.screen.scale);
     
-    // There he is! The new API method
     [w drawViewHierarchyInRect:w.frame afterScreenUpdates:NO];
-    
-    // Get the snapshot
+
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     
-    // Now apply the blur effect using Apple's UIImageEffect category
     UIImage *blurredSnapshotImage = [snapshotImage applyBlurWithRadius:4
                                                              tintColor:[UIColor colorWithWhite:0.f alpha:0.1]
                                                  saturationDeltaFactor:1.f
                                                              maskImage:nil];
     
-    // Or apply any other effects available in "UIImage+ImageEffects.h"
-    // UIImage *blurredSnapshotImage = [snapshotImage applyDarkEffect];
-    // UIImage *blurredSnapshotImage = [snapshotImage applyExtraLightEffect];
-    
-    // Be nice and clean your mess up
     UIGraphicsEndImageContext();
     UIImageView *iv = [[UIImageView alloc] initWithImage:blurredSnapshotImage];
     iv.alpha = 0.f;

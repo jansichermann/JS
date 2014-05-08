@@ -10,6 +10,9 @@
 
 @interface NSObject (JS)
 
+- (void)executeAfterTimeInterval:(CGFloat)seconds
+                           block:(void(^)())block;
+
 - (void)__setNotificationBlock:(JS__SingleParameterBlock)block
                forNotification:(NSString *)notificationName;
 

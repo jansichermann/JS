@@ -198,9 +198,14 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([rowModel respondsToSelector:@selector(selectionStyle)]) {
         cell.selectionStyle = rowModel.selectionStyle;
     }
-    if ([rowModel respondsToSelector:@selector(cellBackgroundColor)] &&
-        rowModel.cellBackgroundColor) {
+    
+    if ([rowModel respondsToSelector:@selector(cellBackgroundColor)]
+        && rowModel.cellBackgroundColor) {
         cell.backgroundColor = rowModel.cellBackgroundColor;
+    }
+    
+    if ([cell respondsToSelector:@selector(setParentTableView:)]) {
+        cell.parentTableView = self.tableView;
     }
     
     // this is consciously done after

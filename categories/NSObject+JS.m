@@ -10,6 +10,20 @@ static char const * const js__NotificationBlocksKey = "js__NotificationBlocksKey
 
 @implementation NSObject (JS)
 
+- (void)executeAfterTimeInterval:(CGFloat)seconds
+                           block:(void(^)())block {
+    
+    if (!block){
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [NSThread sleepForTimeInterval:seconds];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block();
+        });
+    });
+}
 
 - (void)__setNotificationBlock:(JS__SingleParameterBlock)block
                forNotification:(NSString *)notificationName {

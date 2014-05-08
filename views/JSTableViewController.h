@@ -20,6 +20,9 @@ typedef void(^OnClickBlock)();
               inTableView:(UITableView *)tableView;
 - (void)configureWithModel:(id)model;
 
+@optional
+- (void)setParentTableView:(__weak UITableView *)tableView;
+
 @end
 
 
