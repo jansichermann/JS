@@ -29,7 +29,7 @@
 @implementation JSMapViewTableViewCell
 
 + (CGFloat)heightForModel:(JSMapViewTableViewCellModel *)model
-              inTableView:(UITableView *)tableView {
+              inTableView:(__unused UITableView *)tableView {
     NSParameterAssert([model isKindOfClass:[JSMapViewTableViewCellModel class]]);
     return model.height;
 }

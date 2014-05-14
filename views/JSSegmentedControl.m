@@ -51,13 +51,13 @@
     @throw @"NDI";
 }
 
-- (id)initWithItems:(NSArray *)items {
+- (id)initWithItems:(__unused NSArray *)items {
     @throw @"NDI";
 }
 
 - (void)controlChanged:(JSSegmentedControl *)control {
     JSSegmentedControlModel *m =
-    [self.jsSegmentedControlModels objectAtIndexOrNil:control.selectedSegmentIndex];
+    [self.jsSegmentedControlModels objectAtIndexOrNil:(NSUInteger)control.selectedSegmentIndex];
     NSParameterAssert([m isKindOfClass:[JSSegmentedControlModel class]]);
     if (m.clickBlock) {
         m.clickBlock();

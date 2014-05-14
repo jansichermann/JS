@@ -108,6 +108,7 @@ static const CGFloat buttonHeight = 44.f;
 
 - (void)layoutForItems {
     [self _removeButtons];
+    
     for (NSUInteger i = 0; i < self.items.count; i++) {
         JSActionSheetItem *item = self.items[i];
         NSParameterAssert([item isKindOfClass:[JSActionSheetItem class]]);
@@ -120,9 +121,16 @@ static const CGFloat buttonHeight = 44.f;
         
         [self.buttonView addSubview:b];
         
-        UIView *divider = [[UIView alloc] initWithFrame:CGRectMake(10.f, b.bottom, b.width - 20.f, 1.f)];
+        UIView *divider = [[UIView alloc] initWithFrame:
+                           CGRectMake(10.f,
+                                      b.bottom,
+                                      b.width - 20.f,
+                                      1.f)];
+        
         divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        divider.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.f];
+        divider.backgroundColor = [UIColor colorWithWhite:0.95f
+                                                    alpha:1.f];
+        
         [self.buttonView addSubview:divider];
     }
 }
@@ -134,13 +142,15 @@ static const CGFloat buttonHeight = 44.f;
                                            w.screen.scale);
     
     [w drawViewHierarchyInRect:w.frame afterScreenUpdates:NO];
-
+    
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     
-    UIImage *blurredSnapshotImage = [snapshotImage applyBlurWithRadius:4
-                                                             tintColor:[UIColor colorWithWhite:0.f alpha:0.1]
-                                                 saturationDeltaFactor:1.f
-                                                             maskImage:nil];
+    UIImage *blurredSnapshotImage =
+    [snapshotImage applyBlurWithRadius:4
+                             tintColor:[UIColor colorWithWhite:0.f
+                                                         alpha:0.1f]
+                 saturationDeltaFactor:1.f
+                             maskImage:nil];
     
     UIGraphicsEndImageContext();
     UIImageView *iv = [[UIImageView alloc] initWithImage:blurredSnapshotImage];
