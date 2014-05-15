@@ -22,7 +22,8 @@
          topBottomPadding:0];
 }
 
-+ (instancetype)withText:(NSAttributedString *)text icon:(UIImage *)icon {
++ (instancetype)withText:(NSAttributedString *)text
+                    icon:(UIImage *)icon {
     return [self withText:text
                      icon:icon
          topBottomPadding:0];
