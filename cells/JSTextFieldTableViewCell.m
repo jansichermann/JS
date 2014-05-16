@@ -113,7 +113,7 @@ static const CGFloat cellDefaultHeight = 44.f;
         textField.keyboardType = model.keyboardType;
         textField.onDidEndEditingBlock = model.onDidEndEditingBlock;
         textField.onEditingDidEndOnExitBlock = model.onEditingDidEndOnExitBlock;
-        textField.onValueChangeBlock = ^(UITextField *tf) {
+        textField.onValueChangeBlock = ^(JSTextField *tf) {
             if (model.onValueChangeBlock) {
                 model.onValueChangeBlock(tf);
             }

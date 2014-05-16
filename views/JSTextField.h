@@ -6,8 +6,11 @@
  Created by jan on 12/2/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
  */
 
+@class JSTextField;
 
-typedef void(^JSTextFieldDelegateBlock)(UITextField *tf);
+typedef void(^JSTextFieldDelegateBlock)(JSTextField *tf);
+
+
 @interface JSTextField : UITextField
 @property (nonatomic, copy)         JSTextFieldDelegateBlock        onValueChangeBlock;
 @property (nonatomic, copy)         JSTextFieldDelegateBlock        onDidEndEditingBlock;

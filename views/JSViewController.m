@@ -36,10 +36,23 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
+    self.appearanceCount++;
+    
 #if LOG
     NSLog(@"%@", NSStringFromClass(self.class));
 #endif
-    self.appearanceCount++;
+    
+    if (self.onViewDidAppearBlock) {
+        self.onViewDidAppearBlock();
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.onViewWillDisappearBlock) {
+        self.onViewWillDisappearBlock();
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
