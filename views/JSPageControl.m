@@ -13,7 +13,7 @@
 
 - (void)selectionChanged:(UIPageControl *)pc {
     if (self.selectionBlock) {
-        self.selectionBlock(pc.currentPage);
+        self.selectionBlock((NSUInteger)pc.currentPage);
     }
 }
 
