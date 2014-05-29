@@ -40,6 +40,7 @@ typedef void(^OnClickBlock)();
 - (UITableViewCellStyle)cellStyle;
 - (UITableViewCellEditingStyle)editingStyle;
 - (BOOL)editable;
+- (BOOL)hidden;
 @end
 
 
@@ -63,6 +64,16 @@ typedef void(^OnClickBlock)();
  @discussion The UITableView instance for this controller. This instance may change during the lifetime of this controller, such as when you call setTableViewStyle:
  */
 @property (nonatomic, readonly)       UITableView         *tableView;
+
+/**
+ @discussion Setting this causes a refresh view to be added the tableView
+ */
+@property (nonatomic, copy) JS__VoidBlock onPullToRefreshBlock;
+
+/**
+ @discussion Can be overridden for custom UIView to be used as the arrow
+ */
++ (UIView *)pullToRefreshView;
 
 - (void)setTableViewStyle:(UITableViewStyle)style;
 

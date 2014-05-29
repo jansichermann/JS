@@ -1,5 +1,7 @@
 #import "JSTableViewController.h"
 #import "NSArray+JS.h"
+#import "UIView+JS.h"
+
 
 
 @interface JSTableViewController ()
@@ -9,7 +11,7 @@ UITableViewDataSource
 >
 @property (nonatomic, readwrite)        UITableView         *tableView;
 @property (nonatomic)                   NSArray             *sections;
-
+@property (nonatomic) UIView               *pullToRefreshView;
 @end
 
 
@@ -171,6 +173,13 @@ viewForHeaderInSection:(NSInteger)section {
 heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *rowModel =
     [self modelForTableView:tableView atIndexPath:indexPath];
+    
+    if ([rowModel respondsToSelector:@selector(hidden)]) {
+        if (rowModel.hidden) {
+            return 0.f;
+        }
+    }
+    
     return [rowModel.cellClass heightForModel:rowModel.model
                                   inTableView:tableView];
 }
@@ -229,7 +238,7 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView
            editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *m = [self modelForTableView:tableView
-                atIndexPath:indexPath];
+                                                            atIndexPath:indexPath];
     if ([m respondsToSelector:@selector(editingStyle)]) {
         return m.editingStyle;
     }
@@ -244,6 +253,78 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self tableView:tableView
        didSelectRow:rowModel
         atIndexPath:indexPath];
+}
+
++ (UIView *)pullToRefreshView {
+    
+    UIView *v = [[UIView alloc] initWithFrame:
+     CGRectMake(0.f,
+                0.f,
+                64.f,
+                64)];
+    
+    
+    UIView *stem = [[UIView alloc] initWithFrame:CGRectMake(28.f,
+                                                            8.f,
+                                                            8.f,
+                                                            32.f)];
+    UIWindow *mainWindow = [UIApplication sharedApplication].windows.firstObject;
+    stem.backgroundColor = mainWindow.tintColor;
+    [v addSubview:stem];
+    
+    
+    UIView *left = [[UIView alloc] initWithFrame:CGRectMake(21.f,
+                                                            32.f,
+                                                            8.f,
+                                                            28.f)];
+    left.backgroundColor = mainWindow.tintColor;
+    left.transform = CGAffineTransformMakeRotation((CGFloat)M_PI * -0.25f);
+    [v addSubview:left];
+    
+    UIView *right = [[UIView alloc] initWithFrame:CGRectMake(35.f,
+                                                            32.f,
+                                                            8.f,
+                                                            28.f)];
+    right.backgroundColor = mainWindow.tintColor;
+    right.transform = CGAffineTransformMakeRotation((CGFloat)M_PI * -0.75f);
+    [v addSubview:right];
+    
+    return v;
+}
+
+- (void)setOnPullToRefreshBlock:(JS__VoidBlock)onPullToRefreshBlock {
+    _onPullToRefreshBlock = [onPullToRefreshBlock copy];
+    [self.pullToRefreshView removeFromSuperview];
+    if (onPullToRefreshBlock) {
+        self.pullToRefreshView = [self.class pullToRefreshView];
+        [self.tableView addSubview:self.pullToRefreshView];
+        self.pullToRefreshView.top = -self.pullToRefreshView.height;
+        [self.pullToRefreshView centerHorizontallyInSuperview];
+        self.pullToRefreshView.autoresizingMask =
+        UIViewAutoresizingFlexibleLeftMargin |
+        UIViewAutoresizingFlexibleRightMargin;
+    }
+}
+
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
+                  willDecelerate:(__unused BOOL)decelerate {
+    if (scrollView.contentOffset.y < -75.f) {
+        if (self.onPullToRefreshBlock) {
+            self.onPullToRefreshBlock();
+        }
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat y = scrollView.contentOffset.y + 30.f;
+    if (self.pullToRefreshView && y < 0) {
+        
+        CGFloat progress = MAX(y, -45) / -45 * (CGFloat)M_PI;
+        
+        
+        self.pullToRefreshView.transform = CGAffineTransformMakeRotation(progress);
+    }
 }
 
 @end
