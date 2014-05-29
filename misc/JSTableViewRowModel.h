@@ -13,12 +13,13 @@
 <
 JSTableViewRowModelProtocol
 >
-@property (nonatomic, copy, readonly)   OnClickBlock        onClickBlock;
+@property (nonatomic, copy)   OnClickBlock        onClickBlock;
 @property (nonatomic, readonly) id                          model;
 @property (nonatomic, readonly) Class                       cellClass;
 @property (nonatomic, readonly) UIColor                     *cellBackgroundColor;
 @property (nonatomic, readonly) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic, readonly) UITableViewCellEditingStyle editingStyle;
+@property (nonatomic, readwrite)BOOL                        hidden;
 
 + (instancetype)withModel:(id)model
                 cellClass:(Class)cellClass;

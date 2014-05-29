@@ -6,7 +6,6 @@
 
 @property (nonatomic)                   id                  model;
 @property (nonatomic)                   Class               cellClass;
-@property (nonatomic, copy, readwrite)  OnClickBlock        onClickBlock;
 @property (nonatomic)                   UIColor             *cellBackgroundColor;
 @property (nonatomic)                   UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic)                   UITableViewCellEditingStyle editingStyle;
