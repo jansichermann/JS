@@ -68,7 +68,7 @@
               inTableView:(UITableView *)tableView {
     NSParameterAssert([model isKindOfClass:[JSAttributedStringTableViewCellModel class]]);
     NSParameterAssert([model.text isKindOfClass:[NSAttributedString class]]);
-    return [model.text boundingRectWithSize:CGSizeMake(tableView.width,
+    return [model.text boundingRectWithSize:CGSizeMake(tableView.width - 32.f,
                                                        CGFLOAT_MAX)
                                     options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                     context:nil].size.height + 2 * model.topBottomPadding;
@@ -84,7 +84,7 @@
         return nil;
     }
     
-    self.textLabel.numberOfLines = INT16_MAX;
+    self.textLabel.numberOfLines = 0;
     UILabel *textLabel = self.textLabel;
     UIImageView *imageView = self.imageView;
     
