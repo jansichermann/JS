@@ -7,6 +7,16 @@
     return 44.f;
 }
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style
+                reuseIdentifier:reuseIdentifier];
+    
+    self.clipsToBounds = YES;
+    
+    return self;
+}
+
 - (void)configureWithModel:(id)model {
     if (self.configureBlock) {
         self.configureBlock(model);
