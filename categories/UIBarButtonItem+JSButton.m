@@ -7,13 +7,15 @@
 
 + (instancetype)barButtonItemWithTitle:(NSString *)title
                                   font:(UIFont *)font
-                            clickBlock:(void(^)())block {
+                            clickBlock:(JS__VoidBlock)block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
     [b setTitle:title forState:UIControlStateNormal];
     b.titleLabel.font = font;
-    b.touchUpInsideBlock = ^(__unused JSButton *bb) {
-        block();
-    };
+    if (block) {
+        b.touchUpInsideBlock = ^(__unused JSButton *bb) {
+            block();
+        };
+    }
     [b sizeToFit];
     
     UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:b];
@@ -21,7 +23,7 @@
 }
 
 + (instancetype)barButtonItemWithImage:(UIImage *)image
-                            clickBlock:(void(^)())block {
+                            clickBlock:(JS__VoidBlock)block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
     b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         block();
