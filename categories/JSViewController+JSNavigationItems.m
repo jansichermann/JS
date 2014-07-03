@@ -17,7 +17,6 @@
 
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font {
     __weak JSViewController *weakSelf = self;
-    
     self.navigationItem.leftBarButtonItem =
     [UIBarButtonItem barButtonItemWithTitle:@"Close"
                                        font:font

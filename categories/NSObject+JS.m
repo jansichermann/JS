@@ -10,6 +10,29 @@ static char const * const js__NotificationBlocksKey = "js__NotificationBlocksKey
 
 @implementation NSObject (JS)
 
+- (void)observe:(NSString *)observationName
+      fireBlock:(JS__SingleParameterBlock)fireBlock {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:observationName
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_notificationFired:)
+                                                 name:observationName
+                                               object:nil];
+    [self __setNotificationBlock:fireBlock
+                 forNotification:observationName];
+}
+
+- (void)_notificationFired:(NSNotification *)notif {
+    NSDictionary *notificationBlocks = self.__jsNotificationBlocks;
+    JS__SingleParameterBlock b = [notificationBlocks objectForKey:notif.name];
+    if (b) {
+        b(notif.object);
+    }
+}
+
 - (void)executeAfterTimeInterval:(CGFloat)seconds
                            block:(void(^)())block {
     
