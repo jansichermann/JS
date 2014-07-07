@@ -1,40 +1,18 @@
 #import "NSObject+JS.h"
-#import <objc/runtime.h>
 #import "NSDictionary+JS.h"
+#import <objc/runtime.h>
+#import "JS__NotificationObserverContainer.h"
 
 
 
-static char const * const js__NotificationBlocksKey = "js__NotificationBlocksKey";
-
+static char const * const js__ObserverContainersKey = "js__ObserverContainersKey";
 
 
 @implementation NSObject (JS)
 
-- (void)observe:(NSString *)observationName
-      fireBlock:(JS__SingleParameterBlock)fireBlock {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:observationName
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(_notificationFired:)
-                                                 name:observationName
-                                               object:nil];
-    [self __setNotificationBlock:fireBlock
-                 forNotification:observationName];
-}
-
-- (void)_notificationFired:(NSNotification *)notif {
-    NSDictionary *notificationBlocks = self.__jsNotificationBlocks;
-    JS__SingleParameterBlock b = [notificationBlocks objectForKey:notif.name];
-    if (b) {
-        b(notif.object);
-    }
-}
 
 - (void)executeAfterTimeInterval:(CGFloat)seconds
-                           block:(void(^)())block {
+                           block:(JS__VoidBlock)block {
     
     if (!block){
         return;
@@ -48,32 +26,50 @@ static char const * const js__NotificationBlocksKey = "js__NotificationBlocksKey
     });
 }
 
-- (void)__setNotificationBlock:(JS__SingleParameterBlock)block
-               forNotification:(NSString *)notificationName {
+#pragma mark - NSNotificationCenter Observing
+
+- (void)observeNotificationCenter:(NSNotificationCenter *)center
+                               key:(NSString *)notificationKey
+     withFireBlock:(JS__SingleParameterBlock)fireBlock {
     
-    NSDictionary *d = self.__jsNotificationBlocks;
+    JS__NotificationObserverContainer *container =
+    [JS__NotificationObserverContainer notificationCenter:center
+                                              keyObserver:self
+                                                   forKey:notificationKey
+                                                fireBlock:fireBlock];
+    [self _addObserverContainer:container];
+}
+
+
+#pragma mark - KVO
+
+- (void)observe:(NSObject *)observant
+     forKeyPath:(NSString *)keyPath
+        options:(NSKeyValueObservingOptions)options
+      fireBlock:(JS__StringDictBlock)fireBlock {
     
-    if (block) {
-        d = [d dictionaryBySettingObject:block
-                                  forKey:notificationName];
-    }
-    else {
-        d = [d dictionaryByRemovingObjectForKey:notificationName];
-    }
-    
+    [self _addObserverContainer:
+     [JS__NotificationObserverContainer kvObserver:self
+                                       onObservant:observant
+                                        forKeyPath:keyPath
+                                           options:options
+                                         fireBlock:fireBlock]
+     ];
+}
+
+- (void)_addObserverContainer:(JS__NotificationObserverContainer *)container {
+    NSArray *observerContainers = self.observerContainers;
     objc_setAssociatedObject(self,
-                             js__NotificationBlocksKey,
-                             d,
+                             js__ObserverContainersKey,
+                             [observerContainers arrayByAddingObject:container],
                              OBJC_ASSOCIATION_RETAIN);
 }
 
-- (NSDictionary *)__jsNotificationBlocks {
-    NSDictionary *d = objc_getAssociatedObject(self,
-                                    js__NotificationBlocksKey);
-    if (!d) {
-        return @{};
-    }
-    return d;
+- (NSArray *)observerContainers {
+    NSArray *arr = objc_getAssociatedObject(self,
+                                            js__ObserverContainersKey);
+    return arr ? arr : @[];
 }
+
 
 @end

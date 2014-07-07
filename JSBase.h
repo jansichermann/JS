@@ -6,3 +6,4 @@
 typedef void(^JS__VoidBlock)();
 typedef void(^JS__SingleParameterBlock)(id);
 typedef void(^JS__BarButtonItemBlock)(UIBarButtonItem *);
+typedef void(^JS__StringDictBlock)(NSString *string, NSDictionary *dict);

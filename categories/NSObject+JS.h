@@ -11,11 +11,15 @@
 @interface NSObject (JS)
 
 - (void)executeAfterTimeInterval:(CGFloat)seconds
-                           block:(void(^)())block;
+                           block:(JS__VoidBlock)block;
 
-- (void)__setNotificationBlock:(JS__SingleParameterBlock)block
-               forNotification:(NSString *)notificationName;
+- (void)observeNotificationCenter:(NSNotificationCenter *)center
+                              key:(NSString *)notificationKey
+                    withFireBlock:(JS__SingleParameterBlock)fireBlock;
 
-- (NSDictionary *)__jsNotificationBlocks;
+- (void)observe:(NSObject *)observant
+     forKeyPath:(NSString *)keyPath
+        options:(NSKeyValueObservingOptions)options
+      fireBlock:(JS__StringDictBlock)fireBlock;
 
 @end
