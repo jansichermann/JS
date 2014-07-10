@@ -84,9 +84,9 @@
 }
 
 - (void)_notificationFired:(NSNotification *)notif {
-    if (!self.observer) {
-        // do something, i.e. remove block and self
-    }
+    // this can only fire while the observer is actually alive
+    // once the observer deallocs, the container's retain count should
+    // reach 0 and it itself will dealloc as well.
     if (self.fireBlock) {
         self.fireBlock(notif.object);
     }
@@ -107,9 +107,10 @@
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    if (!self.observer) {
-        // do something
-    }
+    // same story here: This can only fire if the observant changed, by definition
+    // it still lives.
+    // This instance itself also only survives if the observer lives, as it retains
+    // this instsance. 
     if (self.kvoFireBlock) {
         self.kvoFireBlock(keyPath, change);
     }
