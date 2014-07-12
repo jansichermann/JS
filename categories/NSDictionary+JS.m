@@ -27,4 +27,22 @@
     return d.copy;
 }
 
+- (NSObject *)nestedObjectOrNil:(NSString *)path {
+    NSArray *components = [path componentsSeparatedByString:@"."];
+    NSUInteger compIndex = 0;
+    NSObject *obj = self;
+    
+    while (YES) {
+        NSString *key = [components objectAtIndex:compIndex];
+        if (!key) {
+            break;
+        }
+        if (obj && [obj isKindOfClass:[NSDictionary class]]) {
+            obj = [(NSDictionary *)obj objectForKey:key];
+        }
+    }
+    
+    return obj;
+}
+
 @end

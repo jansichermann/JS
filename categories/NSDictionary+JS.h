@@ -12,4 +12,5 @@
 - (NSDictionary *)dictionaryBySettingObject:(NSObject *)object
                                      forKey:(id)key;
 - (NSDictionary *)dictionaryByRemovingObjectForKey:(NSString *)key;
+- (NSObject *)nestedObjectOrNil:(NSString *)path;
 @end
