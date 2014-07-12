@@ -256,40 +256,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 + (UIView *)pullToRefreshView {
-    
-    UIView *v = [[UIView alloc] initWithFrame:
-     CGRectMake(0.f,
-                0.f,
-                64.f,
-                64)];
-    
-    
-    UIView *stem = [[UIView alloc] initWithFrame:CGRectMake(28.f,
-                                                            8.f,
-                                                            8.f,
-                                                            32.f)];
-    UIWindow *mainWindow = [UIApplication sharedApplication].windows.firstObject;
-    stem.backgroundColor = mainWindow.tintColor;
-    [v addSubview:stem];
-    
-    
-    UIView *left = [[UIView alloc] initWithFrame:CGRectMake(21.f,
-                                                            32.f,
-                                                            8.f,
-                                                            28.f)];
-    left.backgroundColor = mainWindow.tintColor;
-    left.transform = CGAffineTransformMakeRotation((CGFloat)M_PI * -0.25f);
-    [v addSubview:left];
-    
-    UIView *right = [[UIView alloc] initWithFrame:CGRectMake(35.f,
-                                                            32.f,
-                                                            8.f,
-                                                            28.f)];
-    right.backgroundColor = mainWindow.tintColor;
-    right.transform = CGAffineTransformMakeRotation((CGFloat)M_PI * -0.75f);
-    [v addSubview:right];
-    
-    return v;
+    return nil;
 }
 
 - (void)setOnPullToRefreshBlock:(JS__VoidBlock)onPullToRefreshBlock {
