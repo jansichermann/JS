@@ -29,8 +29,8 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 #pragma mark - NSNotificationCenter Observing
 
 - (void)observeNotificationCenter:(NSNotificationCenter *)center
-                               key:(NSString *)notificationKey
-     withFireBlock:(JS__SingleParameterBlock)fireBlock {
+                              key:(NSString *)notificationKey
+                    withFireBlock:(JS__SingleParameterBlock)fireBlock {
     
     JS__NotificationObserverContainer *container =
     [JS__NotificationObserverContainer notificationCenter:center
@@ -59,16 +59,24 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 
 - (void)_addObserverContainer:(JS__NotificationObserverContainer *)container {
     NSArray *observerContainers = self.observerContainers;
-    objc_setAssociatedObject(self,
-                             js__ObserverContainersKey,
-                             [observerContainers arrayByAddingObject:container],
-                             OBJC_ASSOCIATION_RETAIN);
+    [self _setObserverContainers:[observerContainers arrayByAddingObject:container]];
 }
 
 - (NSArray *)observerContainers {
     NSArray *arr = objc_getAssociatedObject(self,
                                             js__ObserverContainersKey);
     return arr ? arr : @[];
+}
+
+- (void)removeAllObservations {
+    [self _setObserverContainers:nil];
+}
+
+- (void)_setObserverContainers:(NSArray *)containers {
+    objc_setAssociatedObject(self,
+                             js__ObserverContainersKey,
+                             containers,
+                             OBJC_ASSOCIATION_RETAIN);
 }
 
 

@@ -22,4 +22,6 @@
         options:(NSKeyValueObservingOptions)options
       fireBlock:(JS__StringDictBlock)fireBlock;
 
+- (void)removeAllObservations;
+
 @end
