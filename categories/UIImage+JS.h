@@ -10,4 +10,8 @@
 
 @interface UIImage (JS)
 + (UIImage *)named:(NSString *)imageName;
++ (UIImage *)withImage:(UIImage *)image
+          scaledToSize:(CGSize)size;
+- (UIImage *)scaledToSize:(CGSize)size;
+- (UIImage *)scaledToMaxWidth:(CGFloat)maxWidth;
 @end
