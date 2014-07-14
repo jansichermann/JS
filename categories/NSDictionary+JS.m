@@ -45,4 +45,24 @@
     return obj;
 }
 
+- (NSDictionary *)dictionaryWithCopiedKeysToKeys:(NSDictionary *)keyTranslation {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:keyTranslation.count];
+    for (NSString *originalKey in keyTranslation.allKeys) {
+        NSString *newKey = keyTranslation[originalKey];
+        if (self[originalKey]) {
+            d[newKey] = self[originalKey];
+        }
+    }
+    return d.copy;
+}
+
+- (NSDictionary *)dictionaryWithTransferredKeysToKeys:(NSDictionary *)keyTranslation {
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (NSString *key in self.allKeys) {
+        NSString *newKey = keyTranslation[key] ? keyTranslation[key] : key;
+        d[newKey] = self[key];
+    }
+    return d.copy;
+}
+
 @end
