@@ -32,7 +32,7 @@
     }
     
     return [self scaledToSize:CGSizeMake(maxWidth,
-                                         self.size.height / (self.size.width / maxWidth))];
+                                        roundf(self.size.height / (self.size.width / maxWidth)))];
 }
 
 @end
