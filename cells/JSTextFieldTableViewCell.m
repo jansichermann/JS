@@ -135,7 +135,6 @@ static const CGFloat cellDefaultHeight = 44.f;
         
         strongSelf.imageView.image = model.icon;
         
-#warning fix how x is determined
         strongSelf.placeholderLabel.frame =
         CGRectMake(titleLeft,
                    0.f,
