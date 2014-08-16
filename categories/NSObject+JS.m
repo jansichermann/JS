@@ -17,13 +17,8 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
     if (!block){
         return;
     }
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [NSThread sleepForTimeInterval:seconds];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            block();
-        });
-    });
+        
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
 }
 
 #pragma mark - NSNotificationCenter Observing
