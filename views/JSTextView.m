@@ -26,6 +26,11 @@ UITextViewDelegate
     @throw @"NDI";
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    if (self.onDidBeginEditingBlock) {
+        self.onDidBeginEditingBlock(textView);
+    }
+}
 
 - (void)textViewDidChange:(UITextView *)textView {
     if (self.onDidChangeBlock) {

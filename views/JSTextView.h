@@ -9,6 +9,7 @@
 typedef void(^TextViewBlock)(UITextView *tf);
 
 @interface JSTextView : UITextView
+@property (nonatomic, copy)     TextViewBlock       onDidBeginEditingBlock;
 @property (nonatomic, copy)     TextViewBlock       onDidEndEditingBlock;
 @property (nonatomic, copy)     TextViewBlock       onDidChangeBlock;
 @end
