@@ -21,6 +21,11 @@ UITableViewDataSource
 @synthesize tableView = _tableView;
 @synthesize sections = _sections;
 
+
+- (void)dealloc {
+    self.tableView.delegate = nil;
+}
+
 #pragma mark - Setup
 
 - (void)loadView {
