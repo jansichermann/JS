@@ -23,6 +23,10 @@
 
 @property (nonatomic, copy) JS__VoidBlock onViewWillDisappearBlock;
 
+@property (nonatomic, copy) JS__VoidBlock onViewDidLoadBlock;
+
+@property (nonatomic, copy) JS__VoidBlock onViewWillAppearBlock;
+
 /**
  @return Return YES if you want the view to be resized according to the keyboard
  */

@@ -29,9 +29,19 @@
     return NO;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if (self.onViewDidLoadBlock) {
+        self.onViewDidLoadBlock();
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotification];
+    if (self.onViewWillAppearBlock) {
+        self.onViewWillAppearBlock();
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
