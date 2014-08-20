@@ -3,7 +3,7 @@
 
 
 /**
- Created by jan on 11/17/13. Copyright (c) 2013 Jan Sichermann. All rights reserved.
+ Created by jan on 11/17/13. Copyright (c) 2013 Jan Sichermann.
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
