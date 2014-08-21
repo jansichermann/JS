@@ -18,6 +18,18 @@
     return d.copy;
 }
 
+- (NSDictionary *)dictionaryBySettingObjectsInDictionary:(NSDictionary *)dict {
+    if (dict == nil) {
+        return self;
+    }
+    
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:self];
+    for (NSObject <NSCopying>*key in dict.allKeys) {
+        d[key] = dict[key];
+    }
+    return d.copy;
+}
+
 - (NSDictionary *)dictionaryByRemovingObjectForKey:(NSString *)key {
     if (key == nil) {
         return self;
