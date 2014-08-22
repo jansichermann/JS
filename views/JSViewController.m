@@ -1,7 +1,5 @@
 #import "JSViewController.h"
 
-#include "JSMacros.h"
-
 #import "UIView+JS.h"
 
 
