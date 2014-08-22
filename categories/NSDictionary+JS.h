@@ -28,9 +28,9 @@
 
 @interface NSDictionary (JS)
 - (NSDictionary *)dictionaryBySettingObject:(NSObject *)object
-                                     forKey:(id)key;
+                                     forKey:(NSObject <NSCopying> *)key;
 - (NSDictionary *)dictionaryBySettingObjectsInDictionary:(NSDictionary *)dict;
-- (NSDictionary *)dictionaryByRemovingObjectForKey:(NSString *)key;
+- (NSDictionary *)dictionaryByRemovingObjectForKey:(NSObject <NSCopying> *)key;
 - (NSObject *)nestedObjectOrNil:(NSString *)path;
 
 /**

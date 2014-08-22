@@ -3,7 +3,7 @@
 @implementation NSDictionary (JS)
 
 - (NSDictionary *)dictionaryBySettingObject:(NSObject *)object
-                                     forKey:(id)key {
+                                     forKey:(NSObject <NSCopying> *)key {
     if (key == nil) {
         return self;
     }
@@ -30,10 +30,14 @@
     return d.copy;
 }
 
-- (NSDictionary *)dictionaryByRemovingObjectForKey:(NSString *)key {
+- (NSDictionary *)dictionaryByRemovingObjectForKey:(NSObject <NSCopying> *)key {
     if (key == nil) {
         return self;
     }
+    if (self[key] == nil) {
+        return self;
+    }
+    
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:self];
     [d removeObjectForKey:key];
     return d.copy;
