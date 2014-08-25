@@ -7,11 +7,15 @@
 @interface JSTableViewController ()
 <
 UITableViewDelegate,
-UITableViewDataSource
+UITableViewDataSource,
+UISearchDisplayDelegate
 >
 @property (nonatomic, readwrite)        UITableView         *tableView;
 @property (nonatomic)                   NSArray             *sections;
-@property (nonatomic) UIView               *pullToRefreshView;
+@property (nonatomic)                   NSArray             *searchSections;
+@property (nonatomic)                   UIView              *pullToRefreshView;
+@property (nonatomic)                   UISearchDisplayController *jsSearchDisplayController;
+@property (nonatomic, copy)             OnSearchBlock       onSearchBlock;
 @end
 
 
@@ -61,6 +65,10 @@ UITableViewDataSource
     self.sections = nil;
 }
 
+- (void)resetSearchSections {
+    self.searchSections = nil;
+}
+
 - (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
            atIndex:(NSUInteger)index {
     NSParameterAssert(self.sections);
@@ -100,11 +108,22 @@ UITableViewDataSource
     }
 }
 
+- (void)addSearchSection:(NSObject <JSTableViewSectionModelProtocol> *)section {
+    if (!section) {
+        return;
+    }
+    NSParameterAssert([section conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
+    self.searchSections = self.searchSections ? [self.searchSections arrayByAddingObject:section] : @[section];
+}
+
 
 #pragma mark - JSTableViewController Convenience
 
-- (NSObject <JSTableViewSectionModelProtocol> *)_sectionModelForTableView:(__unused UITableView *)tableView
+- (NSObject <JSTableViewSectionModelProtocol> *)_sectionModelForTableView:(UITableView *)tableView
                                                                 inSection:(NSUInteger)section {
+    if (tableView == self.jsSearchDisplayController.searchResultsTableView) {
+        return [self.searchSections objectAtIndexOrNil:section];
+    }
     return [self.sections objectAtIndexOrNil:section];
 }
 
@@ -155,6 +174,10 @@ heightForHeaderInSection:(NSInteger)section {
     NSObject <JSTableViewSectionModelProtocol> *sectionModel =
     [self _sectionModelForTableView:tableView
                           inSection:(NSUInteger)section];
+    if (!sectionModel) {
+        return 0;
+    }
+    
     NSParameterAssert([sectionModel conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)]);
     if ([sectionModel respondsToSelector:@selector(sectionHeaderHeight)]) {
         return sectionModel.sectionHeaderHeight;
@@ -178,6 +201,10 @@ viewForHeaderInSection:(NSInteger)section {
 heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *rowModel =
     [self modelForTableView:tableView atIndexPath:indexPath];
+
+    if (!rowModel) {
+        return 0.f;
+    }
     
     if ([rowModel respondsToSelector:@selector(hidden)]) {
         if (rowModel.hidden) {
@@ -196,8 +223,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
             count];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(__unused UITableView *)tableView {
-    return (NSInteger)self.sections.count;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return (NSUInteger) (tableView == self.searchTableView ? self.searchSections.count : self.sections.count);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -299,4 +326,34 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
 }
 
+- (UISearchBar *)addSearchDisplayController:(OnSearchBlock)onSearchBlock {
+    self.onSearchBlock = onSearchBlock;
+    UISearchBar *searchBar = [[UISearchBar alloc] init];
+    self.jsSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar
+                                                                       contentsController:self];
+    self.jsSearchDisplayController.delegate = self;
+    self.jsSearchDisplayController.searchResultsDataSource = self;
+    self.jsSearchDisplayController.searchResultsDelegate = self;
+    return searchBar;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller
+shouldReloadTableForSearchString:(NSString *)searchString {
+    if (self.onSearchBlock) {
+        self.onSearchBlock(searchString);
+    }
+    return NO;
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+//    [self.jsSearchDisplayController.searchResultsTableView reloadData];
+}
+
+//- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller;
+//- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller;
+//- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller;
+
+- (UITableView *)searchTableView {
+    return self.jsSearchDisplayController.searchResultsTableView;
+}
 @end

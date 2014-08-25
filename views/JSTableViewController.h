@@ -29,7 +29,7 @@
 
 
 typedef void(^OnClickBlock)();
-
+typedef void(^OnSearchBlock)(NSString *);
 
 
 @protocol JSTableViewCellProtocol <NSObject>
@@ -97,13 +97,23 @@ typedef void(^OnClickBlock)();
 - (void)setTableViewStyle:(UITableViewStyle)style;
 
 - (void)resetSections;
+- (void)resetSearchSections;
+
+
+- (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
+- (void)addSearchSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
+
+
 - (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
            atIndex:(NSUInteger)index;
-- (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section;
+
 - (void)updateSection:(NSUInteger)section
              withRows:(NSObject <JSTableViewSectionModelProtocol> *)rows
       reloadTableView:(BOOL)reloadTableView;
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;
+
+- (UISearchBar *)addSearchDisplayController:(OnSearchBlock)onSearchBlock;
+- (UITableView *)searchTableView;
 
 @end
