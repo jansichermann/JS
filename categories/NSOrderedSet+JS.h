@@ -27,5 +27,8 @@
 
 
 @interface NSOrderedSet (JS)
+- (instancetype)orderedSetByAppendingOrderedSet:(NSOrderedSet *)set;
+- (instancetype)orderedSetByRemovingObject:(NSObject *)object;
+- (instancetype)orderedSetByAppendingObject:(NSObject *)object;
 - (id)objectAtIndexOrNil:(NSUInteger)index;
 @end
