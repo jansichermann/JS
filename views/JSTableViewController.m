@@ -351,6 +351,17 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 #pragma mark - UIScrollViewDelegate
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    // this is for the event where a touch (which highlights a cell, that may trigger a highlight for the entire section) gets canceled due to scrolling.
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        UITableView *tv = (UITableView *)scrollView;
+        for (UITableViewCell *c in [tv visibleCells]) {
+            [c setHighlighted:NO];
+        }
+    }
+    
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
                   willDecelerate:(__unused BOOL)decelerate {
     if (scrollView.contentOffset.y < -75.f) {
