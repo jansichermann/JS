@@ -38,6 +38,7 @@ JSTableViewSectionModelProtocol
  */
 + (instancetype)sectionWithRows:(NSArray *)rows;
 - (void)setHeaderView:(UIView *)v;
+- (void)setHighlightEntireSection:(BOOL)highlight;
 - (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title
                                topBottomPadding:(CGFloat)padding
                                 backgroundColor:(UIColor *)color;
@@ -51,5 +52,6 @@ JSTableViewSectionModelProtocol
 - (NSObject <JSTableViewRowModelProtocol> *)modelAtRow:(NSUInteger)row;
 - (NSInteger)count;
 - (UIView *)sectionHeaderView;
+- (BOOL)highlightEntireSection;
 
 @end

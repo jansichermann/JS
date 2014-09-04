@@ -166,8 +166,50 @@ UISearchDisplayDelegate
     }
 }
 
+- (void)deselectTableView:(UITableView *)tableView
+                 animated:(BOOL)animated {
+    NSIndexPath *ip = [tableView indexPathForSelectedRow];
+    if (ip) {
+        [self.class tableView:tableView
+                    highlight:NO
+                      section:ip.section
+                     animated:animated];
+    }
+}
+
++ (void)tableView:(UITableView *)tableView
+        highlight:(BOOL)highlight
+          section:(NSUInteger)section
+         animated:(BOOL)animated {
+    NSUInteger nr = [tableView numberOfRowsInSection:section];
+    
+    for (int i = 0; i < nr; i++) {
+        UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i
+                                                                                 inSection:section]];
+        [c setSelected:NO animated:animated];
+        [c setHighlighted:highlight animated:animated];
+    }
+}
+
 
 #pragma mark - TableView Delegate, DataSource
+
+- (BOOL)tableView:(UITableView *)tableView
+shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSObject <JSTableViewSectionModelProtocol> *section = [self _sectionModelForTableView:tableView
+                                                                                inSection:indexPath.section];
+    
+    if ([section conformsToProtocol:@protocol(JSTableViewSectionModelProtocol)] && [section respondsToSelector:@selector(highlightEntireSection)]) {
+        if (section.highlightEntireSection) {
+            [self.class tableView:tableView
+                        highlight:YES
+                          section:indexPath.section
+                         animated:NO];
+        }
+    }
+    
+    return YES;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView
 heightForHeaderInSection:(NSInteger)section {
@@ -201,7 +243,7 @@ viewForHeaderInSection:(NSInteger)section {
 heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject <JSTableViewRowModelProtocol> *rowModel =
     [self modelForTableView:tableView atIndexPath:indexPath];
-
+    
     if (!rowModel) {
         return 0.f;
     }
@@ -287,6 +329,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         atIndexPath:indexPath];
 }
 
+#pragma mark - Pull To Refresh
+
 + (UIView *)pullToRefreshView {
     return nil;
 }
@@ -305,6 +349,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
 }
 
+#pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
                   willDecelerate:(__unused BOOL)decelerate {
@@ -326,6 +371,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     }
 }
 
+#pragma mark - UISearchDisplayController
+
 - (UISearchBar *)addSearchDisplayController:(OnSearchBlock)onSearchBlock {
     self.onSearchBlock = onSearchBlock;
     UISearchBar *searchBar = [[UISearchBar alloc] init];
@@ -345,15 +392,8 @@ shouldReloadTableForSearchString:(NSString *)searchString {
     return NO;
 }
 
-- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-//    [self.jsSearchDisplayController.searchResultsTableView reloadData];
-}
-
-//- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller;
-//- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller;
-//- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller;
-
 - (UITableView *)searchTableView {
     return self.jsSearchDisplayController.searchResultsTableView;
 }
+
 @end

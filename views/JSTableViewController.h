@@ -73,6 +73,7 @@ typedef void(^OnSearchBlock)(NSString *);
 @optional
 - (UIView *)sectionHeaderView;
 - (CGFloat)sectionHeaderHeight;
+- (BOOL)highlightEntireSection;
 
 @end
 
@@ -84,17 +85,14 @@ typedef void(^OnSearchBlock)(NSString *);
  */
 @property (nonatomic, readonly)       UITableView         *tableView;
 
-/**
- @discussion Setting this causes a refresh view to be added the tableView
- */
-@property (nonatomic, copy) JS__VoidBlock onPullToRefreshBlock;
-
-/**
- @discussion Can be overridden for custom UIView to be used as the arrow
- */
-+ (UIView *)pullToRefreshView;
-
 - (void)setTableViewStyle:(UITableViewStyle)style;
+
+
+/**
+ * --------------
+ * Sections
+ * --------------
+ */
 
 - (void)resetSections;
 - (void)resetSearchSections;
@@ -113,6 +111,37 @@ typedef void(^OnSearchBlock)(NSString *);
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;
 
+/**
+ * --------------
+ * Selection
+ * --------------
+ */
+- (void)deselectTableView:(UITableView *)tableView
+                 animated:(BOOL)animated;
+
+
+/**
+ * --------------
+ * Pull to refresh
+ * --------------
+ */
+
+/**
+ @discussion Can be overridden for custom UIView to be used as the arrow
+ */
++ (UIView *)pullToRefreshView;
+
+/**
+ @discussion Setting this causes a refresh view to be added the tableView
+ */
+@property (nonatomic, copy) JS__VoidBlock onPullToRefreshBlock;
+
+
+/**
+ * --------------
+ * UISearchDisplayController
+ * --------------
+ */
 - (UISearchBar *)addSearchDisplayController:(OnSearchBlock)onSearchBlock;
 - (UITableView *)searchTableView;
 

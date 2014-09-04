@@ -11,7 +11,7 @@
 @property (nonatomic)       NSAttributedString      *headerAttributedString;
 @property (nonatomic)       UIColor                 *headerBackgroundColor;
 @property (nonatomic)       CGFloat                 headerTopBottomPadding;
-
+@property (nonatomic)       BOOL                    highlightEntireSection;
 @end
 
 
