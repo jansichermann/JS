@@ -6,6 +6,17 @@
 
 @implementation UIBarButtonItem (JSButton)
 
++ (instancetype)barbuttonItemWithTitle:(NSString *)title
+                            clickBlock:(JS__VoidBlock)block {
+    UIFont *f = [[UIBarButtonItem appearance] titleTextAttributesForState:UIControlStateNormal][NSFontAttributeName];
+    if (!f) {
+        f = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    }
+    return [self barButtonItemWithTitle:title
+                                   font:f
+                             clickBlock:block];
+}
+
 + (instancetype)barButtonItemWithTitle:(NSString *)title
                                   font:(UIFont *)font
                             clickBlock:(JS__VoidBlock)block {

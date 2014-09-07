@@ -10,6 +10,9 @@
 
 @interface UIBarButtonItem (JSButton)
 
++ (instancetype)barbuttonItemWithTitle:(NSString *)title
+                            clickBlock:(JS__VoidBlock)block;
+
 + (instancetype)barButtonItemWithTitle:(NSString *)title
                                   font:(UIFont *)font
                             clickBlock:(void(^)())block;

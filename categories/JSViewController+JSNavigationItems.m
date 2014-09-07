@@ -15,6 +15,16 @@
                                  }];
 }
 
+- (void)installNavigationCloseButton {
+    __weak JSViewController *weakSelf = self;
+    self.navigationItem.leftBarButtonItem =
+    [UIBarButtonItem barbuttonItemWithTitle:@"Close"
+                                 clickBlock:^{
+                                     JSViewController *vc = weakSelf;
+                                     [vc dismissSelfAnimated];
+                                 }];
+}
+
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font {
     __weak JSViewController *weakSelf = self;
     self.navigationItem.leftBarButtonItem =
