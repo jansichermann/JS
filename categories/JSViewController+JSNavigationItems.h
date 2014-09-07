@@ -13,6 +13,8 @@
 - (void)installNavigationCloseButton;
 - (void)installNavigationCloseButtonWithFont:(UIFont *)font;
 - (void)installLeftNavigationButtonWithTitle:(NSString *)title
+                                  clickBlock:(void(^)())block;
+- (void)installLeftNavigationButtonWithTitle:(NSString *)title
                                         font:(UIFont *)font
                                   clickBlock:(void(^)())block;
 - (void)installRightNavigationButtonWithTitle:(NSString *)title

@@ -38,6 +38,18 @@
 }
 
 - (void)installLeftNavigationButtonWithTitle:(NSString *)title
+                                  clickBlock:(void(^)())block {
+    UIFont *f = [[UIBarButtonItem appearance] titleTextAttributesForState:UIControlStateNormal][NSFontAttributeName];
+    if (!f) {
+        f = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    }
+    
+    [self installLeftNavigationButtonWithTitle:title
+                                          font:f
+                                    clickBlock:block];
+}
+
+- (void)installLeftNavigationButtonWithTitle:(NSString *)title
                                         font:(UIFont *)font
                                    clickBlock:(void(^)())block {
     self.navigationItem.leftBarButtonItem =
