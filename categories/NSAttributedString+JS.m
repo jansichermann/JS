@@ -15,4 +15,13 @@
     }];
 }
 
++ (NSAttributedString *)withString:(NSString *)string
+                             color:(UIColor *)color {
+    return [[NSAttributedString alloc] initWithString:string
+                                           attributes:
+            @{
+              NSForegroundColorAttributeName : color
+              }];
+}
+
 @end

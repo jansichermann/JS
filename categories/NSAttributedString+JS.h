@@ -12,4 +12,7 @@
 + (NSAttributedString *)withString:(NSString *)string
                               font:(UIFont *)font
                              color:(UIColor *)color;
+
++ (NSAttributedString *)withString:(NSString *)string
+                             color:(UIColor *)color;
 @end
