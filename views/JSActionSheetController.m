@@ -1,10 +1,9 @@
 #import "JSActionSheetController.h"
 
-#include "JSMacros.h"
-
 #import "JSButton.h"
 #import "UIView+JS.h"
 #import "UIImage+ImageEffects.h"
+
 
 
 @interface JSActionSheetItem ()
@@ -15,6 +14,8 @@
 @property (nonatomic)           UIColor         *titleColor;
 
 @end
+
+
 
 @implementation JSActionSheetItem
 
@@ -154,6 +155,7 @@ static const CGFloat buttonHeight = 44.f;
     
     UIGraphicsEndImageContext();
     UIImageView *iv = [[UIImageView alloc] initWithImage:blurredSnapshotImage];
+    iv.tag = 11;
     iv.alpha = 0.f;
     [self.view insertSubview:iv belowSubview:self.buttonView];
     
@@ -177,9 +179,19 @@ static const CGFloat buttonHeight = 44.f;
 - (void)dismiss {
     // we remove buttons and unsetitems because
     // we'd otherwise have a retain cycle introduced by the cancel button;
-    [self _removeButtons];
-    self.items = nil;
-    [self.view removeFromSuperview];
+    UIView *iv = [self.view viewWithTag:11];
+    [UIView animateWithDuration:0.2f
+        delay:0.f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         iv.alpha = 0.f;
+                         self.buttonView.top = self.view.height;
+                     }
+                     completion:^(BOOL finished) {
+                         [self _removeButtons];
+                         self.items = nil;
+                         [self.view removeFromSuperview];
+                     }];
 }
 
 
