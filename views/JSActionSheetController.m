@@ -38,20 +38,26 @@
 @interface JSActionSheetController ()
 @property (nonatomic)           NSArray         *items;
 @property (nonatomic)           UIView          *buttonView;
+@property (nonatomic)           BOOL            hasCancel;
 @end
 
 @implementation JSActionSheetController
+
+static NSString * const cancelTitle = @"Cancel";
 
 + (instancetype)withItems:(NSArray *)items
    cancelButtonTitleColor:(UIColor *)titleColor
     cancelButtonTitleFont:(UIFont *)titleFont {
     JSActionSheetController *c = [[JSActionSheetController alloc] init];
-    c.items = [items arrayByAddingObject:
-               [JSActionSheetItem withTitle:@"Cancel"
-                                 titleColor:titleColor
-                                  titleFont:titleFont
-                                    onClick:nil]
-               ];
+    if (titleColor && titleFont) {
+        c.hasCancel = YES;
+        c.items = [items arrayByAddingObject:
+                   [JSActionSheetItem withTitle:cancelTitle
+                                     titleColor:titleColor
+                                      titleFont:titleFont
+                                        onClick:nil]
+                   ];
+    }
     [c layoutForItems];
     return c;
 }
@@ -61,7 +67,7 @@
     JSButton *b = [JSButton buttonWithType:UIButtonTypeCustom];
     
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    b.backgroundColor = [UIColor clearColor];
+    b.backgroundColor = [UIColor whiteColor];
     
     [b setTitle:item.title
        forState:UIControlStateNormal];
@@ -94,7 +100,7 @@
                                                                44.f)];
     
     self.buttonView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    self.buttonView.backgroundColor = [UIColor whiteColor];
+    self.buttonView.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:self.buttonView];
 }
@@ -114,9 +120,11 @@ static const CGFloat buttonHeight = 44.f;
         JSActionSheetItem *item = self.items[i];
         NSParameterAssert([item isKindOfClass:[JSActionSheetItem class]]);
         
+        BOOL isCancel = i == self.items.count - 1 && self.hasCancel;
+        
         JSButton *b = [self buttonForItem:item];
         b.frame = CGRectMake(0.f,
-                             i * buttonHeight,
+                             i * buttonHeight + (isCancel ? 8.f : 0.f),
                              self.view.width,
                              buttonHeight);
         
@@ -124,13 +132,14 @@ static const CGFloat buttonHeight = 44.f;
         
         UIView *divider = [[UIView alloc] initWithFrame:
                            CGRectMake(10.f,
-                                      b.bottom,
+                                      b.bottom - 1.f,
                                       b.width - 20.f,
                                       1.f)];
         
         divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        divider.backgroundColor = [UIColor colorWithWhite:0.95f
-                                                    alpha:1.f];
+        divider.backgroundColor =
+        [UIColor colorWithWhite:0.95f
+                          alpha:1.f];
         
         [self.buttonView addSubview:divider];
     }
@@ -162,16 +171,17 @@ static const CGFloat buttonHeight = 44.f;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.view.frame = w.bounds;
     [w addSubview:self.view];
+    
     self.buttonView.frame = CGRectMake(0.f,
                                        self.view.height,
                                        self.view.width,
                                        self.items.count * buttonHeight);
-    [UIView animateWithDuration:0.15
+    [UIView animateWithDuration:0.2
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          iv.alpha = 1.f;
-                         self.buttonView.top = self.view.height - self.items.count * buttonHeight;
+                         self.buttonView.top = self.view.height - self.items.count * buttonHeight - (self.hasCancel ? 8.f : 0.f);
                      }
                      completion:nil];
 }
@@ -181,7 +191,7 @@ static const CGFloat buttonHeight = 44.f;
     // we'd otherwise have a retain cycle introduced by the cancel button;
     UIView *iv = [self.view viewWithTag:11];
     [UIView animateWithDuration:0.2f
-        delay:0.f
+                          delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          iv.alpha = 0.f;
