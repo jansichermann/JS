@@ -45,6 +45,15 @@
 
 static NSString * const cancelTitle = @"Cancel";
 
+- (instancetype)init {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    self.shouldBlur = YES;
+    return self;
+}
+
 + (instancetype)withItems:(NSArray *)items
    cancelButtonTitleColor:(UIColor *)titleColor
     cancelButtonTitleFont:(UIFont *)titleFont {
@@ -147,26 +156,38 @@ static const CGFloat buttonHeight = 44.f;
 
 - (void)present {
     UIWindow *w = [[UIApplication sharedApplication] windows].firstObject;
-    UIGraphicsBeginImageContextWithOptions(w.bounds.size,
-                                           NO,
-                                           w.screen.scale);
     
-    [w drawViewHierarchyInRect:w.frame afterScreenUpdates:NO];
+    UIView *v = nil;
     
-    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    if (self.shouldBlur) {
+        UIGraphicsBeginImageContextWithOptions(w.bounds.size,
+                                               NO,
+                                               w.screen.scale);
+        
+        [w drawViewHierarchyInRect:w.frame afterScreenUpdates:NO];
+        
+        UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIImage *blurredSnapshotImage =
+        [snapshotImage applyBlurWithRadius:4
+                                 tintColor:[UIColor colorWithWhite:0.f
+                                                             alpha:0.1f]
+                     saturationDeltaFactor:1.f
+                                 maskImage:nil];
+        
+        UIGraphicsEndImageContext();
+        v = [[UIImageView alloc] initWithImage:blurredSnapshotImage];
+        v.tag = 11;
+        v.alpha = 0.f;
+    }
+    else {
+        v = [[UIView alloc] initWithFrame:w.bounds];
+        v.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.4f];
+    }
+    v.tag = 11;
+    v.alpha = 0.f;
     
-    UIImage *blurredSnapshotImage =
-    [snapshotImage applyBlurWithRadius:4
-                             tintColor:[UIColor colorWithWhite:0.f
-                                                         alpha:0.1f]
-                 saturationDeltaFactor:1.f
-                             maskImage:nil];
-    
-    UIGraphicsEndImageContext();
-    UIImageView *iv = [[UIImageView alloc] initWithImage:blurredSnapshotImage];
-    iv.tag = 11;
-    iv.alpha = 0.f;
-    [self.view insertSubview:iv belowSubview:self.buttonView];
+    [self.view insertSubview:v belowSubview:self.buttonView];
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.view.frame = w.bounds;
@@ -180,7 +201,7 @@ static const CGFloat buttonHeight = 44.f;
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         iv.alpha = 1.f;
+                         v.alpha = 1.f;
                          self.buttonView.top = self.view.height - self.items.count * buttonHeight - (self.hasCancel ? 8.f : 0.f);
                      }
                      completion:nil];
@@ -189,12 +210,12 @@ static const CGFloat buttonHeight = 44.f;
 - (void)dismiss {
     // we remove buttons and unsetitems because
     // we'd otherwise have a retain cycle introduced by the cancel button;
-    UIView *iv = [self.view viewWithTag:11];
+    UIView *v = [self.view viewWithTag:11];
     [UIView animateWithDuration:0.2f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         iv.alpha = 0.f;
+                         v.alpha = 0.f;
                          self.buttonView.top = self.view.height;
                      }
                      completion:^(BOOL finished) {

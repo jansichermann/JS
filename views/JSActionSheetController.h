@@ -18,6 +18,9 @@ typedef void(^OnClickBlock)();
 
 
 @interface JSActionSheetController : UIViewController
+
+@property (nonatomic) BOOL shouldBlur;
+
 + (instancetype)withItems:(NSArray *)items
    cancelButtonTitleColor:(UIColor *)titleColor
     cancelButtonTitleFont:(UIFont *)titleFont;
