@@ -1,13 +1,12 @@
 #import "UIBarButtonItem+JSButton.h"
 #import "JSButton.h"
-#import "JSBase.h"
 
 
 
 @implementation UIBarButtonItem (JSButton)
 
 + (instancetype)barbuttonItemWithTitle:(NSString *)title
-                            clickBlock:(JS__VoidBlock)block {
+                            clickBlock:(void(^)())block {
     UIFont *f = [[UIBarButtonItem appearance] titleTextAttributesForState:UIControlStateNormal][NSFontAttributeName];
     if (!f) {
         f = [UIFont systemFontOfSize:[UIFont systemFontSize]];
@@ -19,7 +18,7 @@
 
 + (instancetype)barButtonItemWithTitle:(NSString *)title
                                   font:(UIFont *)font
-                            clickBlock:(JS__VoidBlock)block {
+                            clickBlock:(void(^)())block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
     [b setTitle:title forState:UIControlStateNormal];
     b.titleLabel.font = font;
@@ -35,7 +34,7 @@
 }
 
 + (instancetype)barButtonItemWithImage:(UIImage *)image
-                            clickBlock:(JS__VoidBlock)block {
+                            clickBlock:(void(^)())block {
     JSButton *b = [JSButton buttonWithType:UIButtonTypeSystem];
     b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         block();

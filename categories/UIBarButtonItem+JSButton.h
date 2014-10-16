@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "JSBase.h"
 
 
 /**
@@ -11,7 +10,7 @@
 @interface UIBarButtonItem (JSButton)
 
 + (instancetype)barbuttonItemWithTitle:(NSString *)title
-                            clickBlock:(JS__VoidBlock)block;
+                            clickBlock:(void(^)())block;
 
 + (instancetype)barButtonItemWithTitle:(NSString *)title
                                   font:(UIFont *)font
