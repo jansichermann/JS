@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "JSBase.h"
 
 
 
@@ -37,13 +36,13 @@
 /**
  @discussion Set this block which will be executed on viewDidAppear:.
  */
-@property (nonatomic, copy) JS__VoidBlock onViewDidAppearBlock;
+@property (nonatomic, copy) void(^onViewDidAppearBlock)();
 
-@property (nonatomic, copy) JS__VoidBlock onViewWillDisappearBlock;
+@property (nonatomic, copy) void(^onViewWillDisappearBlock)();
 
-@property (nonatomic, copy) JS__VoidBlock onViewDidLoadBlock;
+@property (nonatomic, copy) void(^onViewDidLoadBlock)();
 
-@property (nonatomic, copy) JS__VoidBlock onViewWillAppearBlock;
+@property (nonatomic, copy) void(^onViewWillAppearBlock)();
 
 /**
  @return Return YES if you want the view to be resized according to the keyboard
