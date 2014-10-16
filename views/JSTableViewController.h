@@ -134,7 +134,7 @@ typedef void(^OnSearchBlock)(NSString *);
 /**
  @discussion Setting this causes a refresh view to be added the tableView
  */
-@property (nonatomic, copy) JS__VoidBlock onPullToRefreshBlock;
+@property (nonatomic, copy) void(^onPullToRefreshBlock)();
 
 
 /**

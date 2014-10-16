@@ -335,7 +335,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }
 
-- (void)setOnPullToRefreshBlock:(JS__VoidBlock)onPullToRefreshBlock {
+- (void)setOnPullToRefreshBlock:(void(^)())onPullToRefreshBlock {
     _onPullToRefreshBlock = [onPullToRefreshBlock copy];
     [self.pullToRefreshView removeFromSuperview];
     if (onPullToRefreshBlock) {
