@@ -71,12 +71,29 @@ static NSString * const cancelTitle = @"Cancel";
     return c;
 }
 
+- (void)pressDown:(UIButton *)b {
+    b.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.f];
+}
+
+- (void)cancelPress:(UIButton *)b {
+    b.backgroundColor = [UIColor whiteColor];
+}
+
+
 - (JSButton *)buttonForItem:(JSActionSheetItem *)item {
     
     JSButton *b = [JSButton buttonWithType:UIButtonTypeCustom];
+    [b addTarget:self
+          action:@selector(pressDown:)
+forControlEvents:UIControlEventTouchDown];
+    
+    [b addTarget:self
+          action:@selector(cancelPress:)
+forControlEvents:UIControlEventAllEvents ^ UIControlEventTouchDown];
     
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     b.backgroundColor = [UIColor whiteColor];
+
     
     [b setTitle:item.title
        forState:UIControlStateNormal];
