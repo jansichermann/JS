@@ -3,7 +3,6 @@
 
 
 typedef void(^ConfigureBlock)(id model);
-typedef void(^PrepareForReuseBlock)();
 
 
 /**
@@ -48,7 +47,12 @@ JSTableViewCellProtocol
  Called prior to the cell being recycled. This is meant to unset any UI content
  that is based on the underlying model representation
  */
-@property (nonatomic, copy) PrepareForReuseBlock    prepareForReuseBlock;
+@property (nonatomic, copy) void(^prepareForReuseBlock)();
+
+/**
+ Called to layout subviews
+ */
+@property (nonatomic, copy) void(^layoutSubviewsBlock)();
 
 /**
  A reference to the UITableView within which this cell is being displayed

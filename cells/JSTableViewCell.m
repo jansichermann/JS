@@ -23,6 +23,13 @@
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    if (self.layoutSubviewsBlock) {
+        self.layoutSubviewsBlock();
+    }
+}
+
 - (void)prepareForReuse {
     if (self.prepareForReuseBlock) {
         self.prepareForReuseBlock();
