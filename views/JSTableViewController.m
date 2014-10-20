@@ -13,7 +13,6 @@ UISearchDisplayDelegate
 @property (nonatomic, readwrite)        UITableView         *tableView;
 @property (nonatomic)                   NSArray             *sections;
 @property (nonatomic)                   NSArray             *searchSections;
-@property (nonatomic)                   UIView              *pullToRefreshView;
 @property (nonatomic)                   UISearchDisplayController *jsSearchDisplayController;
 @property (nonatomic, copy)             OnSearchBlock       onSearchBlock;
 @end
@@ -50,6 +49,7 @@ UISearchDisplayDelegate
     tableView.backgroundColor = [UIColor clearColor];
     [v insertSubview:tableView atIndex:0];
     self.tableView = tableView;
+    [self _resetPullToRefreshControl];
     [tableView reloadData];
 }
 
@@ -331,21 +331,27 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 #pragma mark - Pull To Refresh
 
-+ (UIView *)pullToRefreshView {
-    return nil;
+- (void)setOnPullToRefreshBlock:(void (^)())onPullToRefreshBlock {
+    _onPullToRefreshBlock = onPullToRefreshBlock;
+    NSParameterAssert(!self.refreshControl);
+    [self _resetPullToRefreshControl];
 }
 
-- (void)setOnPullToRefreshBlock:(void(^)())onPullToRefreshBlock {
-    _onPullToRefreshBlock = [onPullToRefreshBlock copy];
-    [self.pullToRefreshView removeFromSuperview];
-    if (onPullToRefreshBlock) {
-        self.pullToRefreshView = [self.class pullToRefreshView];
-        [self.tableView addSubview:self.pullToRefreshView];
-        self.pullToRefreshView.top = -self.pullToRefreshView.height;
-        [self.pullToRefreshView centerHorizontallyInSuperview];
-        self.pullToRefreshView.autoresizingMask =
-        UIViewAutoresizingFlexibleLeftMargin |
-        UIViewAutoresizingFlexibleRightMargin;
+- (void)_resetPullToRefreshControl {
+    if (self.onPullToRefreshBlock) {
+        [self.refreshControl removeFromSuperview];
+        
+        self.refreshControl = [[UIRefreshControl alloc] init];
+        [self.refreshControl addTarget:self
+                                action:@selector(_refresh)
+                      forControlEvents:UIControlEventValueChanged];
+        [self.tableView addSubview:self.refreshControl];
+    }
+}
+
+- (void)_refresh {
+    if (self.onPullToRefreshBlock) {
+        self.onPullToRefreshBlock();
     }
 }
 
@@ -360,26 +366,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         }
     }
     
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView
-                  willDecelerate:(__unused BOOL)decelerate {
-    if (scrollView.contentOffset.y < -75.f) {
-        if (self.onPullToRefreshBlock) {
-            self.onPullToRefreshBlock();
-        }
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat y = scrollView.contentOffset.y + 30.f;
-    if (self.pullToRefreshView && y < 0) {
-        
-        CGFloat progress = MAX(y, -45) / -45 * (CGFloat)M_PI;
-        
-        
-        self.pullToRefreshView.transform = CGAffineTransformMakeRotation(progress);
-    }
 }
 
 #pragma mark - UISearchDisplayController

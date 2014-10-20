@@ -127,12 +127,13 @@ typedef void(^OnSearchBlock)(NSString *);
  */
 
 /**
- @discussion Can be overridden for custom UIView to be used as the arrow
+ @discussion While this is not officially supported, it seems to work.
  */
-+ (UIView *)pullToRefreshView;
+
+@property (nonatomic) UIRefreshControl *refreshControl;
 
 /**
- @discussion Setting this causes a refresh view to be added the tableView
+ @discussion The Block to be executed when refreshing. If no refreshControl is set, a default one will be added.
  */
 @property (nonatomic, copy) void(^onPullToRefreshBlock)();
 
