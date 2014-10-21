@@ -7,12 +7,15 @@
 + (NSAttributedString *)withString:(NSString *)string
                               font:(UIFont *)font
                              color:(UIColor *)color {
-    return [[NSAttributedString alloc] initWithString:string
-                                           attributes:
-  @{
-    NSForegroundColorAttributeName : color,
-    NSFontAttributeName : font
-    }];
+    if (string && [string isKindOfClass:[NSString class]]) {
+        return [[NSAttributedString alloc] initWithString:string
+                                               attributes:
+      @{
+        NSForegroundColorAttributeName : color,
+        NSFontAttributeName : font
+        }];
+    }
+    return nil;
 }
 
 + (NSAttributedString *)withString:(NSString *)string
