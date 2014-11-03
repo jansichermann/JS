@@ -333,7 +333,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)setOnPullToRefreshBlock:(void (^)())onPullToRefreshBlock {
     _onPullToRefreshBlock = onPullToRefreshBlock;
-    NSParameterAssert(!self.refreshControl);
     [self _resetPullToRefreshControl];
 }
 
