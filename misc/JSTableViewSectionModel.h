@@ -42,6 +42,7 @@ JSTableViewSectionModelProtocol
 - (void)setSectionHeaderViewWithAttributedTitle:(NSAttributedString *)title
                                topBottomPadding:(CGFloat)padding
                                 backgroundColor:(UIColor *)color;
+- (void)insertRowAtTop:(NSObject <JSTableViewRowModelProtocol> *)row;
 - (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row;
 
 /**

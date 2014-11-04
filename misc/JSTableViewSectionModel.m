@@ -100,6 +100,11 @@
 
 #pragma mark - Protocol Functions
 
+- (void)insertRowAtTop:(NSObject <JSTableViewRowModelProtocol> *)row {
+    NSParameterAssert(row);
+    self.rows = [@[row] arrayByAddingObjectsFromArray:self.rows];
+}
+
 - (void)addRow:(NSObject <JSTableViewRowModelProtocol> *)row {
     NSParameterAssert(row);
     self.rows = self.rows ? [self.rows arrayByAddingObject:row] : @[row];
