@@ -88,6 +88,10 @@
     self.left = (self.superview.width / 2) - (self.width / 2);
 }
 
+- (void)centerVerticallyToView:(UIView *)v {
+    self.top = v.top + (v.height / 2.f) - (self.height / 2.f);
+}
+
 - (UIImage *)snapshot {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size,
                                            NO,

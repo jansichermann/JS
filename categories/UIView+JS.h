@@ -44,5 +44,6 @@
 - (void)centerInSuperview;
 - (void)centerHorizontallyInSuperview;
 - (void)centerVerticallyInSuperview;
+- (void)centerVerticallyToView:(UIView *)v;
 - (UIImage *)snapshot;
 @end
