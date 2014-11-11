@@ -184,8 +184,11 @@ UISearchDisplayDelegate
     NSUInteger nr = [tableView numberOfRowsInSection:section];
     
     for (int i = 0; i < nr; i++) {
-        UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i
-                                                                                 inSection:section]];
+        NSIndexPath *p = [NSIndexPath indexPathForRow:i
+                                            inSection:section];
+        [tableView deselectRowAtIndexPath:p
+                                 animated:animated];
+        UITableViewCell *c = [tableView cellForRowAtIndexPath:p];
         [c setSelected:NO animated:animated];
         [c setHighlighted:highlight animated:animated];
     }
@@ -333,6 +336,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)setOnPullToRefreshBlock:(void (^)())onPullToRefreshBlock {
     _onPullToRefreshBlock = onPullToRefreshBlock;
+    NSParameterAssert(!self.refreshControl);
     [self _resetPullToRefreshControl];
 }
 

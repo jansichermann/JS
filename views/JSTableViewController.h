@@ -108,8 +108,12 @@ typedef void(^OnSearchBlock)(NSString *);
 - (void)updateSection:(NSUInteger)section
              withRows:(NSObject <JSTableViewSectionModelProtocol> *)rows
       reloadTableView:(BOOL)reloadTableView;
+
 - (void)addSection:(NSObject <JSTableViewSectionModelProtocol> *)section
    reloadTableView:(BOOL)reload;
+
+- (NSObject <JSTableViewRowModelProtocol> *)modelForTableView:(UITableView *)tableView
+                                                  atIndexPath:(NSIndexPath *)indexPath;
 
 /**
  * --------------
