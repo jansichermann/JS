@@ -1,7 +1,4 @@
 #import "JSAttributedStringTableViewCell.h"
-
-#include "JSMacros.h"
-
 #import "UIView+JS.h"
 
 
@@ -88,14 +85,14 @@
     UILabel *textLabel = self.textLabel;
     UIImageView *imageView = self.imageView;
     
-    WEAK(self);
+    __weak JSAttributedStringTableViewCell *weakSelf = self;
     self.configureBlock = ^(JSAttributedStringTableViewCellModel *model) {
-        JSAttributedStringTableViewCell *strong_self = weak_self;
+        JSAttributedStringTableViewCell *strongSelf = weakSelf;
         if (model.accessoryIcon) {
-            strong_self.accessoryView = [[UIImageView alloc] initWithImage:model.accessoryIcon];
+            strongSelf.accessoryView = [[UIImageView alloc] initWithImage:model.accessoryIcon];
         }
         else {
-            strong_self.accessoryView = nil;
+            strongSelf.accessoryView = nil;
         }
         
         textLabel.attributedText = model.text;
