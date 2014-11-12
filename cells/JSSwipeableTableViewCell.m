@@ -80,6 +80,9 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     [super prepareForReuse];
     self.leftLabel.text = @"";
     self.rightLabel.text = @"";
+    self.leftLabel.alpha = 1.f;
+    self.rightLabel.alpha = 1.f;
+    
     [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
                           animated:NO];
 }
@@ -87,6 +90,7 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.triggerView.frame = self.contentView.bounds;
+    self.swipeView.frame = self.contentView.bounds;
     [self layoutLabels];
 }
 
@@ -232,10 +236,10 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 
 - (void)swipeTriggered:(CGFloat)offset {
     JSSwipeableTableViewCellSwipeDirection d = JSSwipeableTableViewCellSwipeNone;
-    if (offset == JSSwipeableTableViewCellOffsetRight) {
+    if (offset > JSSwipeableTableViewCellNoOffset + threshold) {
         d = JSSwipeableTableViewCellSwipeToRight;
     }
-    else if (offset == JSSwipeableTableViewCellNoOffset) {
+    else if (offset < JSSwipeableTableViewCellNoOffset - threshold) {
         d = JSSwipeableTableViewCellSwipeToLeft;
     }
     else {
