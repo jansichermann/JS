@@ -145,6 +145,7 @@ static const CGFloat threshold = 0.25f;
 
 - (void)configureWithModel:(JSSwipeableTableViewCellModel *)model {
     NSParameterAssert([model isKindOfClass:[JSSwipeableTableViewCellModel class]]);
+    [super configureWithModel:model];
     self.swipeConfigurationModel = model;
     
     self.leftLabel.attributedText = model.leftTitle;
