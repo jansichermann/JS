@@ -31,6 +31,10 @@ typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
  */
 
 
+extern CGFloat JSSwipeableTableViewCellNoOffset;
+extern CGFloat JSSwipeableTableViewCellOffsetRight;
+extern CGFloat JSSwipeableTableViewCellOffsetLeft;
+
 
 @interface JSSwipeableTableViewCell : JSTableViewCell
 

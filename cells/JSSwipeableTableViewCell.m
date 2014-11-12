@@ -11,20 +11,6 @@
 
 @implementation JSSwipeableTableViewCellModel
 
-- (UIColor *)leftColor {
-    if (!_leftColor) {
-        _leftColor = [UIColor clearColor];
-    }
-    return _leftColor;
-}
-
-- (UIColor *)rightColor {
-    if (!_rightColor) {
-        _rightColor = [UIColor clearColor];
-    }
-    return _rightColor;
-}
-
 @end
 
 
@@ -38,7 +24,6 @@
 
 @property (nonatomic, readwrite) UIView *swipeView;
 @property (nonatomic) UIView *triggerView;
-
 @property (nonatomic) UILabel *leftLabel;
 @property (nonatomic) UILabel *rightLabel;
 
@@ -47,20 +32,20 @@
 
 
 static const CGFloat threshold = 0.25f;
+CGFloat JSSwipeableTableViewCellNoOffset = 0.f;
+CGFloat JSSwipeableTableViewCellOffsetRight = 1.f;
+CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 
 
 
 @implementation JSSwipeableTableViewCell
 
+@synthesize swipeView = _swipeView;
 @synthesize swipeConfigurationModel = _swipeConfigurationModel;
 @synthesize triggerView = _triggerView;
 @synthesize leftLabel = _leftLabel;
 @synthesize rightLabel = _rightLabel;
 
-+ (CGFloat)heightForModel:(__unused id)model
-              inTableView:(__unused UITableView *)tableView {
-    return 44.f;
-}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
               reuseIdentifier:(NSString *)reuseIdentifier {
@@ -72,7 +57,6 @@ static const CGFloat threshold = 0.25f;
     
     self.triggerView = [[UIView alloc] initWithFrame:self.contentView.bounds];
     [self.contentView addSubview:self.triggerView];
-    self.triggerView.backgroundColor = [UIColor clearColor];
     
     self.leftLabel = [[UILabel alloc] init];
     [self.contentView addSubview:self.leftLabel];
@@ -96,7 +80,7 @@ static const CGFloat threshold = 0.25f;
     [super prepareForReuse];
     self.leftLabel.text = @"";
     self.rightLabel.text = @"";
-    [self setSwipeOffsetPercentage:0.f
+    [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
                           animated:NO];
 }
 
@@ -109,11 +93,11 @@ static const CGFloat threshold = 0.25f;
 - (void)layoutLabels {
     [self.leftLabel sizeToFit];
     [self.leftLabel centerVerticallyInSuperview];
-    self.leftLabel.right = MAX(threshold * self.contentView.width, self.swipeView.left - 4.f);
+    self.leftLabel.right = MAX(threshold * self.contentView.width, self.swipeView.left - 8.f);
     
     [self.rightLabel sizeToFit];
     [self.rightLabel centerVerticallyInSuperview];
-    self.rightLabel.left = MIN((1.f - threshold) * self.contentView.width, self.swipeView.right + 4.f);
+    self.rightLabel.left = MIN((JSSwipeableTableViewCellOffsetRight - threshold) * self.contentView.width, self.swipeView.right + 8.f);
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)pr {
@@ -124,12 +108,6 @@ static const CGFloat threshold = 0.25f;
         }
     return NO;
 }
-
-
-+ (UIColor *)initialTriggerColor __attribute__((const)) {
-    return [UIColor clearColor];
-}
-
 
 - (void)panSwipeView:(UIPanGestureRecognizer *)pr {
     NSParameterAssert([pr isKindOfClass:[UIPanGestureRecognizer class]]);
@@ -143,17 +121,17 @@ static const CGFloat threshold = 0.25f;
                               animated:NO];
     }
     else if (pr.state == UIGestureRecognizerStateCancelled) {
-        [self setSwipeOffsetPercentage:0.f
+        [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
                               animated:YES];
     }
     else if (pr.state == UIGestureRecognizerStateEnded) {
         if (offset > threshold || offset < -threshold) {
             [self swipeTriggered:offset];
-            [self setSwipeOffsetPercentage:offset < 0.f ? -1.f : 1.f
+            [self setSwipeOffsetPercentage:offset < JSSwipeableTableViewCellNoOffset ? JSSwipeableTableViewCellOffsetLeft : JSSwipeableTableViewCellOffsetRight
                                   animated:YES];
         }
         else {
-            [self setSwipeOffsetPercentage:0.f
+            [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
                                   animated:YES];
         }
     }
@@ -170,7 +148,9 @@ static const CGFloat threshold = 0.25f;
 
 - (void)updateTriggerColor:(CGFloat)offset
                   animated:(BOOL)animated {
-    UIColor *c = [self.class initialTriggerColor];
+    
+    UIColor *c = [UIColor clearColor];
+    
     if (offset < -threshold) {
         c = self.swipeConfigurationModel.rightColor;
     }
@@ -191,15 +171,14 @@ static const CGFloat threshold = 0.25f;
 
 - (void)setSwipeOffsetPercentage:(CGFloat)offset
                         animated:(BOOL)animated {
-    NSParameterAssert(offset <= 1.f);
-    NSParameterAssert(offset >= -1.f);
+    NSParameterAssert(offset <= JSSwipeableTableViewCellOffsetRight && offset >= JSSwipeableTableViewCellOffsetLeft);
     
-    if (offset < 0.f &&
+    if (offset < JSSwipeableTableViewCellNoOffset &&
         !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToLeft)) {
         return;
     }
     
-    if (offset > 0.f &&
+    if (offset > JSSwipeableTableViewCellNoOffset &&
         !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToRight)) {
         return;
     }
@@ -207,8 +186,8 @@ static const CGFloat threshold = 0.25f;
     [self updateTriggerColor:offset
                     animated:YES]; // intentionally overridden
     
-    self.leftLabel.hidden = offset < 0.f;
-    self.rightLabel.hidden = offset > 0.f;
+    self.leftLabel.hidden = offset < JSSwipeableTableViewCellNoOffset;
+    self.rightLabel.hidden = offset > JSSwipeableTableViewCellNoOffset;
     
     CGRect r = CGRectMake(offset * self.contentView.width,
                           0.f,
@@ -216,8 +195,8 @@ static const CGFloat threshold = 0.25f;
                           self.contentView.height);
     
     void(^alphaBlock)() = nil;
-    if (offset == 1.f || offset == -1.f) {
-        UILabel *l = offset == 1.f ? self.leftLabel : self.rightLabel;
+    if (offset == JSSwipeableTableViewCellOffsetRight || offset == JSSwipeableTableViewCellOffsetLeft) {
+        UILabel *l = offset == JSSwipeableTableViewCellOffsetRight ? self.leftLabel : self.rightLabel;
         alphaBlock = ^{
             l.alpha = 0.f;
         };
@@ -253,10 +232,10 @@ static const CGFloat threshold = 0.25f;
 
 - (void)swipeTriggered:(CGFloat)offset {
     JSSwipeableTableViewCellSwipeDirection d = JSSwipeableTableViewCellSwipeNone;
-    if (offset == 1.f) {
+    if (offset == JSSwipeableTableViewCellOffsetRight) {
         d = JSSwipeableTableViewCellSwipeToRight;
     }
-    else if (offset == 0.f) {
+    else if (offset == JSSwipeableTableViewCellNoOffset) {
         d = JSSwipeableTableViewCellSwipeToLeft;
     }
     else {
