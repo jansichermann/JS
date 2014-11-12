@@ -13,14 +13,14 @@
 
 - (UIColor *)leftColor {
     if (!_leftColor) {
-        _leftColor = [UIColor redColor];
+        _leftColor = [UIColor clearColor];
     }
     return _leftColor;
 }
 
 - (UIColor *)rightColor {
     if (!_rightColor) {
-        _rightColor = [UIColor greenColor];
+        _rightColor = [UIColor clearColor];
     }
     return _rightColor;
 }
@@ -32,6 +32,8 @@
 
 
 @interface JSSwipeableTableViewCell()
+<UIGestureRecognizerDelegate>
+
 @property (nonatomic) JSSwipeableTableViewCellModel *swipeConfigurationModel;
 
 @property (nonatomic, readwrite) UIView *swipeView;
@@ -43,7 +45,10 @@
 @end
 
 
+
 static const CGFloat threshold = 0.25f;
+
+
 
 @implementation JSSwipeableTableViewCell
 
@@ -81,6 +86,7 @@ static const CGFloat threshold = 0.25f;
     
     UIPanGestureRecognizer *pr = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                          action:@selector(panSwipeView:)];
+    pr.delegate = self;
     [self.swipeView addGestureRecognizer:pr];
     
     return self;
@@ -109,6 +115,16 @@ static const CGFloat threshold = 0.25f;
     [self.rightLabel centerVerticallyInSuperview];
     self.rightLabel.left = MIN((1.f - threshold) * self.contentView.width, self.swipeView.right + 4.f);
 }
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)pr {
+    if ([pr isKindOfClass:[UIPanGestureRecognizer class]]) {
+        
+        CGPoint point = [(UIPanGestureRecognizer *)pr velocityInView:self];
+        return fabs(point.x) > fabs(point.y);
+        }
+    return NO;
+}
+
 
 + (UIColor *)initialTriggerColor __attribute__((const)) {
     return [UIColor clearColor];
