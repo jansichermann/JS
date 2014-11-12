@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
 @property (nonatomic) NSAttributedString *leftTitle;
 @property (nonatomic) NSAttributedString *rightTitle;
 
+@property (nonatomic) id userInfo;
+
 @end
 
 

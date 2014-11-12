@@ -34,7 +34,6 @@
 @interface JSSwipeableTableViewCell()
 @property (nonatomic) JSSwipeableTableViewCellModel *swipeConfigurationModel;
 
-@property (nonatomic) CGFloat swipeOffset;
 @property (nonatomic, readwrite) UIView *swipeView;
 @property (nonatomic) UIView *triggerView;
 
@@ -48,8 +47,13 @@ static const CGFloat threshold = 0.25f;
 
 @implementation JSSwipeableTableViewCell
 
-+ (CGFloat)heightForModel:(id)model
-              inTableView:(UITableView *)tableView {
+@synthesize swipeConfigurationModel = _swipeConfigurationModel;
+@synthesize triggerView = _triggerView;
+@synthesize leftLabel = _leftLabel;
+@synthesize rightLabel = _rightLabel;
+
++ (CGFloat)heightForModel:(__unused id)model
+              inTableView:(__unused UITableView *)tableView {
     return 44.f;
 }
 
