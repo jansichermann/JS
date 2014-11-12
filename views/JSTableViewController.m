@@ -71,9 +71,10 @@ UISearchDisplayDelegate
 
 - (void)setSection:(NSObject <JSTableViewSectionModelProtocol> *)section
            atIndex:(NSUInteger)index {
-    NSParameterAssert(self.sections);
-    NSParameterAssert(self.sections.count + 1 >= index);
+    NSParameterAssert(self.sections != nil);
+    NSParameterAssert(self.sections.count >= index);
     NSParameterAssert(section);
+    
     NSMutableArray *sections = [NSMutableArray arrayWithArray:self.sections];
     sections[index] = section;
     self.sections = sections.copy;
