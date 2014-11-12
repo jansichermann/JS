@@ -25,7 +25,7 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 
 - (void)observeNotificationCenter:(NSNotificationCenter *)center
                               key:(NSString *)notificationKey
-                    withFireBlock:(void(^)(NSString *, NSDictionary *))fireBlock {
+                    withFireBlock:(void(^)(id))fireBlock {
     
     JS__NotificationObserverContainer *container =
     [JS__NotificationObserverContainer notificationCenter:center

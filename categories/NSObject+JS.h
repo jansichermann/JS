@@ -14,7 +14,7 @@
 
 - (void)observeNotificationCenter:(NSNotificationCenter *)center
                               key:(NSString *)notificationKey
-                    withFireBlock:(void(^)(NSString *, NSDictionary *))fireBlock;
+                    withFireBlock:(void(^)(id))fireBlock;
 
 - (void)observe:(NSObject *)observant
      forKeyPath:(NSString *)keyPath
