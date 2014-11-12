@@ -1,12 +1,11 @@
 #import "JS__NotificationObserverContainer.h"
-#import "JSBase.h"
 #import "NSDictionary+JS.h"
 #import <objc/runtime.h>
 
 
 @interface JS__NotificationObserverContainer()
-@property (nonatomic, copy) JS__SingleParameterBlock fireBlock;
-@property (nonatomic, copy) JS__StringDictBlock kvoFireBlock;
+@property (nonatomic, copy) void(^fireBlock)(id);
+@property (nonatomic, copy) void(^kvoFireBlock)(NSString *, NSDictionary *);
 @property (nonatomic) NSString *observantKeyPath;
 @end
 
@@ -23,7 +22,7 @@
 + (instancetype)notificationCenter:(NSNotificationCenter *)center
                     keyObserver:(NSObject *)observer
                             forKey:(NSString *)key
-                         fireBlock:(JS__SingleParameterBlock)fireBlock {
+                         fireBlock:(void(^)(id))fireBlock {
     
     JS__NotificationObserverContainer *c = [self _withObserver:observer];
     
@@ -41,7 +40,7 @@
                 onObservant:(NSObject *)observant
                 forKeyPath:(NSString *)keyPath
                    options:(NSKeyValueObservingOptions)options
-                 fireBlock:(JS__StringDictBlock)fireBlock {
+                 fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock {
     
     NSParameterAssert(observer);
     NSParameterAssert(observant);

@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "JSBase.h"
 
 
 /**
@@ -10,6 +9,6 @@
 
 @interface UISplitViewController (JS)
 + (instancetype)withViewControllers:(NSArray *)viewControllers;
-- (void)setOnHideBlock:(JS__BarButtonItemBlock)b;
-- (void)setOnShowBlock:(JS__BarButtonItemBlock)b;
+- (void)setOnHideBlock:(void(^)(UIBarButtonItem *))b;
+- (void)setOnShowBlock:(void(^)(UIBarButtonItem *))b;
 @end

@@ -16,14 +16,14 @@ static char const * const js__UISplitViewControllerWillShowBlockKey = "js__UISpl
     return sv;
 }
 
-- (void)setOnHideBlock:(JS__BarButtonItemBlock)b {
+- (void)setOnHideBlock:(void(^)(UIBarButtonItem *))b {
     objc_setAssociatedObject(self,
                              js__UISplitViewControllerWillHideBlockKey,
                              b,
                              OBJC_ASSOCIATION_COPY);
 }
 
-- (void)setOnShowBlock:(JS__BarButtonItemBlock)b {
+- (void)setOnShowBlock:(void(^)(UIBarButtonItem *))b {
     objc_setAssociatedObject(self,
                              js__UISplitViewControllerWillShowBlockKey,
                              b,
@@ -34,7 +34,7 @@ static char const * const js__UISplitViewControllerWillShowBlockKey = "js__UISpl
      willHideViewController:(UIViewController *)aViewController
           withBarButtonItem:(UIBarButtonItem *)barButtonItem
        forPopoverController:(UIPopoverController *)pc {
-    JS__BarButtonItemBlock b =
+    void(^b)(UIBarButtonItem *) =
     objc_getAssociatedObject(self,
                              js__UISplitViewControllerWillHideBlockKey);
     if (b) {
@@ -45,7 +45,7 @@ static char const * const js__UISplitViewControllerWillShowBlockKey = "js__UISpl
 - (void)splitViewController:(UISplitViewController *)svc
      willShowViewController:(UIViewController *)aViewController
   invalidatingBarButtonItem:(UIBarButtonItem *)button {
-    JS__BarButtonItemBlock b =
+    void(^b)(UIBarButtonItem *) =
     objc_getAssociatedObject(self,
                              js__UISplitViewControllerWillShowBlockKey);
     if (b) {

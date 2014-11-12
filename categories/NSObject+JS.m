@@ -12,7 +12,7 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 
 
 - (void)executeAfterTimeInterval:(CGFloat)seconds
-                           block:(JS__VoidBlock)block {
+                           block:(void(^)())block {
     
     if (!block){
         return;
@@ -25,7 +25,7 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 
 - (void)observeNotificationCenter:(NSNotificationCenter *)center
                               key:(NSString *)notificationKey
-                    withFireBlock:(JS__SingleParameterBlock)fireBlock {
+                    withFireBlock:(void(^)(NSString *, NSDictionary *))fireBlock {
     
     JS__NotificationObserverContainer *container =
     [JS__NotificationObserverContainer notificationCenter:center
@@ -41,7 +41,7 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 - (void)observe:(NSObject *)observant
      forKeyPath:(NSString *)keyPath
         options:(NSKeyValueObservingOptions)options
-      fireBlock:(JS__StringDictBlock)fireBlock {
+      fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock {
     
     [self _addObserverContainer:
      [JS__NotificationObserverContainer kvObserver:self

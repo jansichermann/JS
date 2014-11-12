@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import "JSBase.h"
 
 
 
@@ -16,12 +15,12 @@
                onObservant:(NSObject *)observant
                 forKeyPath:(NSString *)keyPath
                    options:(NSKeyValueObservingOptions)options
-                 fireBlock:(JS__StringDictBlock)fireBlock;
+                 fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock;
 
 
 + (instancetype)notificationCenter:(NSNotificationCenter *)center
                        keyObserver:(NSObject *)observer
                             forKey:(NSString *)key
-                         fireBlock:(JS__SingleParameterBlock)fireBlock;
+                         fireBlock:(void(^)(id))fireBlock;
 @end
 
