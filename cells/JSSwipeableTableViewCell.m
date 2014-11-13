@@ -313,6 +313,16 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 }
 
 - (void)swipeTriggered:(CGFloat)offset {
+    if (offset < JSSwipeableTableViewCellNoOffset &&
+        !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToLeft)) {
+        return;
+    }
+    
+    if (offset > JSSwipeableTableViewCellNoOffset &&
+        !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToRight)) {
+        return;
+    }
+    
     JSSwipeableTableViewCellSwipeDirection d = JSSwipeableTableViewCellSwipeNone;
     if (offset > JSSwipeableTableViewCellNoOffset + threshold) {
         d = JSSwipeableTableViewCellSwipeToRight;
