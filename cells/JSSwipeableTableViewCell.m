@@ -10,7 +10,23 @@
 
 
 @implementation JSSwipeableTableViewCellModel
-
++ (instancetype)withLeftTitle:(NSAttributedString *)leftTitle
+                    leftColor:(UIColor *)leftColor
+                   rightTitle:(NSAttributedString *)rightTitle
+                   rightColor:(UIColor *)rightcolor
+                    direction:(JSSwipeableTableViewCellSwipeDirection)d
+                     userInfo:(NSObject *)userInfo
+               triggerHandler:(void(^)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction))triggerHandler {
+    JSSwipeableTableViewCellModel *m = [[JSSwipeableTableViewCellModel alloc] init];
+    m.leftTitle = leftTitle;
+    m.leftColor = leftColor;
+    m.rightTitle = rightTitle;
+    m.rightColor = rightcolor;
+    m.swipeableDirections = d;;
+    m.userInfo = userInfo;
+    m.swipeTriggerHandler = triggerHandler;
+    return m;
+}
 @end
 
 
@@ -109,7 +125,7 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
         
         CGPoint point = [(UIPanGestureRecognizer *)pr velocityInView:self];
         return fabs(point.x) > fabs(point.y);
-        }
+    }
     return NO;
 }
 

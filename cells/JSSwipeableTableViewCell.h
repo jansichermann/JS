@@ -11,6 +11,14 @@ typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
 
 @interface JSSwipeableTableViewCellModel : NSObject
 
++ (instancetype)withLeftTitle:(NSAttributedString *)leftTitle
+                    leftColor:(UIColor *)leftColor
+                   rightTitle:(NSAttributedString *)rightTitle
+                   rightColor:(UIColor *)rightcolor
+                    direction:(JSSwipeableTableViewCellSwipeDirection)d
+                     userInfo:(NSObject *)userInfo
+               triggerHandler:(void(^)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction))triggerHandler;
+
 @property (nonatomic) JSSwipeableTableViewCellSwipeDirection swipeableDirections;
 @property (nonatomic, copy) void(^onSwipeHandler)(UITableViewCell *cell, CGFloat swipeOffset);
 @property (nonatomic, copy) void(^swipeTriggerHandler)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction);
