@@ -251,4 +251,11 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     }
 }
 
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    self.leftLabel.hidden = highlighted;
+    self.rightLabel.hidden = highlighted;
+    [super setHighlighted:highlighted
+                 animated:animated];
+}
+
 @end
