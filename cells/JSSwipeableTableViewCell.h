@@ -11,6 +11,14 @@ typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
 
 @interface JSSwipeableTableViewCellModel : NSObject
 
++ (instancetype)withLeftImage:(UIImage *)leftImage
+                    leftColor:(UIColor *)leftColor
+                   rightImage:(UIImage *)rightImage
+                   rightColor:(UIColor *)rightcolor
+                    direction:(JSSwipeableTableViewCellSwipeDirection)d
+                     userInfo:(NSObject *)userInfo
+               triggerHandler:(void(^)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction))triggerHandle;
+
 + (instancetype)withLeftTitle:(NSAttributedString *)leftTitle
                     leftColor:(UIColor *)leftColor
                    rightTitle:(NSAttributedString *)rightTitle
@@ -29,6 +37,9 @@ typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
 @property (nonatomic) NSAttributedString *leftTitle;
 @property (nonatomic) NSAttributedString *rightTitle;
 
+@property (nonatomic) UIImage *leftImage;
+@property (nonatomic) UIImage *rightImage;
+
 @property (nonatomic) id userInfo;
 
 @end
@@ -45,7 +56,10 @@ extern CGFloat JSSwipeableTableViewCellOffsetLeft;
 
 
 @interface JSSwipeableTableViewCell : JSTableViewCell
-
+@property (nonatomic, readonly) UILabel *leftLabel;
+@property (nonatomic, readonly) UILabel *rightLabel;
+@property (nonatomic, readonly) UIImageView *leftImage;
+@property (nonatomic, readonly) UIImageView *rightImage;
 @property (nonatomic, readonly) UIView *swipeView;
 - (void)setSwipeOffsetPercentage:(CGFloat)offset
                         animated:(BOOL)animated; // ranges from -1 (left) to +1 (right).
