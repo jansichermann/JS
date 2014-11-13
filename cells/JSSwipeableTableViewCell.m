@@ -274,4 +274,12 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
                  animated:animated];
 }
 
+- (void)setSelected:(BOOL)selected
+           animated:(BOOL)animated {
+    self.leftLabel.hidden = selected;
+    self.rightLabel.hidden = selected;
+    [super setSelected:selected
+              animated:animated];
+}
+
 @end

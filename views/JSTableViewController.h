@@ -80,6 +80,7 @@ typedef void(^OnSearchBlock)(NSString *);
 
 
 @interface JSTableViewController : JSViewController
+<UITableViewDelegate>
 /**
  @discussion The UITableView instance for this controller. This instance may change during the lifetime of this controller, such as when you call setTableViewStyle:
  */
