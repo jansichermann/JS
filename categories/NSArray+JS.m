@@ -2,11 +2,14 @@
 
 @implementation NSArray (JS)
 
-- (id)objectAtIndexOrNil:(NSUInteger)index {
-    if (index >= self.count) {
+- (id)objectAtIndexOrNil:(NSInteger)index {
+    if (index >= (NSInteger)self.count) {
         return nil;
     }
-    return self[index];
+    if (index < 0) {
+        return self[(NSUInteger) (index + (NSInteger)self.count)];
+    }
+    return self[(NSUInteger)index];
 }
 
 - (NSArray *)arrayByRemovingObject:(NSObject *)object {
