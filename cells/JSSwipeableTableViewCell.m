@@ -144,10 +144,11 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
     self.triggerView.frame = self.contentView.bounds;
     self.swipeView.frame = self.contentView.bounds;
     [self layoutLabels];
+    
+    [super layoutSubviews];
 }
 
 - (void)layoutImages {
