@@ -8,6 +8,7 @@
 @property (nonatomic)           CGFloat                     topBottomPadding;
 @property (nonatomic)           UIImage                     *icon;
 @property (nonatomic)           UIImage                     *accessoryIcon;
+@property (nonatomic)           UITableViewCellAccessoryType accessoryType;
 @end
 
 
@@ -51,6 +52,19 @@
     m.icon = icon;
     m.topBottomPadding = topBottomPadding;
     m.accessoryIcon = accessoryIcon;
+    m.accessoryType = UITableViewCellAccessoryNone;
+    return m;
+}
+
++ (instancetype)withText:(NSAttributedString *)text
+                    icon:(UIImage *)icon
+     disclosureIndicator:(UITableViewCellAccessoryType)accessoryType
+        topBottomPadding:(CGFloat)topBottomPadding {
+    JSAttributedStringTableViewCellModel *m = [[JSAttributedStringTableViewCellModel alloc] init];
+    m.text = text;
+    m.icon = icon;
+    m.topBottomPadding = topBottomPadding;
+    m.accessoryType = accessoryType;
     return m;
 }
 
@@ -88,11 +102,18 @@
     __weak JSAttributedStringTableViewCell *weakSelf = self;
     self.configureBlock = ^(JSAttributedStringTableViewCellModel *model) {
         JSAttributedStringTableViewCell *strongSelf = weakSelf;
+        
+        
+        
         if (model.accessoryIcon) {
             strongSelf.accessoryView = [[UIImageView alloc] initWithImage:model.accessoryIcon];
         }
         else {
             strongSelf.accessoryView = nil;
+        }
+        
+        if (model.accessoryType != UITableViewCellAccessoryNone) {
+            strongSelf.accessoryType = model.accessoryType;
         }
         
         textLabel.attributedText = model.text;

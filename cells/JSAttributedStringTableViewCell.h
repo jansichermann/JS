@@ -14,6 +14,11 @@
                     icon:(UIImage *)icon
            accessoryIcon:(UIImage *)accessoryIcon
         topBottomPadding:(CGFloat)topBottomPadding;
+
++ (instancetype)withText:(NSAttributedString *)text
+                    icon:(UIImage *)icon
+     disclosureIndicator:(UITableViewCellAccessoryType)accessoryType
+        topBottomPadding:(CGFloat)topBottomPadding;
 @end
 
 /**
