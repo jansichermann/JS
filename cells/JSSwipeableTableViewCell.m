@@ -158,11 +158,28 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     
     [self.leftImage sizeToFit];
     [self.leftImage centerVerticallyInSuperview];
-    self.leftImage.right = MAX(threshold * self.contentView.width, self.swipeView.left - 8.f);
+    
+    CGFloat min = self.leftImage.image.size.width;
+    CGFloat max = threshold * self.contentView.width;
+    
+    
+    
+    self.leftImage.right = MAX(min + ((max - min - (self.leftImage.image.size.width / 2.f)) / 2.f),
+                               self.swipeView.left - self.leftImage.image.size.width);
     
     [self.rightImage sizeToFit];
     [self.rightImage centerVerticallyInSuperview];
-    self.rightImage.left = MIN((JSSwipeableTableViewCellOffsetRight - threshold) * self.contentView.width, self.swipeView.right + 8.f);
+    
+    max =
+    self.contentView.width - self.rightImage.image.size.width;
+    
+    min =
+    (JSSwipeableTableViewCellOffsetRight - threshold) * self.contentView.width;
+    
+    
+    
+    self.rightImage.left = MIN(min + ((max - min + (self.rightImage.image.size.width / 2.f)) / 2.f),
+                               self.swipeView.right + self.rightImage.image.size.width);
 }
 
 - (void)layoutLabels {
