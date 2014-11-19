@@ -111,9 +111,11 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     [self.contentView addSubview:self.rightImage];
     
     self.leftLabel = [[UILabel alloc] init];
+    self.leftLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:self.leftLabel];
     
     self.rightLabel = [[UILabel alloc] init];
+    self.rightLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:self.rightLabel];
     
     self.swipeView = [[UIView alloc] initWithFrame:self.contentView.bounds];
@@ -176,20 +178,22 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     min =
     (JSSwipeableTableViewCellOffsetRight - threshold) * self.contentView.width;
     
-    
-    
     self.rightImage.left = MIN(min + ((max - min + (self.rightImage.image.size.width / 2.f)) / 2.f),
                                self.swipeView.right + self.rightImage.image.size.width);
 }
 
 - (void)layoutLabels {
-    [self.leftLabel sizeToFit];
-    [self.leftLabel centerVerticallyInSuperview];
-    self.leftLabel.right = MAX(threshold * self.contentView.width, self.swipeView.left - 8.f);
+    CGFloat labelWidth = self.contentView.width * threshold;
     
-    [self.rightLabel sizeToFit];
-    [self.rightLabel centerVerticallyInSuperview];
-    self.rightLabel.left = MIN((JSSwipeableTableViewCellOffsetRight - threshold) * self.contentView.width, self.swipeView.right + 8.f);
+    self.leftLabel.frame = CGRectMake(MAX(0, self.swipeView.left - labelWidth),
+                                      0.f,
+                                      labelWidth,
+                                      self.swipeView.height);
+    
+    self.rightLabel.frame = CGRectMake(MIN(self.swipeView.right, self.swipeView.width - labelWidth),
+                                       0.f,
+                                       labelWidth,
+                                       self.swipeView.height);
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)pr {
