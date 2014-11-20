@@ -39,8 +39,8 @@
     b.touchUpInsideBlock = ^(__unused JSButton *bb) {
         block();
     };
-    [b setBackgroundImage:image
-                 forState:UIControlStateNormal];
+    [b setImage:image
+       forState:UIControlStateNormal];
     [b sizeToFit];
     UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:b];
     return bb;
