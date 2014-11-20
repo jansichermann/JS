@@ -3,15 +3,14 @@
 #import "JSButton.h"
 #import "UIView+JS.h"
 #import "UIImage+ImageEffects.h"
-
+#import "NSAttributedString+JS.h"
 
 
 @interface JSActionSheetItem ()
 
-@property (nonatomic)           NSString        *title;
 @property (nonatomic, copy)     OnClickBlock    onClickBlock;
-@property (nonatomic)           UIFont          *titleFont;
-@property (nonatomic)           UIColor         *titleColor;
+@property (nonatomic)           BOOL isInfoItem;
+@property (nonatomic)           NSAttributedString *title;
 
 @end
 
@@ -19,15 +18,22 @@
 
 @implementation JSActionSheetItem
 
++ (instancetype)infoItemWithText:(NSAttributedString *)text {
+    JSActionSheetItem *i = [[JSActionSheetItem alloc] init];
+    i.isInfoItem = YES;
+    i.title = text;
+    return i;
+};
+
 + (instancetype)withTitle:(NSString *)title
                titleColor:(UIColor *)color
                 titleFont:(UIFont *)titleFont
                   onClick:(OnClickBlock)onClickBlock {
     JSActionSheetItem *i = [[JSActionSheetItem alloc] init];
-    i.title = title;
+    i.title = [NSAttributedString withString:title
+                                        font:titleFont
+                                       color:color];
     i.onClickBlock = onClickBlock;
-    i.titleFont = titleFont;
-    i.titleColor = color;
     return i;
 }
 
@@ -79,6 +85,14 @@ static NSString * const cancelTitle = @"Cancel";
     b.backgroundColor = [UIColor whiteColor];
 }
 
+- (UILabel *)infoLabelForItem:(JSActionSheetItem *)item {
+    UILabel *l = [[UILabel alloc] init];
+    l.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    l.numberOfLines = 0;
+    l.backgroundColor = [UIColor whiteColor];
+    l.attributedText = item.title;
+    return l;
+}
 
 - (JSButton *)buttonForItem:(JSActionSheetItem *)item {
     
@@ -93,18 +107,13 @@ forControlEvents:UIControlEventAllEvents ^ UIControlEventTouchDown];
     
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     b.backgroundColor = [UIColor whiteColor];
-
     
-    [b setTitle:item.title
-       forState:UIControlStateNormal];
-    
-    [b setTitleColor:item.titleColor
-            forState:UIControlStateNormal];
+    [b setAttributedTitle:item.title
+                 forState:UIControlStateNormal];
     
     [b setTitleColor:((UIWindow *)[UIApplication sharedApplication].windows.lastObject).tintColor
             forState:UIControlStateHighlighted];
     
-    b.titleLabel.font = item.titleFont;
     // the button explicitly introduces a retain cycle
     // so the controller sticks around
     b.touchUpInsideBlock = ^(__unused JSButton *bb) {
@@ -142,24 +151,43 @@ static const CGFloat buttonHeight = 44.f;
 - (void)layoutForItems {
     [self _removeButtons];
     
+    CGFloat height = 0.f;
+    
     for (NSUInteger i = 0; i < self.items.count; i++) {
         JSActionSheetItem *item = self.items[i];
         NSParameterAssert([item isKindOfClass:[JSActionSheetItem class]]);
         
         BOOL isCancel = i == self.items.count - 1 && self.hasCancel;
         
-        JSButton *b = [self buttonForItem:item];
-        b.frame = CGRectMake(0.f,
-                             i * buttonHeight + (isCancel ? 8.f : 0.f),
-                             self.view.width,
-                             buttonHeight);
+        UIView *v = nil;
+        if (item.isInfoItem) {
+            v = [self infoLabelForItem:item];
+            CGSize s =
+            [v sizeThatFits:CGSizeMake(self.view.width,
+                                       CGFLOAT_MAX)];
+            v.frame = CGRectMake(0.f,
+                                 height,
+                                 self.view.width,
+                                 s.height + 32.f);
+        }
+        else {
+            
+            v = [self buttonForItem:item];
+            v.frame = CGRectMake(0.f,
+                                 height + (isCancel ? 8.f : 0.f),
+                                 self.view.width,
+                                 buttonHeight);
+            
+        }
         
-        [self.buttonView addSubview:b];
+        [self.buttonView addSubview:v];
+        
+        height += v.height;
         
         UIView *divider = [[UIView alloc] initWithFrame:
                            CGRectMake(10.f,
-                                      b.bottom - 1.f,
-                                      b.width - 20.f,
+                                      v.bottom - 1.f,
+                                      v.width - 20.f,
                                       1.f)];
         
         divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -168,6 +196,7 @@ static const CGFloat buttonHeight = 44.f;
                           alpha:1.f];
         
         [self.buttonView addSubview:divider];
+        self.buttonView.height = v.bottom;
     }
 }
 
@@ -213,13 +242,13 @@ static const CGFloat buttonHeight = 44.f;
     self.buttonView.frame = CGRectMake(0.f,
                                        self.view.height,
                                        self.view.width,
-                                       self.items.count * buttonHeight);
+                                       self.buttonView.height);
     [UIView animateWithDuration:0.2
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          v.alpha = 1.f;
-                         self.buttonView.top = self.view.height - self.items.count * buttonHeight - (self.hasCancel ? 8.f : 0.f);
+                         self.buttonView.top = self.view.height - self.buttonView.height;
                      }
                      completion:nil];
 }

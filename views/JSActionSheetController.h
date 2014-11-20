@@ -9,6 +9,7 @@
 typedef void(^OnClickBlock)();
 
 @interface JSActionSheetItem : NSObject
++ (instancetype)infoItemWithText:(NSAttributedString *)text;
 + (instancetype)withTitle:(NSString *)title
                titleColor:(UIColor *)color
                 titleFont:(UIFont *)titleFont
