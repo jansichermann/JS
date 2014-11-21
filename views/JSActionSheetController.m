@@ -85,13 +85,16 @@ static NSString * const cancelTitle = @"Cancel";
     b.backgroundColor = [UIColor whiteColor];
 }
 
-- (UILabel *)infoLabelForItem:(JSActionSheetItem *)item {
+- (UIView *)infoLabelForItem:(JSActionSheetItem *)item {
+    UIView *v = [[UIView alloc] init];
+    v.backgroundColor = [UIColor whiteColor];
     UILabel *l = [[UILabel alloc] init];
-    l.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    l.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     l.numberOfLines = 0;
-    l.backgroundColor = [UIColor whiteColor];
+    l.tag = 111;
     l.attributedText = item.title;
-    return l;
+    [v addSubview:l];
+    return v;
 }
 
 - (JSButton *)buttonForItem:(JSActionSheetItem *)item {
@@ -162,13 +165,15 @@ static const CGFloat buttonHeight = 44.f;
         UIView *v = nil;
         if (item.isInfoItem) {
             v = [self infoLabelForItem:item];
+            UILabel *l = (UILabel *)[v viewWithTag:111];
             CGSize s =
-            [v sizeThatFits:CGSizeMake(self.view.width,
+            [l sizeThatFits:CGSizeMake(self.view.width - 40.f,
                                        CGFLOAT_MAX)];
             v.frame = CGRectMake(0.f,
                                  height,
                                  self.view.width,
                                  s.height + 32.f);
+            l.frame = CGRectInset(v.bounds, 20.f, 0.f);
         }
         else {
             
