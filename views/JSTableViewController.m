@@ -11,8 +11,8 @@ UITableViewDataSource,
 UISearchDisplayDelegate
 >
 @property (nonatomic, readwrite)        UITableView         *tableView;
-@property (nonatomic)                   NSArray             *sections;
-@property (nonatomic)                   NSArray             *searchSections;
+@property (atomic)                      NSArray             *sections;
+@property (atomic)                      NSArray             *searchSections;
 @property (nonatomic)                   UISearchDisplayController *jsSearchDisplayController;
 @property (nonatomic, copy)             OnSearchBlock       onSearchBlock;
 @end
