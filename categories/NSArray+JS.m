@@ -7,7 +7,12 @@
         return nil;
     }
     if (index < 0) {
-        return self[(NSUInteger) (index + (NSInteger)self.count)];
+        NSInteger newIndex = (NSInteger)index + (NSInteger)self.count;
+        if (newIndex < 0) {
+            return nil;
+        }
+        
+        return [self objectAtIndexOrNil:newIndex];
     }
     return self[(NSUInteger)index];
 }
