@@ -26,4 +26,15 @@
     return arr.copy;
 }
 
+- (NSArray *)arrayByPrependingObject:(NSObject *)object {
+    if (!object) {
+        return self;
+    }
+    
+    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:self.count + 1];
+    [arr addObject:object];
+    [arr addObjectsFromArray:self];
+    return arr.copy;
+}
+
 @end
