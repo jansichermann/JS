@@ -295,11 +295,22 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
         cell.parentTableView = self.tableView;
     }
     
-    // this is consciously done after
-    // selectionstyle and background color are set
-    // to allow overriding by the configure block
-    [cell configureWithModel:rowModel.model];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView
+  willDisplayCell:(UITableViewCell *)cell
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([cell conformsToProtocol:@protocol(JSTableViewCellProtocol)]) {
+        NSObject <JSTableViewRowModelProtocol> *rowModel =
+        [self modelForTableView:tableView
+                    atIndexPath:indexPath];
+        
+        // this is consciously done after
+        // selectionstyle and background color are set
+        // to allow overriding by the configure block
+        [(NSObject <JSTableViewCellProtocol> *)cell configureWithModel:rowModel.model];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView
