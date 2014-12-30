@@ -142,7 +142,8 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     self.leftImage.image = nil;
     
     [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
-                          animated:NO];
+                          animated:NO
+                        fromSource:nil];
 }
 
 - (void)layoutSubviews {
@@ -214,21 +215,25 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     
     if (pr.state == UIGestureRecognizerStateChanged) {
         [self setSwipeOffsetPercentage:offset
-                              animated:NO];
+                              animated:NO
+                            fromSource:pr];
     }
     else if (pr.state == UIGestureRecognizerStateCancelled) {
         [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
-                              animated:YES];
+                              animated:YES
+                            fromSource:pr];
     }
     else if (pr.state == UIGestureRecognizerStateEnded) {
         if (offset > threshold || offset < -threshold) {
             [self swipeTriggered:offset];
             [self setSwipeOffsetPercentage:offset < JSSwipeableTableViewCellNoOffset ? JSSwipeableTableViewCellOffsetLeft : JSSwipeableTableViewCellOffsetRight
-                                  animated:YES];
+                                  animated:YES
+                                fromSource:pr];
         }
         else {
             [self setSwipeOffsetPercentage:JSSwipeableTableViewCellNoOffset
-                                  animated:YES];
+                                  animated:YES
+                                fromSource:pr];
         }
     }
 }
@@ -269,17 +274,19 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
 }
 
 - (void)setSwipeOffsetPercentage:(CGFloat)offset
-                        animated:(BOOL)animated {
+                        animated:(BOOL)animated
+                      fromSource:(NSObject *)source {
+    
     NSParameterAssert(offset <= JSSwipeableTableViewCellOffsetRight && offset >= JSSwipeableTableViewCellOffsetLeft);
     
     if (offset < JSSwipeableTableViewCellNoOffset &&
         !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToLeft)) {
-        return;
+        offset = JSSwipeableTableViewCellNoOffset;
     }
     
     if (offset > JSSwipeableTableViewCellNoOffset &&
         !(self.swipeConfigurationModel.swipeableDirections & JSSwipeableTableViewCellSwipeToRight)) {
-        return;
+        offset = JSSwipeableTableViewCellNoOffset;
     }
     
     [self updateTriggerColor:offset
@@ -329,8 +336,10 @@ CGFloat JSSwipeableTableViewCellOffsetLeft = -1.f;
     [self layoutLabels];
     [self layoutImages];
     
-    if (self.swipeConfigurationModel.onSwipeHandler) {
-        self.swipeConfigurationModel.onSwipeHandler(self, offset);
+    if ([source isKindOfClass:[UIGestureRecognizer class]]) {
+        if (self.swipeConfigurationModel.onSwipeHandler) {
+            self.swipeConfigurationModel.onSwipeHandler(self, offset);
+        }
     }
 }
 

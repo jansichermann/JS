@@ -2,7 +2,7 @@
 
 
 
-typedef NS_ENUM(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
+typedef NS_OPTIONS(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
     JSSwipeableTableViewCellSwipeNone = 0,
     JSSwipeableTableViewCellSwipeToLeft = 1 << 0,
     JSSwipeableTableViewCellSwipeToRight = 1 << 1
@@ -61,6 +61,7 @@ extern CGFloat JSSwipeableTableViewCellOffsetLeft;
 @property (nonatomic, readonly) UIImageView *leftImage;
 @property (nonatomic, readonly) UIImageView *rightImage;
 @property (nonatomic, readonly) UIView *swipeView;
-- (void)setSwipeOffsetPercentage:(CGFloat)offset
-                        animated:(BOOL)animated; // ranges from -1 (left) to +1 (right).
+- (void)setSwipeOffsetPercentage:(CGFloat)offset  // ranges from -1 (left) to +1 (right).
+                        animated:(BOOL)animated
+                      fromSource:(NSObject *)source;
 @end
