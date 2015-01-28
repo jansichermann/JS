@@ -11,6 +11,8 @@ typedef NS_OPTIONS(NSInteger, JSSwipeableTableViewCellSwipeDirection) {
 
 @interface JSSwipeableTableViewCellModel : NSObject
 
++ (instancetype)withUserInfo:(NSObject *)userInfo;
+
 + (instancetype)withLeftImage:(UIImage *)leftImage
                     leftColor:(UIColor *)leftColor
                    rightImage:(UIImage *)rightImage

@@ -19,6 +19,12 @@
 @synthesize rightImage = _rightImage;
 @synthesize userInfo = _userInfo;
 
++ (instancetype)withUserInfo:(NSObject *)userInfo {
+    JSSwipeableTableViewCellModel *m = [[JSSwipeableTableViewCellModel alloc] init];
+    m.userInfo = userInfo;
+    return m;
+}
+
 + (instancetype)withLeftImage:(UIImage *)leftImage
                     leftColor:(UIColor *)leftColor
                    rightImage:(UIImage *)rightImage
@@ -26,13 +32,12 @@
                     direction:(JSSwipeableTableViewCellSwipeDirection)d
                      userInfo:(NSObject *)userInfo
                triggerHandler:(void(^)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction))triggerHandler {
-    JSSwipeableTableViewCellModel *m = [[JSSwipeableTableViewCellModel alloc] init];
+    JSSwipeableTableViewCellModel *m = [JSSwipeableTableViewCellModel withUserInfo:userInfo];
     m.leftImage = leftImage;
     m.leftColor = leftColor;
     m.rightImage = rightImage;
     m.rightColor = rightcolor;
     m.swipeableDirections = d;;
-    m.userInfo = userInfo;
     m.swipeTriggerHandler = triggerHandler;
     return m;
 }
@@ -44,7 +49,7 @@
                     direction:(JSSwipeableTableViewCellSwipeDirection)d
                      userInfo:(NSObject *)userInfo
                triggerHandler:(void(^)(UITableViewCell *cell, JSSwipeableTableViewCellSwipeDirection direction))triggerHandler {
-    JSSwipeableTableViewCellModel *m = [[JSSwipeableTableViewCellModel alloc] init];
+    JSSwipeableTableViewCellModel *m = [JSSwipeableTableViewCellModel withUserInfo:userInfo];
     m.leftTitle = leftTitle;
     m.leftColor = leftColor;
     m.rightTitle = rightTitle;
