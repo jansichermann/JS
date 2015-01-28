@@ -36,14 +36,11 @@
 
 + (NSAttributedString *)withString:(NSString *)string
                              color:(UIColor *)color {
-    if (string && [string isKindOfClass:[NSString class]]) {
-        return [[NSAttributedString alloc] initWithString:string
-                                               attributes:
-                @{
-                  NSForegroundColorAttributeName : color
-                  }];
-    }
-    return nil;
+    return [[NSAttributedString alloc] initWithString:string
+                                           attributes:
+            @{
+              NSForegroundColorAttributeName : color
+              }];
 }
 
 @end

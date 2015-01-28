@@ -30,4 +30,5 @@
 - (id)objectAtIndexOrNil:(NSInteger)index;
 - (NSArray *)arrayByRemovingObject:(NSObject *)object;
 - (NSArray *)arrayByPrependingObject:(NSObject *)object;
+- (NSArray *)arrayByPrependingObjects:(NSArray *)objects;
 @end

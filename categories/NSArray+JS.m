@@ -26,6 +26,7 @@
     return arr.copy;
 }
 
+
 - (NSArray *)arrayByPrependingObject:(NSObject *)object {
     if (!object) {
         return self;
@@ -36,5 +37,18 @@
     [arr addObjectsFromArray:self];
     return arr.copy;
 }
+
+- (NSArray *)arrayByPrependingObjects:(NSArray *)objects {
+    if (!objects || objects.count == 0) {
+        return self;
+    }
+    
+    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:self.count + 1];
+    [arr addObjectsFromArray:objects];
+    [arr addObjectsFromArray:self];
+    return arr.copy;
+}
+
+
 
 @end
