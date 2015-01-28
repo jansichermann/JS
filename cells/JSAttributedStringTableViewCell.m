@@ -79,6 +79,7 @@
               inTableView:(UITableView *)tableView {
     NSParameterAssert([model isKindOfClass:[JSAttributedStringTableViewCellModel class]]);
     NSParameterAssert([model.text isKindOfClass:[NSAttributedString class]]);
+#warning this calculation is off if image or accessory view are set.
     return [model.text boundingRectWithSize:CGSizeMake(tableView.width - 32.f,
                                                        CGFLOAT_MAX)
                                     options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
@@ -95,30 +96,38 @@
         return nil;
     }
     
-    self.textLabel.numberOfLines = 0;
-    UILabel *textLabel = self.textLabel;
+    UILabel *textLabel = [[UILabel alloc] init];
+    [self.contentView addSubview:textLabel];
+    textLabel.numberOfLines = 0;
+    textLabel.backgroundColor = [UIColor clearColor];
+    
     UIImageView *imageView = self.imageView;
     
     __weak JSAttributedStringTableViewCell *weakSelf = self;
     self.configureBlock = ^(JSAttributedStringTableViewCellModel *model) {
+
         JSAttributedStringTableViewCell *strongSelf = weakSelf;
-        
-        
-        
+
         if (model.accessoryIcon) {
             strongSelf.accessoryView = [[UIImageView alloc] initWithImage:model.accessoryIcon];
         }
         else {
             strongSelf.accessoryView = nil;
         }
-        
+
         if (model.accessoryType != UITableViewCellAccessoryNone) {
             strongSelf.accessoryType = model.accessoryType;
         }
-        
+
         textLabel.attributedText = model.text;
         imageView.image = model.icon;
-        [textLabel sizeToFit];
+    };
+    
+    
+    self.layoutSubviewsBlock = ^{
+        [textLabel centerVerticallyInSuperview];
+        JSAttributedStringTableViewCell *strongSelf = weakSelf;
+        textLabel.frame = CGRectInset(strongSelf.contentView.bounds, 16.f, 0.f);
     };
     
     return self;
