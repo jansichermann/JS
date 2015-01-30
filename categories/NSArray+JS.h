@@ -28,6 +28,7 @@
 
 @interface NSArray (JS)
 - (id)objectAtIndexOrNil:(NSInteger)index;
+- (instancetype)arrayByAddingObjectIfNotContained:(NSObject *)object;
 - (NSArray *)arrayByRemovingObject:(NSObject *)object;
 - (NSArray *)arrayByPrependingObject:(NSObject *)object;
 - (NSArray *)arrayByPrependingObjects:(NSArray *)objects;

@@ -17,6 +17,15 @@
     return self[(NSUInteger)index];
 }
 
+- (instancetype)arrayByAddingObjectIfNotContained:(NSObject *)object {
+    if (!object || [self containsObject:object]) {
+        return self;
+    }
+    
+    return [self arrayByAddingObject:object];
+    
+}
+
 - (NSArray *)arrayByRemovingObject:(NSObject *)object {
     if (![self containsObject:object]) {
         return self;
