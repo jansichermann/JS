@@ -8,15 +8,16 @@
 
 @interface JS__NotificationObserverContainer : NSObject
 
-@property (nonatomic, weak) NSObject *observer;
-@property (nonatomic, weak) NSObject *observant;
-
 + (instancetype)kvObserver:(NSObject *)observer
                onObservant:(NSObject *)observant
                 forKeyPath:(NSString *)keyPath
                    options:(NSKeyValueObservingOptions)options
                  fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock;
 
++ (instancetype)kvObserver:(NSObject *)observer
+               onObservant:(NSObject *)observant
+                forKeyPath:(NSString *)keyPath
+      convenienceFireBlock:(void(^)(NSObject *newValue))fireBlock;
 
 + (instancetype)notificationCenter:(NSNotificationCenter *)center
                        keyObserver:(NSObject *)observer

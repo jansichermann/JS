@@ -17,7 +17,7 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
     if (!block){
         return;
     }
-        
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
 }
 
@@ -37,11 +37,22 @@ static char const * const js__ObserverContainersKey = "js__ObserverContainersKey
 
 
 #pragma mark - KVO
+- (void)observe:(NSObject *)observant
+        keyPath:(NSString *)keyPath
+      fireBlock:(void(^)(id newValue))fireBlock {
+    
+    [self _addObserverContainer:
+     [JS__NotificationObserverContainer kvObserver:self
+                                       onObservant:observant
+                                        forKeyPath:keyPath
+                              convenienceFireBlock:fireBlock]
+     ];
+}
 
 - (void)observe:(NSObject *)observant
      forKeyPath:(NSString *)keyPath
         options:(NSKeyValueObservingOptions)options
-      fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock {
+      fireBlock:(void(^)(NSString *keyPath, NSDictionary *change))fireBlock {
     
     [self _addObserverContainer:
      [JS__NotificationObserverContainer kvObserver:self

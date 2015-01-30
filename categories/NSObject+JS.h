@@ -17,9 +17,13 @@
                     withFireBlock:(void(^)(id))fireBlock;
 
 - (void)observe:(NSObject *)observant
+        keyPath:(NSString *)keyPath
+      fireBlock:(void(^)(id newValue))fireBlock;
+
+- (void)observe:(NSObject *)observant
      forKeyPath:(NSString *)keyPath
         options:(NSKeyValueObservingOptions)options
-      fireBlock:(void(^)(NSString *, NSDictionary *))fireBlock;
+      fireBlock:(void(^)(NSString *keyPath, NSDictionary *change))fireBlock;
 
 - (void)removeAllObservations;
 

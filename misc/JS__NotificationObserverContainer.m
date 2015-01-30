@@ -4,9 +4,14 @@
 
 
 @interface JS__NotificationObserverContainer()
+@property (nonatomic, weak) NSObject *observer;
+@property (nonatomic, weak) NSObject *observant;
+
+@property (nonatomic) NSString *observantKeyPath;
+
 @property (nonatomic, copy) void(^fireBlock)(id);
 @property (nonatomic, copy) void(^kvoFireBlock)(NSString *, NSDictionary *);
-@property (nonatomic) NSString *observantKeyPath;
+@property (nonatomic, copy) void(^convenienceKvoFireBlock)(NSObject *newValue);
 @end
 
 
@@ -33,6 +38,29 @@
     
     c.fireBlock = fireBlock;
 
+    return c;
+}
+
++ (instancetype)kvObserver:(NSObject *)observer
+               onObservant:(NSObject *)observant
+                forKeyPath:(NSString *)keyPath
+                 convenienceFireBlock:(void(^)(NSObject *newValue))fireBlock {
+    
+    NSParameterAssert(observer);
+    NSParameterAssert(observant);
+    NSParameterAssert(keyPath);
+    NSParameterAssert(fireBlock);
+    
+    JS__NotificationObserverContainer *c = [self _withObserver:observer];
+    c.observant = observant;
+    c.observantKeyPath = keyPath;
+    c.convenienceKvoFireBlock = fireBlock;
+    
+    [observant addObserver:c
+                forKeyPath:keyPath
+                   options:NSKeyValueObservingOptionNew
+                   context:nil];
+    
     return c;
 }
 
@@ -113,7 +141,10 @@
     // to observe a property, deallocates.
     // This is so, because this instance should be placed in an associated reference
     // of the object instance that initially requested to observe a property.
-    if (self.kvoFireBlock) {
+    if (self.convenienceKvoFireBlock) {
+        self.convenienceKvoFireBlock(change[NSKeyValueChangeNewKey]);
+    }
+    else if (self.kvoFireBlock) {
         self.kvoFireBlock(keyPath, change);
     }
 }
