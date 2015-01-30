@@ -83,15 +83,18 @@
 }
 
 - (void)_notificationFired:(NSNotification *)notif {
-    // this can only fire while the observer is actually alive
-    // once the observer deallocs, the container's retain count should
-    // reach 0 and it itself will dealloc as well.
+    // This instance's lifecycle ends when the object which initially requested
+    // to observe a property, deallocates.
+    // This is so, because this instance should be placed in an associated reference
+    // of the object instance that initially requested to observe a property.
     if (self.fireBlock) {
         self.fireBlock(notif.object);
     }
 }
 
 - (void)dealloc {
+    // When the parent object (the one that initially requested to observe a property)
+    // deallocates, we remove the reference in the observant's dispatch table. 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (self.observant && self.observantKeyPath) {
         [self.observant removeObserver:self
@@ -106,10 +109,10 @@
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    // same story here: This can only fire if the observant changed, by definition
-    // it still lives.
-    // This instance itself also only survives if the observer lives, as it retains
-    // this instsance. 
+    // This instance's lifecycle ends when the object which initially requested
+    // to observe a property, deallocates.
+    // This is so, because this instance should be placed in an associated reference
+    // of the object instance that initially requested to observe a property.
     if (self.kvoFireBlock) {
         self.kvoFireBlock(keyPath, change);
     }
