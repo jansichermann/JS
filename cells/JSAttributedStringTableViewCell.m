@@ -80,7 +80,8 @@
     NSParameterAssert([model isKindOfClass:[JSAttributedStringTableViewCellModel class]]);
     NSParameterAssert([model.text isKindOfClass:[NSAttributedString class]]);
 #warning this calculation is off if image or accessory view are set.
-    return [model.text boundingRectWithSize:CGSizeMake(tableView.width - 32.f,
+    CGFloat accessory = model.accessoryType == UITableViewCellAccessoryNone ? 0 : 18.f;
+    return [model.text boundingRectWithSize:CGSizeMake(tableView.width - 32.f - accessory,
                                                        CGFLOAT_MAX)
                                     options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                     context:nil].size.height + 2 * model.topBottomPadding;
@@ -127,7 +128,15 @@
     self.layoutSubviewsBlock = ^{
         [textLabel centerVerticallyInSuperview];
         JSAttributedStringTableViewCell *strongSelf = weakSelf;
-        textLabel.frame = CGRectInset(strongSelf.contentView.bounds, 16.f, 0.f);
+        textLabel.frame = CGRectMake(16.f,
+                                     0.f,
+                                     strongSelf.contentView.width - 16 + (strongSelf.accessoryType == UITableViewCellAccessoryNone ? -16.f : 0.f),
+                                     strongSelf.contentView.height);
+    };
+    
+    self.prepareForReuseBlock = ^{
+        JSAttributedStringTableViewCell *strongSelf = weakSelf;
+        strongSelf.accessoryType = UITableViewCellAccessoryNone;
     };
     
     return self;
