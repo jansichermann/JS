@@ -9,7 +9,6 @@
 @property (nonatomic)                   UIColor             *cellBackgroundColor;
 @property (nonatomic)                   UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic)                   UITableViewCellEditingStyle editingStyle;
-
 @end
 
 
@@ -92,6 +91,22 @@ selectionStyle:(UITableViewCellSelectionStyle)style {
            selectionStyle:(UITableViewCellSelectionStyle)style
              editingStyle:(UITableViewCellEditingStyle)editingStyle
                   onClick:(OnClickBlock)onClickBlock {
+    return [self withModel:model
+                 cellClass:cellClass
+           backgroundColor:bgColor
+            selectionStyle:style
+             accessoryType:UITableViewCellAccessoryNone
+              editingStyle:editingStyle
+                   onClick:onClickBlock];
+}
+
++ (instancetype)withModel:(id)model
+                cellClass:(Class)cellClass
+          backgroundColor:(UIColor *)bgColor
+           selectionStyle:(UITableViewCellSelectionStyle)style
+            accessoryType:(UITableViewCellAccessoryType)accessoryType
+             editingStyle:(UITableViewCellEditingStyle)editingStyle
+                  onClick:(OnClickBlock)onClickBlock {
     JSTableViewRowModel *m = [[JSTableViewRowModel alloc] init];
     m.model = model;
     m.cellClass = cellClass;
@@ -99,6 +114,7 @@ selectionStyle:(UITableViewCellSelectionStyle)style {
     m.cellBackgroundColor = bgColor;
     m.selectionStyle = style;
     m.editingStyle = editingStyle;
+    m.accessoryType = accessoryType;
     return m;
 }
 

@@ -58,6 +58,7 @@ typedef void(^OnSearchBlock)(NSString *);
 - (UITableViewCellSelectionStyle)selectionStyle;
 - (UITableViewCellStyle)cellStyle;
 - (UITableViewCellEditingStyle)editingStyle;
+- (UITableViewCellAccessoryType)accessoryType;
 - (BOOL)editable;
 - (BOOL)hidden;
 @end

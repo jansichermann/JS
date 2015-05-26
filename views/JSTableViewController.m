@@ -154,6 +154,7 @@ UISearchDisplayDelegate
         UITableViewCellStyleDefault;
         cell = [[rowModel.cellClass alloc] initWithStyle:s
                                          reuseIdentifier:cellIdentifier];
+        
     }
     return cell;
 }
@@ -293,6 +294,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([cell respondsToSelector:@selector(setParentTableView:)]) {
         cell.parentTableView = self.tableView;
+    }
+    
+    
+    if ([rowModel respondsToSelector:@selector(accessoryType)]) {
+        cell.accessoryType = rowModel.accessoryType;
     }
     
     return cell;
