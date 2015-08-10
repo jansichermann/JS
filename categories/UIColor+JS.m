@@ -15,4 +15,15 @@
     return [UIColor colorWithRed:(float)r/255.0f green:(float)g/255.0f blue:(float)b/255.0f alpha:alpha];
 }
 
++ (UIColor *)colorFromHexString:(NSString *)hexString {
+    NSParameterAssert([[hexString substringToIndex:1] isEqualToString:@"#"]);
+    unsigned v = 0;
+    NSScanner *s = [NSScanner scannerWithString:hexString];
+    [s setScanLocation:1];
+    [s scanHexInt:&v];
+    return [UIColor colorWithRed:((v & 0xFF0000) >> 16)/255.0
+                           green:((v & 0xFF00) >> 8)/255.0
+                            blue:(v & 0xFF)/255.0 alpha:1.0];
+}
+
 @end

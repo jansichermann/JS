@@ -13,5 +13,5 @@
 + (UIColor *)colorWithHex:(UInt32)col;
 + (UIColor *)colorWithHex:(UInt32)col
                     alpha:(CGFloat)alpha;
-
++ (UIColor *)colorFromHexString:(NSString *)hexString;
 @end
