@@ -1,18 +1,13 @@
 #import <UIKit/UIKit.h>
-
-
+#import "JSEventBlockContainer.h"
 
 /**
- Created by jan on 4/24/14. Copyright (c) 2014 Jan Sichermann. All rights reserved.
+ Created by Jan Sichermann on 8/14/15. Copyright (c) 2015 Jan Sichermann. All rights reserved.
  */
 
 
 
-typedef void(^JSUIControlBlock)(UIControl *c);
-
 @interface UIControl (JS)
-
-- (void)js__setTouchUpInsideBlock:(JSUIControlBlock)block;
-- (void)js__setValueChangedBlock:(JSUIControlBlock)block;
-
+- (void)addTarget:(TargetBlock)tb
+ forControlEvents:(UIControlEvents)events;
 @end

@@ -2,64 +2,42 @@
 #import <objc/runtime.h>
 
 
-
-static char const * const js__OnTouchUpInsideBlockKey = "js__OnTouchUpInsideBlockKey";
-static char const * const js__ValueChangedBlockKey = "js__ValueChangedBlockKey";
-
-
+static char const * const js__TargetContainersKey = "js__TargetContainersKey";
 
 @implementation UIControl (JS)
 
-- (void)js__setTouchUpInsideBlock:(JSUIControlBlock)block {
-    [self __setJSTouchUpInsideBlock:block];
-    [self addTarget:self
-             action:@selector(__jsTouchUpInsideAction)
-   forControlEvents:UIControlEventTouchUpInside];
+- (void)addTarget:(TargetBlock)tb
+ forControlEvents:(UIControlEvents)events {
+    
+    JSEventBlockContainer *c = [JSEventBlockContainer withBlock:tb];
+    
+    [self addTarget:c
+             action:@selector(handleEvent:)
+   forControlEvents:events];
+    
+    [self _addTargetContainer:c];
 }
 
-- (void)__setJSTouchUpInsideBlock:(JSUIControlBlock)block {
+- (void)_addTargetContainer:(JSEventBlockContainer *)tc {
+    NSArray *tbs = self.targetBlocks;
+    [self _setTargetContainers:[tbs arrayByAddingObject:tc]];
+}
+
+- (NSArray *)targetBlocks {
+    NSArray *arr = objc_getAssociatedObject(self,
+                                            js__TargetContainersKey);
+    return arr ? arr : @[];
+}
+
+- (void)removeAllTargets {
+    [self _setTargetContainers:nil];
+}
+
+- (void)_setTargetContainers:(NSArray *)containers {
     objc_setAssociatedObject(self,
-                             js__OnTouchUpInsideBlockKey,
-                             block,
-                             OBJC_ASSOCIATION_COPY);
-}
-
-- (JSUIControlBlock)__jsTouchUpInsideBlock {
-    return objc_getAssociatedObject(self,
-                                    js__OnTouchUpInsideBlockKey);
-}
-
-- (void)__jsTouchUpInsideAction {
-    if (self.__jsTouchUpInsideBlock) {
-        self.__jsTouchUpInsideBlock(self);
-    }
-}
-
-
-
-- (void)js__setValueChangedBlock:(JSUIControlBlock)block {
-    [self __setJSValueChangedBlock:block];
-    [self addTarget:self
-             action:@selector(__jsValueChangedAction)
-   forControlEvents:UIControlEventValueChanged];
-}
-
-- (void)__setJSValueChangedBlock:(JSUIControlBlock)block {
-    objc_setAssociatedObject(self,
-                             js__ValueChangedBlockKey,
-                             block,
-                             OBJC_ASSOCIATION_COPY);
-}
-
-- (JSUIControlBlock)__jsValueChangedBlock {
-    return objc_getAssociatedObject(self,
-                                    js__ValueChangedBlockKey);
-}
-
-- (void)__jsValueChangedAction {
-    if (self.__jsValueChangedBlock) {
-        self.__jsValueChangedBlock(self);
-    }
+                             js__TargetContainersKey,
+                             containers,
+                             OBJC_ASSOCIATION_RETAIN);
 }
 
 @end
