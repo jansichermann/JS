@@ -87,11 +87,11 @@ static NSString * const cancelTitle = @"Cancel";
 }
 
 - (void)pressDown:(UIButton *)b {
-    b.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.f];
+    b.superview.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.f];
 }
 
 - (void)cancelPress:(UIButton *)b {
-    b.backgroundColor = [UIColor whiteColor];
+    b.superview.backgroundColor = [UIColor whiteColor];
 }
 
 - (UIView *)labelForItem:(JSActionSheetItem *)item {
@@ -125,6 +125,9 @@ static NSString * const cancelTitle = @"Cancel";
                              0.f,
                              self.view.width,
                              item.view.height);
+        UIView *button = [self buttonForItem:item];
+        [v addSubview:button];
+        button.frame = v.bounds;
     }
     else {
         UIView *button = [self buttonForItem:item];
@@ -150,7 +153,6 @@ forControlEvents:UIControlEventTouchDown];
 forControlEvents:UIControlEventAllEvents ^ UIControlEventTouchDown];
     
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    b.backgroundColor = [UIColor whiteColor];
 
     if (item.title) {
         [b setAttributedTitle:item.title
