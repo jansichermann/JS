@@ -11,6 +11,7 @@
 @property (nonatomic, copy)     OnClickBlock    onClickBlock;
 @property (nonatomic)           BOOL isInfoItem;
 @property (nonatomic)           NSAttributedString *title;
+@property (nonatomic)           UIView *view;
 
 @end
 
@@ -33,6 +34,14 @@
     i.title = [NSAttributedString withString:title
                                         font:titleFont
                                        color:color];
+    i.onClickBlock = onClickBlock;
+    return i;
+}
+
++ (instancetype)withView:(UIView *)view
+                 onClick:(OnClickBlock)onClickBlock {
+    JSActionSheetItem *i = [[JSActionSheetItem alloc] init];
+    i.view = view;
     i.onClickBlock = onClickBlock;
     return i;
 }
@@ -85,15 +94,47 @@ static NSString * const cancelTitle = @"Cancel";
     b.backgroundColor = [UIColor whiteColor];
 }
 
-- (UIView *)infoLabelForItem:(JSActionSheetItem *)item {
-    UIView *v = [[UIView alloc] init];
-    v.backgroundColor = [UIColor whiteColor];
+- (UIView *)labelForItem:(JSActionSheetItem *)item {
     UILabel *l = [[UILabel alloc] init];
-    l.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     l.numberOfLines = 0;
-    l.tag = 111;
     l.attributedText = item.title;
-    [v addSubview:l];
+    return l;
+}
+
+- (UIView *)viewForItem:(JSActionSheetItem *)item {
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.width, buttonHeight)];
+    v.backgroundColor = [UIColor whiteColor];
+    
+    if (item.isInfoItem) {
+        UIView *label = [self labelForItem:item];
+        [v addSubview:label];
+        
+        CGSize s =
+        [label sizeThatFits:CGSizeMake(self.view.width - 40.f,
+                                   CGFLOAT_MAX)];
+        v.frame = CGRectMake(0.f,
+                             0.f,
+                             self.view.width,
+                             MAX(buttonHeight, s.height + 32.f));
+        
+        label.frame = CGRectInset(v.bounds, 20.f, 16.f);
+    }
+    else if (item.view) {
+        [v addSubview:item.view];
+        v.frame = CGRectMake(0.f,
+                             0.f,
+                             self.view.width,
+                             item.view.height);
+    }
+    else {
+        UIView *button = [self buttonForItem:item];
+        [v addSubview:button];
+        v.frame = CGRectMake(0.f,
+                             0.f,
+                             self.view.width,
+                             MAX(buttonHeight, button.height));
+        button.frame = v.bounds;
+    }
     return v;
 }
 
@@ -110,9 +151,11 @@ forControlEvents:UIControlEventAllEvents ^ UIControlEventTouchDown];
     
     b.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     b.backgroundColor = [UIColor whiteColor];
-    
-    [b setAttributedTitle:item.title
-                 forState:UIControlStateNormal];
+
+    if (item.title) {
+        [b setAttributedTitle:item.title
+                     forState:UIControlStateNormal];
+    }
     
     [b setTitleColor:((UIWindow *)[UIApplication sharedApplication].windows.lastObject).tintColor
             forState:UIControlStateHighlighted];
@@ -162,28 +205,11 @@ static const CGFloat buttonHeight = 44.f;
         
         BOOL isCancel = i == self.items.count - 1 && self.hasCancel;
         
-        UIView *v = nil;
-        if (item.isInfoItem) {
-            v = [self infoLabelForItem:item];
-            UILabel *l = (UILabel *)[v viewWithTag:111];
-            CGSize s =
-            [l sizeThatFits:CGSizeMake(self.view.width - 40.f,
-                                       CGFLOAT_MAX)];
-            v.frame = CGRectMake(0.f,
-                                 height,
-                                 self.view.width,
-                                 s.height + 32.f);
-            l.frame = CGRectInset(v.bounds, 20.f, 0.f);
-        }
-        else {
-            
-            v = [self buttonForItem:item];
-            v.frame = CGRectMake(0.f,
-                                 height + (isCancel ? 8.f : 0.f),
-                                 self.view.width,
-                                 buttonHeight);
-            
-        }
+        UIView *v = [self viewForItem:item];
+        v.frame = CGRectMake(0.f,
+                             height + (isCancel ? 8.f : 0.f),
+                             self.view.width,
+                             buttonHeight);
         
         [self.buttonView addSubview:v];
         

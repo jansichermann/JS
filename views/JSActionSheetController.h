@@ -14,6 +14,8 @@ typedef void(^OnClickBlock)();
                titleColor:(UIColor *)color
                 titleFont:(UIFont *)titleFont
                   onClick:(OnClickBlock)onClickBlock;
++ (instancetype)withView:(UIView *)view
+                 onClick:(OnClickBlock)onClickBlock;
 @end
 
 
