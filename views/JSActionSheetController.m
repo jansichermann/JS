@@ -209,7 +209,7 @@ static const CGFloat buttonHeight = 44.f;
         v.frame = CGRectMake(0.f,
                              height + (isCancel ? 8.f : 0.f),
                              self.view.width,
-                             buttonHeight);
+                             v.height);
         
         [self.buttonView addSubview:v];
         
